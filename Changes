@@ -1,0 +1,15 @@
+Revision history for Math::.Cephes
+
+0.20    Mar 12, 2000
+
+  - changed name from Math::Functions to Math::Cephes
+  - added Math::Cephes::Fraction and Math::Cephes::Complex
+    for a more "perlish" interface
+  - added '-g -Wall -fno-builtin' when compiling with gcc
+  - small documentation improvements
+  - some changes to the pmath script, including the interface
+    to handle fractions and complex numbers
+
+0.10	Feb 14, 2000
+
+  - original version, created by Swig with help from h2xs
