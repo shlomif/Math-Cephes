@@ -1,4 +1,4 @@
-/*							jn.c
+/*							md_jn.c
  *
  *	Bessel function of integer order
  *
@@ -7,9 +7,9 @@
  * SYNOPSIS:
  *
  * int n;
- * double x, y, jn();
+ * double x, y, md_jn();
  *
- * y = jn( n, x );
+ * y = md_jn( n, x );
  *
  *
  *
@@ -18,13 +18,13 @@
  * Returns Bessel function of order n, where n is a
  * (possibly negative) integer.
  *
- * The ratio of jn(x) to j0(x) is computed by backward
- * recurrence.  First the ratio jn/jn-1 is found by a
+ * The ratio of md_jn(x) to md_j0(x) is computed by backward
+ * recurrence.  First the ratio md_jn/md_jn-1 is found by a
  * continued fraction expansion.  Then the recurrence
- * relating successive orders is applied until j0 or j1 is
+ * relating successive orders is applied until md_j0 or md_j1 is
  * reached.
  *
- * If n = 0 or 1 the routine for j0 or j1 is called
+ * If n = 0 or 1 the routine for md_j0 or md_j1 is called
  * directly.
  *
  *
@@ -41,21 +41,21 @@
  *
  */
 
-/*							jn.c
+/*							md_jn.c
 Cephes Math Library Release 2.8:  June, 2000
 Copyright 1984, 1987, 2000 by Stephen L. Moshier
 */
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double j0 ( double );
-extern double j1 ( double );
+extern double md_fabs ( double );
+extern double md_j0 ( double );
+extern double md_j1 ( double );
 #else
-double fabs(), j0(), j1();
+double md_fabs(), md_j0(), md_j1();
 #endif
 extern double MACHEP;
 
-double jn( n, x )
+double md_jn( n, x )
 int n;
 double x;
 {
@@ -81,11 +81,11 @@ if( x < 0.0 )
 	}
 
 if( n == 0 )
-	return( sign * j0(x) );
+	return( sign * md_j0(x) );
 if( n == 1 )
-	return( sign * j1(x) );
+	return( sign * md_j1(x) );
 if( n == 2 )
-	return( sign * (2.0 * j1(x) / x  -  j0(x)) );
+	return( sign * (2.0 * md_j1(x) / x  -  md_j0(x)) );
 
 if( x < MACHEP )
 	return( 0.0 );
@@ -125,9 +125,9 @@ do
 	}
 while( --k > 0 );
 
-if( fabs(pk) > fabs(pkm1) )
-	ans = j1(x)/pk;
+if( md_fabs(pk) > md_fabs(pkm1) )
+	ans = md_j1(x)/pk;
 else
-	ans = j0(x)/pkm1;
+	ans = md_j0(x)/pkm1;
 return( sign * ans );
 }

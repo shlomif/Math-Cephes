@@ -48,7 +48,7 @@
 /*							simq	2 */
 
 #include <stdio.h>
-#define fabs(x) ((x) < 0 ? -(x) : (x))
+#define md_fabs(x) ((x) < 0 ? -(x) : (x))
 
 int simq( A, B, X, n, flag, IPS )
 double A[], B[], X[];
@@ -74,7 +74,7 @@ for( i=0; i<n; i++ )
 	rownrm = 0.0;
 	for( j=0; j<n; j++ )
 		{
-		q = fabs( A[ij] );
+		q = md_fabs( A[ij] );
 		if( rownrm < q )
 			rownrm = q;
 		++ij;
@@ -98,7 +98,7 @@ for( k=0; k<nm1; k++ )
 		{
 		ip = IPS[i];
 		ipk = n*ip + k;
-		size = fabs( A[ipk] ) * X[ip];
+		size = md_fabs( A[ipk] ) * X[ip];
 		if( size > big )
 			{
 			big = size;

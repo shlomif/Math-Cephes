@@ -35,7 +35,7 @@
  * ERROR MESSAGES:
  *
  *   message         condition          value returned
- * beta overflow    log(beta) > MAXLOG       0.0
+ * beta overflow    md_log(beta) > MAXLOG       0.0
  *                  a or b <0 integer        0.0
  *
  */
@@ -65,14 +65,14 @@ Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 #endif
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double gamma ( double );
+extern double md_fabs ( double );
+extern double md_gamma ( double );
 extern double lgam ( double );
-extern double exp ( double );
-extern double log ( double );
-extern double floor ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
+extern double md_floor ( double );
 #else
-double fabs(), gamma(), lgam(), exp(), log(), floor();
+double md_fabs(), md_gamma(), lgam(), md_exp(), md_log(), md_floor();
 #endif
 extern double MAXLOG, MAXNUM;
 extern int sgngam;
@@ -87,18 +87,18 @@ sign = 1;
 
 if( a <= 0.0 )
 	{
-	if( a == floor(a) )
+	if( a == md_floor(a) )
 		goto over;
 	}
 if( b <= 0.0 )
 	{
-	if( b == floor(b) )
+	if( b == md_floor(b) )
 		goto over;
 	}
 
 
 y = a + b;
-if( fabs(y) > MAXGAM )
+if( md_fabs(y) > MAXGAM )
 	{
 	y = lgam(y);
 	sign *= sgngam; /* keep track of the sign */
@@ -112,22 +112,22 @@ over:
 		mtherr( "beta", OVERFLOW );
 		return( sign * MAXNUM );
 		}
-	return( sign * exp(y) );
+	return( sign * md_exp(y) );
 	}
 
-y = gamma(y);
+y = md_gamma(y);
 if( y == 0.0 )
 	goto over;
 
 if( a > b )
 	{
-	y = gamma(a)/y;
-	y *= gamma(b);
+	y = md_gamma(a)/y;
+	y *= md_gamma(b);
 	}
 else
 	{
-	y = gamma(b)/y;
-	y *= gamma(a);
+	y = md_gamma(b)/y;
+	y *= md_gamma(a);
 	}
 
 return(y);
@@ -135,7 +135,7 @@ return(y);
 
 
 
-/* Natural log of |beta|.  Return the sign of beta in sgngam.  */
+/* Natural md_log of |beta|.  Return the sign of beta in sgngam.  */
 
 double lbeta( a, b )
 double a, b;
@@ -147,18 +147,18 @@ sign = 1;
 
 if( a <= 0.0 )
 	{
-	if( a == floor(a) )
+	if( a == md_floor(a) )
 		goto over;
 	}
 if( b <= 0.0 )
 	{
-	if( b == floor(b) )
+	if( b == md_floor(b) )
 		goto over;
 	}
 
 
 y = a + b;
-if( fabs(y) > MAXGAM )
+if( md_fabs(y) > MAXGAM )
 	{
 	y = lgam(y);
 	sign *= sgngam; /* keep track of the sign */
@@ -170,7 +170,7 @@ if( fabs(y) > MAXGAM )
 	return( y );
 	}
 
-y = gamma(y);
+y = md_gamma(y);
 if( y == 0.0 )
 	{
 over:
@@ -180,13 +180,13 @@ over:
 
 if( a > b )
 	{
-	y = gamma(a)/y;
-	y *= gamma(b);
+	y = md_gamma(a)/y;
+	y *= md_gamma(b);
 	}
 else
 	{
-	y = gamma(b)/y;
-	y *= gamma(a);
+	y = md_gamma(b)/y;
+	y *= md_gamma(a);
 	}
 
 if( y < 0 )
@@ -197,5 +197,5 @@ if( y < 0 )
 else
   sgngam = 1;
 
-return( log(y) );
+return( md_log(y) );
 }

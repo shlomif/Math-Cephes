@@ -61,11 +61,11 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double pow ( double, double );
-extern double floor ( double );
+extern double md_fabs ( double );
+extern double md_pow ( double, double );
+extern double md_floor ( double );
 #else
-double fabs(), pow(), floor();
+double md_fabs(), md_pow(), md_floor();
 #endif
 extern double MAXNUM, MACHEP;
 
@@ -109,13 +109,13 @@ domerr:
 
 if( q <= 0.0 )
 	{
-	if(q == floor(q))
+	if(q == md_floor(q))
 		{
 		mtherr( "zeta", SING );
 retinf:
 		return( MAXNUM );
 		}
-	if( x != floor(x) )
+	if( x != md_floor(x) )
 		goto domerr; /* because q^-x not defined */
 	}
 
@@ -129,7 +129,7 @@ if( x < 25.0 )
  * If q<0 and x is an integer, there is a relation to
  * the polygamma function.
  */
-s = pow( q, -x );
+s = md_pow( q, -x );
 a = q;
 i = 0;
 b = 0.0;
@@ -137,9 +137,9 @@ while( (i < 9) || (a <= 9.0) )
 	{
 	i += 1;
 	a += 1.0;
-	b = pow( a, -x );
+	b = md_pow( a, -x );
 	s += b;
-	if( fabs(b/s) < MACHEP )
+	if( md_fabs(b/s) < MACHEP )
 		goto done;
 	}
 
@@ -154,7 +154,7 @@ for( i=0; i<12; i++ )
 	b /= w;
 	t = a*b/A[i];
 	s = s + t;
-	t = fabs(t/s);
+	t = md_fabs(t/s);
 	if( t < MACHEP )
 		goto done;
 	k += 1.0;
@@ -172,17 +172,17 @@ return(s);
 /*
 pseres:
 
-s = pow( q, -x );
+s = md_pow( q, -x );
 a = q;
 do
 	{
 	a += 2.0;
-	b = pow( a, -x );
+	b = md_pow( a, -x );
 	s += b;
 	}
 while( b/s > MACHEP );
 
-b = pow( 2.0, -x );
+b = md_pow( 2.0, -x );
 s = (s + b)/(1.0-b);
 return(s);
 */

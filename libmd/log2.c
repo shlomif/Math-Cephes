@@ -1,4 +1,4 @@
-/*							log2.c
+/*							md_log2.c
  *
  *	Base 2 logarithm
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, log2();
+ * double x, y, md_log2();
  *
- * y = log2( x );
+ * y = md_log2( x );
  *
  *
  *
@@ -20,11 +20,11 @@
  * parts.  If the exponent is between -1 and +1, the base e
  * logarithm of the fraction is approximated by
  *
- *     log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
+ *     md_log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
  *
  * Otherwise, setting  z = 2(x-1)/x+1),
  * 
- *     log(x) = z + z**3 P(z)/Q(z).
+ *     md_log(x) = z + z**3 P(z)/Q(z).
  *
  *
  *
@@ -33,15 +33,15 @@
  *                      Relative error:
  * arithmetic   domain     # trials      peak         rms
  *    IEEE      0.5, 2.0    30000       2.0e-16     5.5e-17
- *    IEEE      exp(+-700)  40000       1.3e-16     4.6e-17
+ *    IEEE      md_exp(+-700)  40000       1.3e-16     4.6e-17
  *
- * In the tests over the interval [exp(+-700)], the logarithms
+ * In the tests over the interval [md_exp(+-700)], the logarithms
  * of the random arguments were uniformly distributed.
  *
  * ERROR MESSAGES:
  *
- * log2 singularity:  x = 0; returns -INFINITY
- * log2 domain:       x < 0; returns NAN
+ * md_log2 singularity:  x = 0; returns -INFINITY
+ * md_log2 domain:       x < 0; returns NAN
  */
 
 /*
@@ -50,9 +50,9 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-static char fname[] = {"log2"};
+static char fname[] = {"md_log2"};
 
-/* Coefficients for log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
+/* Coefficients for md_log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
  * 1/sqrt(2) <= x < sqrt(2)
  */
 #ifdef UNK
@@ -139,7 +139,7 @@ static unsigned short L[5] = {0x3fdc,0x551d,0x94ae,0x0bf8};
 #define LOG2EA (*(double *)(&L[0]))
 #endif
 
-/* Coefficients for log(x) = z + z**3 P(z)/Q(z),
+/* Coefficients for md_log(x) = z + z**3 P(z)/Q(z),
  * where z = 2(x-1)/(x+1)
  * 1/sqrt(2) <= x < sqrt(2)
  */
@@ -156,7 +156,7 @@ static double S[3] = {
  3.12093766372244180303E2,
 -7.69691943550460008604E2,
 };
-/* log2(e) - 1 */
+/* md_log2(e) - 1 */
 #define LOG2EA 0.44269504088896340735992
 #endif
 #ifdef DEC
@@ -171,7 +171,7 @@ static unsigned short S[12] = {
 0042234,0006000,0104527,0020155,
 0142500,0066110,0146631,0174731,
 };
-/* log2(e) - 1 */
+/* md_log2(e) - 1 */
 #define LOG2EA 0.44269504088896340735992L
 #endif
 #ifdef IBMPC
@@ -202,20 +202,20 @@ static unsigned short S[12] = {
 #endif
 
 #ifdef ANSIPROT
-extern double frexp ( double, int * );
-extern double ldexp ( double, int );
+extern double md_frexp ( double, int * );
+extern double md_ldexp ( double, int );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double frexp(), ldexp(), polevl(), p1evl();
+double md_frexp(), md_ldexp(), polevl(), p1evl();
 int isnan(), isfinite();
 #endif
 #define SQRTH 0.70710678118654752440
 extern double LOGE2, INFINITY, NAN;
 
-double log2(x)
+double md_log2(x)
 double x;
 {
 int e;
@@ -258,11 +258,11 @@ e = ((e >> 7) & 0377) - 0200;	/* the exponent */
 *q |= 040000;	/* x now between 0.5 and 1 */
 #endif
 
-/* Note, frexp is used so that denormal numbers
+/* Note, md_frexp is used so that denormal numbers
  * will be handled properly.
  */
 #ifdef IBMPC
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 /*
 q = (short *)&x;
 q += 3;
@@ -275,15 +275,15 @@ e = ((e >> 4) & 0x0fff) - 0x3fe;
 
 /* Equivalent C language standard library function: */
 #ifdef UNK
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 #endif
 
 #ifdef MIEEE
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 #endif
 
 
-/* logarithm using log(x) = z + z**3 P(z)/Q(z),
+/* logarithm using md_log(x) = z + z**3 P(z)/Q(z),
  * where z = 2(x-1)/x+1)
  */
 
@@ -310,12 +310,12 @@ goto ldone;
 
 
 
-/* logarithm using log(1+x) = x - .5x**2 + x**3 P(x)/Q(x) */
+/* logarithm using md_log(1+x) = x - .5x**2 + x**3 P(x)/Q(x) */
 
 if( x < SQRTH )
 	{
 	e -= 1;
-	x = ldexp( x, 1 ) - 1.0; /*  2x - 1  */
+	x = md_ldexp( x, 1 ) - 1.0; /*  2x - 1  */
 	}	
 else
 	{
@@ -324,14 +324,14 @@ else
 
 z = x*x;
 #if DEC
-y = x * ( z * polevl( x, P, 5 ) / p1evl( x, Q, 6 ) ) - ldexp( z, -1 );
+y = x * ( z * polevl( x, P, 5 ) / p1evl( x, Q, 6 ) ) - md_ldexp( z, -1 );
 #else
-y = x * ( z * polevl( x, P, 5 ) / p1evl( x, Q, 5 ) ) - ldexp( z, -1 );
+y = x * ( z * polevl( x, P, 5 ) / p1evl( x, Q, 5 ) ) - md_ldexp( z, -1 );
 #endif
 
 ldone:
 
-/* Multiply log of fraction by log2(e)
+/* Multiply md_log of fraction by md_log2(e)
  * and base 2 exponent by 1
  *
  * ***CAUTION***

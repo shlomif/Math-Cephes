@@ -17,10 +17,10 @@
  *
  * For two vectors p, q, the angle A between them is given by
  *
- *      p.q / (|p| |q|)  = cos A  .
+ *      p.q / (|p| |q|)  = md_cos A  .
  *
  * where "." represents inner product, "|x|" the length of vector x.
- * If the angle is small, an expression in sin A is preferred.
+ * If the angle is small, an expression in md_sin A is preferred.
  * Set r = q - p.  Then
  *
  *     p.q = p.p + p.r ,
@@ -30,14 +30,14 @@
  *     |q|^2 = p.p + 2 p.r + r.r ,
  *
  *                  p.p^2 + 2 p.p p.r + p.r^2
- *     cos^2 A  =  ----------------------------
+ *     md_cos^2 A  =  ----------------------------
  *                    p.p (p.p + 2 p.r + r.r)
  *
  *                  p.p + 2 p.r + p.r^2 / p.p
  *              =  --------------------------- ,
  *                     p.p + 2 p.r + r.r
  *
- *     sin^2 A  =  1 - cos^2 A
+ *     md_sin^2 A  =  1 - md_cos^2 A
  *
  *                   r.r - p.r^2 / p.p
  *              =  --------------------
@@ -61,11 +61,11 @@ Copyright 1995 by Stephen L. Moshier
 #include "mconf.h"
 #ifdef ANSIPROT
 extern double sqrt ( double );
-extern double acos ( double );
-extern double asin ( double );
-extern double atan ( double );
+extern double md_acos ( double );
+extern double md_asin ( double );
+extern double md_atan ( double );
 #else
-double sqrt(), acos(), asin(), atan();
+double sqrt(), md_acos(), md_asin(), md_atan();
 #endif
 extern double PI;
 
@@ -97,14 +97,14 @@ rt = (rr - (pr * pr) / pp) / qq;
 if (rt <= 0.75)
   {
     rt = sqrt(rt);
-    qt = asin(rt);
+    qt = md_asin(rt);
     if (pq < 0.0)
       qt = PI - qt;
   }
 else
   {
     pt = pq / sqrt(pp*qq);
-    qt = acos(pt);
+    qt = md_acos(pt);
   }
 return qt;
 }

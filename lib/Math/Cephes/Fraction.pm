@@ -1,7 +1,7 @@
 ############# Class : fract ##############
 package Math::Cephes::Fraction;
 use strict;
-use vars qw(%OWNER %BLESSEDMEMBERS %ITERATORS 
+use vars qw(%OWNER @ISA %ITERATORS 
 	    @EXPORT_OK %EXPORT_TAGS $VERSION);
 
 require Exporter;
@@ -11,25 +11,47 @@ my @fract = qw(euclid fract mixed_fract);
 @EXPORT_OK = (@fract);
 %EXPORT_TAGS = ('fract' => [@fract]);
 
-%OWNER = ();
-%BLESSEDMEMBERS = ();
-%ITERATORS = ();
-$VERSION = '0.36';
-
+$VERSION = '0.40';
 #use Math::Cephes qw(new_fract euclid);
 require Math::Cephes;
+@ISA = qw( Math::Cephes );
 
+%OWNER = ();
+%ITERATORS = ();
+
+*swig_n_get = *Math::Cephesc::fract_n_get;
+*swig_n_set = *Math::Cephesc::fract_n_set;
+*swig_d_get = *Math::Cephesc::fract_d_get;
+*swig_d_set = *Math::Cephesc::fract_d_set;
 sub new {
-    my $self = shift;
-    my @args = @_;
-    $self = Math::Cephes::new_fract(@args);
-    return undef if (!defined($self));
-    bless $self, "Math::Cephes::Fraction";
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "Math::Cephes::Fraction", $self;
-    return bless \%retval,"Math::Cephes::Fraction";
+    my $pkg = shift;
+    my $self = Math::Cephesc::new_fract(@_);
+    bless $self, $pkg if defined($self);
 }
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        Math::Cephesc::delete_fract($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
 
 sub fract {
   return Math::Cephes::Fraction->new(@_);
@@ -51,77 +73,6 @@ sub d {
 
 sub euclid {
   return Math::Cephes::euclid($_[0], $_[1]);
-}
-
-sub TIEHASH {
-    my ($classname,$obj) = @_;
-    return bless $obj, $classname;
-}
-  
-sub DESTROY {
-  return undef if ref($_[0]) ne 'HASH';
-    my $self = tied(%{$_[0]});
-    delete $ITERATORS{$self};
-    if (exists $OWNER{$self}) {
-        Math::Cephes::delete_fract($self);
-        delete $OWNER{$self};
-    }
-}
-
-sub DISOWN {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    delete $OWNER{$ptr};
-    };
-
-sub ACQUIRE {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    $OWNER{$ptr} = 1;
-    };
-
-sub FETCH {
-    my ($self,$field) = @_;
-    no strict 'refs';
-    my $member_func = "Math::Cephes::fract_${field}_get";
-    my $val = &$member_func($self);
-    if (exists $BLESSEDMEMBERS{$field}) {
-        return undef if (!defined($val));
-        my %retval;
-        tie %retval,$BLESSEDMEMBERS{$field},$val;
-        return bless \%retval, $BLESSEDMEMBERS{$field};
-    }
-    return $val;
-}
-
-sub STORE {
-    my ($self,$field,$newval) = @_;
-    no strict 'refs';
-    my $member_func = "Math::Cephes::fract_${field}_set";
-    if (exists $BLESSEDMEMBERS{$field}) {
-        &$member_func($self,tied(%{$newval}));
-    } else {
-        &$member_func($self,$newval);
-    }
-}
-
-sub FIRSTKEY {
-    my $self = shift;
-    $ITERATORS{$self} = ['n', 'd', ];
-    my $first = shift @{$ITERATORS{$self}};
-    return $first;
-}
-
-sub NEXTKEY {
-    my $self = shift;
-    my $nelem = scalar @{$ITERATORS{$self}};
-    if ($nelem > 0) {
-        my $member = shift @{$ITERATORS{$self}};
-        return $member;
-    } else {
-        $ITERATORS{$self} = ['n', 'd', ];
-        return ();
-    }
 }
 
 

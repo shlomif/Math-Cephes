@@ -37,21 +37,21 @@ Copyright 1984, 1987, 1989, 2000 by Stephen L. Moshier
 #include "mconf.h"
 #define DEBUG 0
 #ifdef ANSIPROT
-extern double gamma ( double );
-extern double pow ( double, double );
+extern double md_gamma ( double );
+extern double md_pow ( double, double );
 extern double sqrt ( double );
-extern double yn ( int, double );
+extern double md_yn ( int, double );
 extern double jv ( double, double );
-extern double fabs ( double );
-extern double floor ( double );
-extern double sin ( double );
-extern double cos ( double );
+extern double md_fabs ( double );
+extern double md_floor ( double );
+extern double md_sin ( double );
+extern double md_cos ( double );
 double yv ( double, double );
 double onef2 (double, double, double, double, double * );
 double threef0 (double, double, double, double, double * );
 #else
-double gamma(), pow(), sqrt(), yn(), yv(), jv(), fabs(), floor();
-double sin(), cos();
+double md_gamma(), md_pow(), sqrt(), md_yn(), yv(), jv(), md_fabs(), md_floor();
+double md_sin(), md_cos();
 double onef2(), threef0();
 #endif
 static double stop = 1.37e-17;
@@ -89,11 +89,11 @@ do
 	bn += 1.0;
 	cn += 1.0;
 	n += 1.0;
-	z = fabs( a0 );
+	z = md_fabs( a0 );
 	if( z > max )
 		max = z;
 	if( sum != 0 )
-		t = fabs( a0 / sum );
+		t = md_fabs( a0 / sum );
 	else
 		t = z;
 	}
@@ -101,7 +101,7 @@ while( t > stop );
 
 done:
 
-*err = fabs( MACHEP*max /sum );
+*err = md_fabs( MACHEP*max /sum );
 
 #if DEBUG
 	printf(" onef2 cancellation error %.5E\n", *err );
@@ -159,7 +159,7 @@ do
 	bn += 1.0;
 	cn += 1.0;
 	n += 1.0;
-	z = fabs( a0 );
+	z = md_fabs( a0 );
 	if( z > max )
 		max = z;
 	if( z >= conv )
@@ -171,7 +171,7 @@ do
 	conv = z;
 	sum += a0;
 	if( sum != 0 )
-		t = fabs( a0 / sum );
+		t = md_fabs( a0 / sum );
 	else
 		t = z;
 	}
@@ -179,12 +179,12 @@ while( t > stop );
 
 done:
 
-t = fabs( MACHEP*max/sum );
+t = md_fabs( MACHEP*max/sum );
 #if DEBUG
 	printf(" threef0 cancellation error %.5E\n", t );
 #endif
 
-max = fabs( conv/sum );
+max = md_fabs( conv/sum );
 if( max > t )
 	t = max;
 #if DEBUG
@@ -220,19 +220,19 @@ double v, x;
 double y, ya, f, g, h, t;
 double onef2err, threef0err;
 
-f = floor(v);
+f = md_floor(v);
 if( (v < 0) && ( v-f == 0.5 ) )
 	{
 	y = jv( -v, x );
 	f = 1.0 - f;
-	g =  2.0 * floor(f/2.0);
+	g =  2.0 * md_floor(f/2.0);
 	if( g != f )
 		y = -y;
 	return(y);
 	}
 t = 0.25*x*x;
-f = fabs(x);
-g = 1.5 * fabs(v);
+f = md_fabs(x);
+g = 1.5 * md_fabs(v);
 if( (f > 30.0) && (f > g) )
 	{
 	onef2err = 1.0e38;
@@ -254,17 +254,17 @@ else
 	}
 
 f = sqrt( PI );
-h = pow( 0.5*x, v-1.0 );
+h = md_pow( 0.5*x, v-1.0 );
 
 if( onef2err <= threef0err )
 	{
-	g = gamma( v + 1.5 );
+	g = md_gamma( v + 1.5 );
 	y = y * h * t / ( 0.5 * f * g );
 	return(y);
 	}
 else
 	{
-	g = gamma( v + 0.5 );
+	g = md_gamma( v + 0.5 );
 	ya = ya * h / ( f * g );
 	ya = ya + yv( v, x );
 	return(ya);
@@ -283,15 +283,15 @@ double v, x;
 double y, t;
 int n;
 
-y = floor( v );
+y = md_floor( v );
 if( y == v )
 	{
 	n = v;
-	y = yn( n, x );
+	y = md_yn( n, x );
 	return( y );
 	}
 t = PI * v;
-y = (cos(t) * jv( v, x ) - jv( -v, x ))/sin(t);
+y = (md_cos(t) * jv( v, x ) - jv( -v, x ))/md_sin(t);
 return( y );
 }
 

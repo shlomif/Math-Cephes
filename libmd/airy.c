@@ -823,16 +823,16 @@ static unsigned short APGD[40] = {
 #endif
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double exp ( double );
+extern double md_fabs ( double );
+extern double md_exp ( double );
 extern double sqrt ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double sin ( double );
-extern double cos ( double );
+extern double md_sin ( double );
+extern double md_cos ( double );
 #else
-double fabs(), exp(), sqrt();
-double polevl(), p1evl(), sin(), cos();
+double md_fabs(), md_exp(), sqrt();
+double polevl(), p1evl(), md_sin(), md_cos();
 #endif
 
 int airy( x, ai, aip, bi, bip )
@@ -863,8 +863,8 @@ if( x < -2.09 )
 	uf = 1.0 + zz * polevl( zz, AFN, 8 ) / p1evl( zz, AFD, 9 );
 	ug = z * polevl( zz, AGN, 10 ) / p1evl( zz, AGD, 10 );
 	theta = zeta + 0.25 * PI;
-	f = sin( theta );
-	g = cos( theta );
+	f = md_sin( theta );
+	g = md_cos( theta );
 	*ai = k * (f * uf - g * ug);
 	*bi = k * (g * uf + f * ug);
 	uf = 1.0 + zz * polevl( zz, APFN, 8 ) / p1evl( zz, APFD, 9 );
@@ -875,12 +875,12 @@ if( x < -2.09 )
 	return(0);
 	}
 
-if( x >= 2.09 )	/* cbrt(9) */
+if( x >= 2.09 )	/* md_cbrt(9) */
 	{
 	domflg = 5;
 	t = sqrt(x);
 	zeta = 2.0 * x * t / 3.0;
-	g = exp( zeta );
+	g = md_exp( zeta );
 	t = sqrt(t);
 	k = 2.0 * t * g;
 	z = 1.0/zeta;
@@ -921,7 +921,7 @@ while( t > MACHEP )
 	k += 1.0;
 	ug /=k;
 	g += ug;
-	t = fabs(uf/f);
+	t = md_fabs(uf/f);
 	}
 uf = c1 * f;
 ug = c2 * g;
@@ -952,7 +952,7 @@ while( t > MACHEP )
 	uf /=k;
 	g += ug;
 	k += 1.0;
-	t = fabs(ug/g);
+	t = md_fabs(ug/g);
 	}
 
 uf = c1 * f;

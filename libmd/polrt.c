@@ -54,9 +54,9 @@ typedef struct
 	}cmplx;
 */
 #ifdef ANSIPROT
-extern double fabs ( double );
+extern double md_fabs ( double );
 #else
-double fabs();
+double md_fabs();
 #endif
 
 int polrt( xcof, cof, m, root )
@@ -151,7 +151,7 @@ dx.r = (u.i * ud.i  -  u.r * ud.r)/mag;
 x.r += dx.r;
 dx.i = -(u.r * ud.i  +  u.i * ud.r)/mag;
 x.i += dx.i;
-if( (fabs(dx.i) + fabs(dx.r)) < 1.0e-6 )
+if( (md_fabs(dx.i) + md_fabs(dx.r)) < 1.0e-6 )
 	goto lupdon;
 iter += 1;
 }	/* while iter < 500 */
@@ -179,7 +179,7 @@ n1 = i;
 if( !final )
 	{
 	final = 1;
-	if( fabs(x.i/x.r) < 1.0e-4 )
+	if( md_fabs(x.i/x.r) < 1.0e-4 )
 		x.i = 0.0;
 	xsav.r = x.r;
 	xsav.i = x.i;
@@ -188,7 +188,7 @@ if( !final )
 
 findon:
 final = 0;
-if( fabs(x.i/x.r) >= 1.0e-5 )
+if( md_fabs(x.i/x.r) >= 1.0e-5 )
 	{
 	cofj = x.r + x.r;
 	mag = x.r * x.r  +  x.i * x.i;

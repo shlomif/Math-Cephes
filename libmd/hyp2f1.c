@@ -90,18 +90,18 @@ Copyright 1984, 1987, 1992, 2000 by Stephen L. Moshier
 #define ETHRESH 1.0e-12
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double pow ( double, double );
-extern double round ( double );
-extern double gamma ( double );
-extern double log ( double );
-extern double exp ( double );
+extern double md_fabs ( double );
+extern double md_pow ( double, double );
+extern double md_round ( double );
+extern double md_gamma ( double );
+extern double md_log ( double );
+extern double md_exp ( double );
 extern double psi ( double );
 static double hyt2f1(double, double, double, double, double *);
 static double hys2f1(double, double, double, double, double *);
 double hyp2f1(double, double, double, double);
 #else
-double fabs(), pow(), round(), gamma(), log(), exp(), psi();
+double md_fabs(), md_pow(), md_round(), md_gamma(), md_log(), md_exp(), psi();
 static double hyt2f1();
 static double hys2f1();
 double hyp2f1();
@@ -117,34 +117,34 @@ double ia, ib, ic, id, err;
 int flag, i, aid;
 
 err = 0.0;
-ax = fabs(x);
+ax = md_fabs(x);
 s = 1.0 - x;
 flag = 0;
-ia = round(a); /* nearest integer to a */
-ib = round(b);
+ia = md_round(a); /* nearest integer to a */
+ib = md_round(b);
 
 if( a <= 0 )
 	{
-	if( fabs(a-ia) < EPS )		/* a is a negative integer */
+	if( md_fabs(a-ia) < EPS )		/* a is a negative integer */
 		flag |= 1;
 	}
 
 if( b <= 0 )
 	{
-	if( fabs(b-ib) < EPS )		/* b is a negative integer */
+	if( md_fabs(b-ib) < EPS )		/* b is a negative integer */
 		flag |= 2;
 	}
 
 if( ax < 1.0 )
 	{
-	if( fabs(b-c) < EPS )		/* b = c */
+	if( md_fabs(b-c) < EPS )		/* b = c */
 		{
-		y = pow( s, -a );	/* s to the -a power */
+		y = md_pow( s, -a );	/* s to the -a power */
 		goto hypdon;
 		}
-	if( fabs(a-c) < EPS )		/* a = c */
+	if( md_fabs(a-c) < EPS )		/* a = c */
 		{
-		y = pow( s, -b );	/* s to the -b power */
+		y = md_pow( s, -b );	/* s to the -b power */
 		goto hypdon;
 		}
 	}
@@ -153,8 +153,8 @@ if( ax < 1.0 )
 
 if( c <= 0.0 )
 	{
-	ic = round(c); 	/* nearest integer to c */
-	if( fabs(c-ic) < EPS )		/* c is a negative integer */
+	ic = md_round(c); 	/* nearest integer to c */
+	if( md_fabs(c-ic) < EPS )		/* c is a negative integer */
 		{
 		/* check if termination before explosion */
 		if( (flag & 1) && (ia > ic) )
@@ -172,22 +172,22 @@ if( ax > 1.0 )			/* series diverges	*/
 	goto hypdiv;
 
 p = c - a;
-ia = round(p); /* nearest integer to c-a */
-if( (ia <= 0.0) && (fabs(p-ia) < EPS) )	/* negative int c - a */
+ia = md_round(p); /* nearest integer to c-a */
+if( (ia <= 0.0) && (md_fabs(p-ia) < EPS) )	/* negative int c - a */
 	flag |= 4;
 
 r = c - b;
-ib = round(r); /* nearest integer to c-b */
-if( (ib <= 0.0) && (fabs(r-ib) < EPS) )	/* negative int c - b */
+ib = md_round(r); /* nearest integer to c-b */
+if( (ib <= 0.0) && (md_fabs(r-ib) < EPS) )	/* negative int c - b */
 	flag |= 8;
 
 d = c - a - b;
-id = round(d); /* nearest integer to d */
-q = fabs(d-id);
+id = md_round(d); /* nearest integer to d */
+q = md_fabs(d-id);
 
 /* Thanks to Christian Burger <BURGER@DMRHRZ11.HRZ.Uni-Marburg.DE>
  * for reporting a bug here.  */
-if( fabs(ax-1.0) < EPS )			/* |x| == 1.0	*/
+if( md_fabs(ax-1.0) < EPS )			/* |x| == 1.0	*/
 	{
 	if( x > 0.0 )
 		{
@@ -200,7 +200,7 @@ if( fabs(ax-1.0) < EPS )			/* |x| == 1.0	*/
 			}
 		if( d <= 0.0 )
 			goto hypdiv;
-		y = gamma(c)*gamma(d)/(gamma(p)*gamma(r));
+		y = md_gamma(c)*md_gamma(d)/(md_gamma(p)*md_gamma(r));
 		goto hypdon;
 		}
 
@@ -256,7 +256,7 @@ return(y);
  * AMS55 #15.3.3
  */
 hypf:
-y = pow( s, d ) * hys2f1( c-a, c-b, c, x, &err );
+y = md_pow( s, d ) * hys2f1( c-a, c-b, c, x, &err );
 goto hypdon;
 
 /* The alarm exit */
@@ -278,7 +278,7 @@ double a, b, c, x;
 double *loss;
 {
 double p, q, r, s, t, y, d, err, err1;
-double ax, id, d1, d2, e, y1;
+double ax, id, d1, d2, e, md_y1;
 int i, aid;
 
 err = 0.0;
@@ -286,20 +286,20 @@ s = 1.0 - x;
 if( x < -0.5 )
 	{
 	if( b > a )
-		y = pow( s, -a ) * hys2f1( a, c-b, c, -x/s, &err );
+		y = md_pow( s, -a ) * hys2f1( a, c-b, c, -x/s, &err );
 
 	else
-		y = pow( s, -b ) * hys2f1( c-a, b, c, -x/s, &err );
+		y = md_pow( s, -b ) * hys2f1( c-a, b, c, -x/s, &err );
 
 	goto done;
 	}
 
 d = c - a - b;
-id = round(d);	/* nearest integer to d */
+id = md_round(d);	/* nearest integer to d */
 
 if( x > 0.9 )
 {
-if( fabs(d-id) > EPS ) /* test for integer c-a-b */
+if( md_fabs(d-id) > EPS ) /* test for integer c-a-b */
 	{
 /* Try the power series first */
 	y = hys2f1( a, b, c, x, &err );
@@ -307,18 +307,18 @@ if( fabs(d-id) > EPS ) /* test for integer c-a-b */
 		goto done;
 /* If power series fails, then apply AMS55 #15.3.6 */
 	q = hys2f1( a, b, 1.0-d, s, &err );	
-	q *= gamma(d) /(gamma(c-a) * gamma(c-b));
-	r = pow(s,d) * hys2f1( c-a, c-b, d+1.0, s, &err1 );
-	r *= gamma(-d)/(gamma(a) * gamma(b));
+	q *= md_gamma(d) /(md_gamma(c-a) * md_gamma(c-b));
+	r = md_pow(s,d) * hys2f1( c-a, c-b, d+1.0, s, &err1 );
+	r *= md_gamma(-d)/(md_gamma(a) * md_gamma(b));
 	y = q + r;
 
-	q = fabs(q); /* estimate cancellation error */
-	r = fabs(r);
+	q = md_fabs(q); /* estimate cancellation error */
+	r = md_fabs(r);
 	if( q > r )
 		r = q;
 	err += err1 + (MACHEP*r)/y;
 
-	y *= gamma(c);
+	y *= md_gamma(c);
 	goto done;
 	}
 else
@@ -339,13 +339,13 @@ else
 		aid = -id;
 		}
 
-	ax = log(s);
+	ax = md_log(s);
 
 	/* sum for t = 0 */
 	y = psi(1.0) + psi(1.0+e) - psi(a+d1) - psi(b+d1) - ax;
-	y /= gamma(e+1.0);
+	y /= md_gamma(e+1.0);
 
-	p = (a+d1) * (b+d1) * s / gamma(e+2.0);	/* Poch for t=1 */
+	p = (a+d1) * (b+d1) * s / md_gamma(e+2.0);	/* Poch for t=1 */
 	t = 1.0;
 	do
 		{
@@ -357,16 +357,16 @@ else
 		p *= (b+t+d1) / (t+1.0+e);
 		t += 1.0;
 		}
-	while( fabs(q/y) > EPS );
+	while( md_fabs(q/y) > EPS );
 
 
 	if( id == 0.0 )
 		{
-		y *= gamma(c)/(gamma(a)*gamma(b));
+		y *= md_gamma(c)/(md_gamma(a)*md_gamma(b));
 		goto psidon;
 		}
 
-	y1 = 1.0;
+	md_y1 = 1.0;
 
 	if( aid == 1 )
 		goto nosum;
@@ -379,23 +379,23 @@ else
 		p *= s * (a+t+d2) * (b+t+d2) / r;
 		t += 1.0;
 		p /= t;
-		y1 += p;
+		md_y1 += p;
 		}
 nosum:
-	p = gamma(c);
-	y1 *= gamma(e) * p / (gamma(a+d1) * gamma(b+d1));
+	p = md_gamma(c);
+	md_y1 *= md_gamma(e) * p / (md_gamma(a+d1) * md_gamma(b+d1));
 
-	y *= p / (gamma(a+d2) * gamma(b+d2));
+	y *= p / (md_gamma(a+d2) * md_gamma(b+d2));
 	if( (aid & 1) != 0 )
 		y = -y;
 
-	q = pow( s, id );	/* s to the id power */
+	q = md_pow( s, id );	/* s to the id power */
 	if( id > 0.0 )
 		y *= q;
 	else
-		y1 *= q;
+		md_y1 *= q;
 
-	y += y1;
+	y += md_y1;
 psidon:
 	goto done;
 	}
@@ -433,7 +433,7 @@ u = 1.0;
 k = 0.0;
 do
 	{
-	if( fabs(h) < EPS )
+	if( md_fabs(h) < EPS )
 		{
 		*loss = 1.0;
 		return( MAXNUM );
@@ -441,7 +441,7 @@ do
 	m = k + 1.0;
 	u = u * ((f+k) * (g+k) * x / ((h+k) * m));
 	s += u;
-	k = fabs(u);  /* remember largest term summed */
+	k = md_fabs(u);  /* remember largest term summed */
 	if( k > umax )
 		umax = k;
 	k = m;
@@ -451,10 +451,10 @@ do
 		return(s);
 		}
 	}
-while( fabs(u/s) > MACHEP );
+while( md_fabs(u/s) > MACHEP );
 
 /* return estimated relative error */
-*loss = (MACHEP*umax)/fabs(s) + (MACHEP*i);
+*loss = (MACHEP*umax)/md_fabs(s) + (MACHEP*i);
 
 return(s);
 }

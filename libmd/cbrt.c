@@ -1,4 +1,4 @@
-/*							cbrt.c
+/*							md_cbrt.c
  *
  *	Cube root
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, cbrt();
+ * double x, y, md_cbrt();
  *
- * y = cbrt( x );
+ * y = md_cbrt( x );
  *
  *
  *
@@ -33,7 +33,7 @@
  *    IEEE       0,1e308     30000      1.5e-16     5.0e-17
  *
  */
-/*							cbrt.c  */
+/*							md_cbrt.c  */
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -49,16 +49,16 @@ static double CBRT2I = 0.79370052598409973737585;
 static double CBRT4I = 0.62996052494743658238361;
 
 #ifdef ANSIPROT
-extern double frexp ( double, int * );
-extern double ldexp ( double, int );
+extern double md_frexp ( double, int * );
+extern double md_ldexp ( double, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double frexp(), ldexp();
+double md_frexp(), md_ldexp();
 int isnan(), isfinite();
 #endif
 
-double cbrt(x)
+double md_cbrt(x)
 double x;
 {
 int e, rem, sign;
@@ -86,7 +86,7 @@ z = x;
 /* extract power of 2, leaving
  * mantissa between 0.5 and 1
  */
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 
 /* Approximate cube root of number between .5 and 1,
  * peak relative error = 9.2e-6
@@ -126,7 +126,7 @@ else
 	}
 
 /* multiply by power of 2 */
-x = ldexp( x, e );
+x = md_ldexp( x, e );
 
 /* Newton iteration */
 x -= ( x - (z/(x*x)) )*0.33333333333333333333;

@@ -1,4 +1,4 @@
-/*							exp2.c
+/*							md_exp2.c
  *
  *	Base 2 exponential function
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, exp2();
+ * double x, y, md_exp2();
  *
- * y = exp2( x );
+ * y = md_exp2( x );
  *
  *
  *
@@ -35,14 +35,14 @@
  *    IEEE    -1022,+1024   30000       1.8e-16     5.4e-17
  *
  *
- * See exp.c for comments on error amplification.
+ * See md_exp.c for comments on error amplification.
  *
  *
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * exp underflow    x < -MAXL2        0.0
- * exp overflow     x > MAXL2         MAXNUM
+ * md_exp underflow    x < -MAXL2        0.0
+ * md_exp overflow     x > MAXL2         MAXNUM
  *
  * For DEC arithmetic, MAXL2 = 127.
  * For IEEE arithmetic, MAXL2 = 1024.
@@ -121,12 +121,12 @@ static unsigned short Q[] = {
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double floor ( double );
-extern double ldexp ( double, int );
+extern double md_floor ( double );
+extern double md_ldexp ( double, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double polevl(), p1evl(), floor(), ldexp();
+double polevl(), p1evl(), md_floor(), md_ldexp();
 int isnan(), isfinite();
 #endif
 #ifdef INFINITIES
@@ -134,7 +134,7 @@ extern double INFINITY;
 #endif
 extern double MAXNUM;
 
-double exp2(x)
+double md_exp2(x)
 double x;
 {
 double px, xx;
@@ -149,7 +149,7 @@ if( x > MAXL2)
 #ifdef INFINITIES
 	return( INFINITY );
 #else
-	mtherr( "exp2", OVERFLOW );
+	mtherr( "md_exp2", OVERFLOW );
 	return( MAXNUM );
 #endif
 	}
@@ -157,27 +157,27 @@ if( x > MAXL2)
 if( x < MINL2 )
 	{
 #ifndef INFINITIES
-	mtherr( "exp2", UNDERFLOW );
+	mtherr( "md_exp2", UNDERFLOW );
 #endif
 	return(0.0);
 	}
 
 xx = x;	/* save x */
 /* separate into integer and fractional parts */
-px = floor(x+0.5);
+px = md_floor(x+0.5);
 n = px;
 x = x - px;
 
 /* rational approximation
- * exp2(x) = 1 +  2xP(xx)/(Q(xx) - P(xx))
+ * md_exp2(x) = 1 +  2xP(xx)/(Q(xx) - P(xx))
  * where xx = x**2
  */
 xx = x * x;
 px = x * polevl( xx, P, 2 );
 x =  px / ( p1evl( xx, Q, 2 ) - px );
-x = 1.0 + ldexp( x, 1 );
+x = 1.0 + md_ldexp( x, 1 );
 
 /* scale by power of 2 */
-x = ldexp( x, n );
+x = md_ldexp( x, n );
 return(x);
 }

@@ -19,7 +19,7 @@
  *           x
  *           -
  *          | |
- * C(x) =   |   cos(pi/2 t**2) dt,
+ * C(x) =   |   md_cos(pi/2 t**2) dt,
  *        | |
  *         -
  *          0
@@ -27,7 +27,7 @@
  *           x
  *           -
  *          | |
- * S(x) =   |   sin(pi/2 t**2) dt.
+ * S(x) =   |   md_sin(pi/2 t**2) dt.
  *        | |
  *         -
  *          0
@@ -37,8 +37,8 @@
  * For x >= 1 auxiliary functions f(x) and g(x) are employed
  * such that
  *
- * C(x) = 0.5 + f(x) sin( pi/2 x**2 ) - g(x) cos( pi/2 x**2 )
- * S(x) = 0.5 - f(x) cos( pi/2 x**2 ) - g(x) sin( pi/2 x**2 )
+ * C(x) = 0.5 + f(x) md_sin( pi/2 x**2 ) - g(x) md_cos( pi/2 x**2 )
+ * S(x) = 0.5 - f(x) md_cos( pi/2 x**2 ) - g(x) md_sin( pi/2 x**2 )
  *
  *
  *
@@ -446,13 +446,13 @@ static unsigned short gd[44] = {
 #endif
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double cos ( double );
-extern double sin ( double );
+extern double md_fabs ( double );
+extern double md_cos ( double );
+extern double md_sin ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 #else
-double fabs(), cos(), sin(), polevl(), p1evl();
+double md_fabs(), md_cos(), md_sin(), polevl(), p1evl();
 #endif
 extern double PI, PIO2, MACHEP;
 
@@ -462,7 +462,7 @@ double xxa, *ssa, *cca;
 double f, g, cc, ss, c, s, t, u;
 double x, x2;
 
-x = fabs(xxa);
+x = md_fabs(xxa);
 x2 = x * x;
 if( x2 < 2.5625 )
 	{
@@ -496,8 +496,8 @@ if( x > 36974.0 )
 	g = t * polevl( u, gn, 10)/p1evl(u, gd, 11);
 
 	t = PIO2 * x2;
-	c = cos(t);
-	s = sin(t);
+	c = md_cos(t);
+	s = md_sin(t);
 	t = PI * x;
 	cc = 0.5  +  (f * s  -  g * c)/t;
 	ss = 0.5  -  (f * c  +  g * s)/t;

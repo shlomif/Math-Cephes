@@ -82,6 +82,10 @@ To install, within the ppm shell set the repository to
       http://theoryx5.uwinnipeg.ca/cgi-bin/ppmserver?urn:/PPMServer
 and then
       ppm> install Math-Cephes
+For Win32 ActivePerl 8xx, the corresponding repository is
+     http://theoryx5.uwinnipeg.ca/ppms/
+with the repository location within the ppm shell as
+      http://theoryx5.uwinnipeg.ca/cgi-bin/ppmserver?urn:/PPMServer58
 
 The C code for the Cephes Math Library is Copyright 1984, 1987, 
 1989, 2002 by Stephen L. Moshier, and is available at 

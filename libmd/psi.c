@@ -16,7 +16,7 @@
  *   psi(x)  =  -- ln | (x)
  *              dx
  *
- * is the logarithmic derivative of the gamma function.
+ * is the logarithmic derivative of the md_gamma function.
  * For integer x,
  *                   n-1
  *                    -
@@ -33,7 +33,7 @@
  *
  *                           inf.   B
  *                            -      2k
- * psi(x) = log(x) - 1/2x -   >   -------
+ * psi(x) = md_log(x) - 1/2x -   >   -------
  *                            -        2k
  *                           k=1   2k x
  *
@@ -109,12 +109,12 @@ static unsigned short A[] = {
 #define EUL 0.57721566490153286061
 
 #ifdef ANSIPROT
-extern double floor ( double );
-extern double log ( double );
-extern double tan ( double );
+extern double md_floor ( double );
+extern double md_log ( double );
+extern double md_tan ( double );
 extern double polevl ( double, void *, int );
 #else
-double floor(), log(), tan(), polevl();
+double md_floor(), md_log(), md_tan(), polevl();
 #endif
 extern double PI, MAXNUM;
 
@@ -132,13 +132,13 @@ if( x <= 0.0 )
 	{
 	negative = 1;
 	q = x;
-	p = floor(q);
+	p = md_floor(q);
 	if( p == q )
 		{
 		mtherr( "psi", SING );
 		return( MAXNUM );
 		}
-/* Remove the zeros of tan(PI x)
+/* Remove the zeros of md_tan(PI x)
  * by subtracting the nearest integer from x
  */
 	nz = q - p;
@@ -149,7 +149,7 @@ if( x <= 0.0 )
 			p += 1.0;
 			nz = q - p;
 			}
-		nz = PI/tan(PI*nz);
+		nz = PI/md_tan(PI*nz);
 		}
 	else
 		{
@@ -159,7 +159,7 @@ if( x <= 0.0 )
 	}
 
 /* check for positive integer up to 10 */
-if( (x <= 10.0) && (x == floor(x)) )
+if( (x <= 10.0) && (x == md_floor(x)) )
 	{
 	y = 0.0;
 	n = x;
@@ -188,7 +188,7 @@ if( s < 1.0e17 )
 else
 	y = 0.0;
 
-y = log(s)  -  (0.5/s)  -  y  -  w;
+y = md_log(s)  -  (0.5/s)  -  y  -  w;
 
 done:
 

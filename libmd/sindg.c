@@ -1,4 +1,4 @@
-/*							sindg.c
+/*							md_sindg.c
  *
  *	Circular sine of angle in degrees
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, sindg();
+ * double x, y, md_sindg();
  *
- * y = sindg( x );
+ * y = md_sindg( x );
  *
  *
  *
@@ -34,7 +34,7 @@
  * ERROR MESSAGES:
  *
  *   message           condition        value returned
- * sindg total loss   x > 8.0e14 (DEC)      0.0
+ * md_sindg total loss   x > 8.0e14 (DEC)      0.0
  *                    x > 1.0e14 (IEEE)
  *
  */
@@ -69,7 +69,7 @@
  * arithmetic   domain      # trials      peak         rms
  *    DEC      +-1000         3400       3.5e-17     9.1e-18
  *    IEEE     +-1000        30000       2.1e-16     5.7e-17
- *  See also sin().
+ *  See also md_sin().
  *
  */
 
@@ -176,14 +176,14 @@ static double lossth = 1.0e14;
 
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
-extern double floor ( double );
-extern double ldexp ( double, int );
+extern double md_floor ( double );
+extern double md_ldexp ( double, int );
 #else
-double polevl(), floor(), ldexp();
+double polevl(), md_floor(), md_ldexp();
 #endif
 extern double PIO4;
 
-double sindg(x)
+double md_sindg(x)
 double x;
 {
 double y, z, zz;
@@ -199,16 +199,16 @@ if( x < 0 )
 
 if( x > lossth )
 	{
-	mtherr( "sindg", TLOSS );
+	mtherr( "md_sindg", TLOSS );
 	return(0.0);
 	}
 
-y = floor( x/45.0 ); /* integer part of x/PIO4 */
+y = md_floor( x/45.0 ); /* integer part of x/PIO4 */
 
 /* strip high bits of integer part to prevent integer overflow */
-z = ldexp( y, -4 );
-z = floor(z);           /* integer part of y/8 */
-z = y - ldexp( z, 4 );  /* y - 16 * (y/16) */
+z = md_ldexp( y, -4 );
+z = md_floor(z);           /* integer part of y/8 */
+z = y - md_ldexp( z, 4 );  /* y - 16 * (y/16) */
 
 j = z; /* convert to integer for tests on the phase angle */
 /* map zeros to origin */
@@ -265,10 +265,10 @@ if( x > lossth )
 	return(0.0);
 	}
 
-y = floor( x/45.0 );
-z = ldexp( y, -4 );
-z = floor(z);		/* integer part of y/8 */
-z = y - ldexp( z, 4 );  /* y - 16 * (y/16) */
+y = md_floor( x/45.0 );
+z = md_ldexp( y, -4 );
+z = md_floor(z);		/* integer part of y/8 */
+z = y - md_ldexp( z, 4 );  /* y - 16 * (y/16) */
 
 /* integer and fractional part modulo one octant */
 j = z;

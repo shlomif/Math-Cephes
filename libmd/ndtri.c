@@ -19,11 +19,11 @@
  * minus infinity to x) is equal to y.
  *
  *
- * For small arguments 0 < y < exp(-2), the program computes
- * z = sqrt( -2.0 * log(y) );  then the approximation is
- * x = z - log(z)/z  - (1/z) P(1/z) / Q(1/z).
- * There are two rational functions P/Q, one for 0 < y < exp(-32)
- * and the other for y up to exp(-2).  For larger arguments,
+ * For small arguments 0 < y < md_exp(-2), the program computes
+ * z = sqrt( -2.0 * md_log(y) );  then the approximation is
+ * x = z - md_log(z)/z  - (1/z) P(1/z) / Q(1/z).
+ * There are two rational functions P/Q, one for 0 < y < md_exp(-32)
+ * and the other for y up to md_exp(-2).  For larger arguments,
  * w = y - 0.5, and  x/sqrt(2pi) = w + w**3 R(w**2)/S(w**2)).
  *
  *
@@ -159,8 +159,8 @@ static unsigned short Q0[32] = {
 #endif
 
 
-/* Approximation for interval z = sqrt(-2 log y ) between 2 and 8
- * i.e., y between exp(-2) = .135 and exp(-32) = 1.27e-14.
+/* Approximation for interval z = sqrt(-2 md_log y ) between 2 and 8
+ * i.e., y between md_exp(-2) = .135 and md_exp(-32) = 1.27e-14.
  */
 #ifdef UNK
 static double P1[9] = {
@@ -259,8 +259,8 @@ static unsigned short Q1[32] = {
 };
 #endif
 
-/* Approximation for interval z = sqrt(-2 log y ) between 8 and 64
- * i.e., y between exp(-32) = 1.27e-14 and exp(-2048) = 3.67e-890.
+/* Approximation for interval z = sqrt(-2 md_log y ) between 8 and 64
+ * i.e., y between md_exp(-32) = 1.27e-14 and md_exp(-2048) = 3.67e-890.
  */
 
 #ifdef UNK
@@ -363,31 +363,31 @@ static unsigned short Q2[32] = {
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double log ( double );
+extern double md_log ( double );
 extern double sqrt ( double );
 #else
-double polevl(), p1evl(), log(), sqrt();
+double polevl(), p1evl(), md_log(), sqrt();
 #endif
 
-double ndtri(y0)
-double y0;
+double ndtri(md_y0)
+double md_y0;
 {
 double x, y, z, y2, x0, x1;
 int code;
 
-if( y0 <= 0.0 )
+if( md_y0 <= 0.0 )
 	{
 	mtherr( "ndtri", DOMAIN );
 	return( -MAXNUM );
 	}
-if( y0 >= 1.0 )
+if( md_y0 >= 1.0 )
 	{
 	mtherr( "ndtri", DOMAIN );
 	return( MAXNUM );
 	}
 code = 1;
-y = y0;
-if( y > (1.0 - 0.13533528323661269189) ) /* 0.135... = exp(-2) */
+y = md_y0;
+if( y > (1.0 - 0.13533528323661269189) ) /* 0.135... = md_exp(-2) */
 	{
 	y = 1.0 - y;
 	code = 0;
@@ -402,11 +402,11 @@ if( y > 0.13533528323661269189 )
 	return(x);
 	}
 
-x = sqrt( -2.0 * log(y) );
-x0 = x - log(x)/x;
+x = sqrt( -2.0 * md_log(y) );
+x0 = x - md_log(x)/x;
 
 z = 1.0/x;
-if( x < 8.0 ) /* y > exp(-32) = 1.2664165549e-14 */
+if( x < 8.0 ) /* y > md_exp(-32) = 1.2664165549e-14 */
 	x1 = z * polevl( z, P1, 8 )/p1evl( z, Q1, 8 );
 else
 	x1 = z * polevl( z, P2, 8 )/p1evl( z, Q2, 8 );

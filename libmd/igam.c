@@ -1,6 +1,6 @@
 /*							igam.c
  *
- *	Incomplete gamma integral
+ *	Incomplete md_gamma integral
  *
  *
  *
@@ -37,7 +37,7 @@
  */
 /*							igamc()
  *
- *	Complemented incomplete gamma integral
+ *	Complemented incomplete md_gamma integral
  *
  *
  *
@@ -85,13 +85,13 @@ Copyright 1985, 1987, 2000 by Stephen L. Moshier
 #include "mconf.h"
 #ifdef ANSIPROT
 extern double lgam ( double );
-extern double exp ( double );
-extern double log ( double );
-extern double fabs ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
+extern double md_fabs ( double );
 extern double igam ( double, double );
 extern double igamc ( double, double );
 #else
-double lgam(), exp(), log(), fabs(), igam(), igamc();
+double lgam(), md_exp(), md_log(), md_fabs(), igam(), igamc();
 #endif
 
 extern double MACHEP, MAXLOG;
@@ -110,13 +110,13 @@ if( (x <= 0) || ( a <= 0) )
 if( (x < 1.0) || (x < a) )
 	return( 1.0 - igam(a,x) );
 
-ax = a * log(x) - x - lgam(a);
+ax = a * md_log(x) - x - lgam(a);
 if( ax < -MAXLOG )
 	{
 	mtherr( "igamc", UNDERFLOW );
 	return( 0.0 );
 	}
-ax = exp(ax);
+ax = md_exp(ax);
 
 /* continued fraction */
 y = 1.0 - a;
@@ -139,7 +139,7 @@ do
 	if( qk != 0 )
 		{
 		r = pk/qk;
-		t = fabs( (ans - r)/r );
+		t = md_fabs( (ans - r)/r );
 		ans = r;
 		}
 	else
@@ -148,7 +148,7 @@ do
 	pkm1 = pk;
 	qkm2 = qkm1;
 	qkm1 = qk;
-	if( fabs(pk) > big )
+	if( md_fabs(pk) > big )
 		{
 		pkm2 *= biginv;
 		pkm1 *= biginv;
@@ -163,7 +163,7 @@ return( ans * ax );
 
 
 
-/* left tail of incomplete gamma function:
+/* left tail of incomplete md_gamma function:
  *
  *          inf.      k
  *   a  -x   -       x
@@ -184,14 +184,14 @@ if( (x <= 0) || ( a <= 0) )
 if( (x > 1.0) && (x > a ) )
 	return( 1.0 - igamc(a,x) );
 
-/* Compute  x**a * exp(-x) / gamma(a)  */
-ax = a * log(x) - x - lgam(a);
+/* Compute  x**a * md_exp(-x) / md_gamma(a)  */
+ax = a * md_log(x) - x - lgam(a);
 if( ax < -MAXLOG )
 	{
 	mtherr( "igam", UNDERFLOW );
 	return( 0.0 );
 	}
-ax = exp(ax);
+ax = md_exp(ax);
 
 /* power series */
 r = a;

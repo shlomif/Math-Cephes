@@ -17,7 +17,7 @@
  * Returns modified Bessel function of order one of the
  * argument.
  *
- * The function is defined as i1(x) = -i j1( ix ).
+ * The function is defined as i1(x) = -i md_j1( ix ).
  *
  * The range is partitioned into the two intervals [0,8] and
  * (8, infinity).  Chebyshev polynomial expansions are employed
@@ -54,7 +54,7 @@
  * Returns exponentially scaled modified Bessel function
  * of order one of the argument.
  *
- * The function is defined as i1(x) = -i exp(-|x|) j1( ix ).
+ * The function is defined as i1(x) = -i md_exp(-|x|) md_j1( ix ).
  *
  *
  *
@@ -77,10 +77,10 @@ Copyright 1985, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 
-/* Chebyshev coefficients for exp(-x) I1(x) / x
+/* Chebyshev coefficients for md_exp(-x) I1(x) / x
  * in the interval [0,8].
  *
- * lim(x->0){ exp(-x) I1(x) / x } = 1/2.
+ * lim(x->0){ md_exp(-x) I1(x) / x } = 1/2.
  */
 
 #ifdef UNK
@@ -222,10 +222,10 @@ static unsigned short A[] = {
 
 /*							i1.c	*/
 
-/* Chebyshev coefficients for exp(-x) sqrt(x) I1(x)
+/* Chebyshev coefficients for md_exp(-x) sqrt(x) I1(x)
  * in the inverted interval [8,infinity].
  *
- * lim(x->inf){ exp(-x) sqrt(x) I1(x) } = 1/sqrt(2pi).
+ * lim(x->inf){ md_exp(-x) sqrt(x) I1(x) } = 1/sqrt(2pi).
  */
 
 #ifdef UNK
@@ -352,11 +352,11 @@ static unsigned short B[] = {
 /*							i1.c	*/
 #ifdef ANSIPROT
 extern double chbevl ( double, void *, int );
-extern double exp ( double );
+extern double md_exp ( double );
 extern double sqrt ( double );
-extern double fabs ( double );
+extern double md_fabs ( double );
 #else
-double chbevl(), exp(), sqrt(), fabs();
+double chbevl(), md_exp(), sqrt(), md_fabs();
 #endif
 
 double i1(x)
@@ -364,15 +364,15 @@ double x;
 { 
 double y, z;
 
-z = fabs(x);
+z = md_fabs(x);
 if( z <= 8.0 )
 	{
 	y = (z/2.0) - 2.0;
-	z = chbevl( y, A, 29 ) * z * exp(z);
+	z = chbevl( y, A, 29 ) * z * md_exp(z);
 	}
 else
 	{
-	z = exp(z) * chbevl( 32.0/z - 2.0, B, 25 ) / sqrt(z);
+	z = md_exp(z) * chbevl( 32.0/z - 2.0, B, 25 ) / sqrt(z);
 	}
 if( x < 0.0 )
 	z = -z;
@@ -386,7 +386,7 @@ double x;
 { 
 double y, z;
 
-z = fabs(x);
+z = md_fabs(x);
 if( z <= 8.0 )
 	{
 	y = (z/2.0) - 2.0;

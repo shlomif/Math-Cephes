@@ -49,20 +49,20 @@ Copyright 1984, 1996, 2000 by Stephen L. Moshier
 extern double MACHEP, MAXNUM, MAXLOG, MINLOG;
 #ifdef ANSIPROT
 extern double ndtri ( double );
-extern double exp ( double );
-extern double fabs ( double );
-extern double log ( double );
+extern double md_exp ( double );
+extern double md_fabs ( double );
+extern double md_log ( double );
 extern double sqrt ( double );
 extern double lgam ( double );
 extern double incbet ( double, double, double );
 #else
-double ndtri(), exp(), fabs(), log(), sqrt(), lgam(), incbet();
+double ndtri(), md_exp(), md_fabs(), md_log(), sqrt(), lgam(), incbet();
 #endif
 
 double incbi( aa, bb, yy0 )
 double aa, bb, yy0;
 {
-double a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt;
+double a, b, md_y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt;
 int i, rflg, dir, nflg;
 
 
@@ -83,7 +83,7 @@ if( aa <= 1.0 || bb <= 1.0 )
 	rflg = 0;
 	a = aa;
 	b = bb;
-	y0 = yy0;
+	md_y0 = yy0;
 	x = a/(a+b);
 	y = incbet( a, b, x );
 	goto ihalve;
@@ -101,7 +101,7 @@ if( yy0 > 0.5 )
 	rflg = 1;
 	a = bb;
 	b = aa;
-	y0 = 1.0 - yy0;
+	md_y0 = 1.0 - yy0;
 	yp = -yp;
 	}
 else
@@ -109,7 +109,7 @@ else
 	rflg = 0;
 	a = aa;
 	b = bb;
-	y0 = yy0;
+	md_y0 = yy0;
 	}
 
 lgm = (yp * yp - 3.0)/6.0;
@@ -123,10 +123,10 @@ if( d < MINLOG )
 	x = 1.0;
 	goto under;
 	}
-x = a/( a + b * exp(d) );
+x = a/( a + b * md_exp(d) );
 y = incbet( a, b, x );
-yp = (y - y0)/y0;
-if( fabs(yp) < 0.2 )
+yp = (y - md_y0)/md_y0;
+if( md_fabs(yp) < 0.2 )
 	goto newt;
 
 /* Resort to interval halving if not close enough. */
@@ -150,13 +150,13 @@ for( i=0; i<100; i++ )
 			}
 		y = incbet( a, b, x );
 		yp = (x1 - x0)/(x1 + x0);
-		if( fabs(yp) < dithresh )
+		if( md_fabs(yp) < dithresh )
 			goto newt;
-		yp = (y-y0)/y0;
-		if( fabs(yp) < dithresh )
+		yp = (y-md_y0)/md_y0;
+		if( md_fabs(yp) < dithresh )
 			goto newt;
 		}
-	if( y < y0 )
+	if( y < md_y0 )
 		{
 		x0 = x;
 		yl = y;
@@ -170,7 +170,7 @@ for( i=0; i<100; i++ )
 		else if( dir > 1 )
 			di = 0.5 * di + 0.5; 
 		else
-			di = (y0 - y)/(yh - yl);
+			di = (md_y0 - y)/(yh - yl);
 		dir += 1;
 		if( x0 > 0.75 )
 			{
@@ -179,14 +179,14 @@ for( i=0; i<100; i++ )
 				rflg = 0;
 				a = aa;
 				b = bb;
-				y0 = yy0;
+				md_y0 = yy0;
 				}
 			else
 				{
 				rflg = 1;
 				a = bb;
 				b = aa;
-				y0 = 1.0 - yy0;
+				md_y0 = 1.0 - yy0;
 				}
 			x = 1.0 - x;
 			y = incbet( a, b, x );
@@ -216,7 +216,7 @@ for( i=0; i<100; i++ )
 		else if( dir < -1 )
 			di = 0.5 * di;
 		else
-			di = (y - y0)/(yh - yl);
+			di = (y - md_y0)/(yh - yl);
 		dir -= 1;
 		}
 	}
@@ -256,7 +256,7 @@ for( i=0; i<8; i++ )
 		x = x1;
 		y = yh;
 		}
-	else if( y < y0 )
+	else if( y < md_y0 )
 		{
 		x0 = x;
 		yl = y;
@@ -269,14 +269,14 @@ for( i=0; i<8; i++ )
 	if( x == 1.0 || x == 0.0 )
 		break;
 	/* Compute the derivative of the function at this point. */
-	d = (a - 1.0) * log(x) + (b - 1.0) * log(1.0-x) + lgm;
+	d = (a - 1.0) * md_log(x) + (b - 1.0) * md_log(1.0-x) + lgm;
 	if( d < MINLOG )
 		goto done;
 	if( d > MAXLOG )
 		break;
-	d = exp(d);
+	d = md_exp(d);
 	/* Compute the step to the next approximation of x. */
-	d = (y - y0)/d;
+	d = (y - md_y0)/d;
 	xt = x - d;
 	if( xt <= x0 )
 		{
@@ -293,7 +293,7 @@ for( i=0; i<8; i++ )
 			break;
 		}
 	x = xt;
-	if( fabs(d/x) < 128.0 * MACHEP )
+	if( md_fabs(d/x) < 128.0 * MACHEP )
 		goto done;
 	}
 /* Did not converge.  */

@@ -1,4 +1,4 @@
-/*							gamma.c
+/*							md_gamma.c
  *
  *	Gamma function
  *
@@ -6,19 +6,19 @@
  *
  * SYNOPSIS:
  *
- * double x, y, gamma();
+ * double x, y, md_gamma();
  * extern int sgngam;
  *
- * y = gamma( x );
+ * y = md_gamma( x );
  *
  *
  *
  * DESCRIPTION:
  *
- * Returns gamma function of the argument.  The result is
+ * Returns md_gamma function of the argument.  The result is
  * correctly signed, and the sign (+1 or -1) is also
  * returned in a global (extern) variable named sgngam.
- * This variable is also filled in by the logarithmic gamma
+ * This variable is also filled in by the logarithmic md_gamma
  * function lgam().
  *
  * Arguments |x| <= 34 are reduced by recurrence and the function
@@ -43,7 +43,7 @@
  */
 /*							lgam()
  *
- *	Natural logarithm of gamma function
+ *	Natural logarithm of md_gamma function
  *
  *
  *
@@ -59,11 +59,11 @@
  * DESCRIPTION:
  *
  * Returns the base e (2.718...) logarithm of the absolute
- * value of the gamma function of the argument.
- * The sign (+1 or -1) of the gamma function is returned in a
+ * value of the md_gamma function of the argument.
+ * The sign (+1 or -1) of the md_gamma function is returned in a
  * global (extern) variable named sgngam.
  *
- * For arguments greater than 13, the logarithm of the gamma
+ * For arguments greater than 13, the logarithm of the md_gamma
  * function is approximated by the logarithmic version of
  * Stirling's formula using a polynomial approximation of
  * degree 4. Arguments between -33 and +33 are reduced by
@@ -95,8 +95,8 @@
  *
  */
 
-/*							gamma.c	*/
-/*	gamma function	*/
+/*							md_gamma.c	*/
+/*	md_gamma function	*/
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -211,7 +211,7 @@ static unsigned short LPI[4] = {
 #define LOGPI *(double *)LPI
 #endif 
 
-/* Stirling's formula for the gamma function */
+/* Stirling's formula for the md_gamma function */
 #if UNK
 static double STIR[5] = {
  7.87311395793093628397E-4,
@@ -270,20 +270,20 @@ int sgngam = 0;
 extern int sgngam;
 extern double MAXLOG, MAXNUM, PI;
 #ifdef ANSIPROT
-extern double pow ( double, double );
-extern double log ( double );
-extern double exp ( double );
-extern double sin ( double );
+extern double md_pow ( double, double );
+extern double md_log ( double );
+extern double md_exp ( double );
+extern double md_sin ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double floor ( double );
-extern double fabs ( double );
+extern double md_floor ( double );
+extern double md_fabs ( double );
 extern int isnan ( double );
 extern int isfinite ( double );
 static double stirf ( double );
 double lgam ( double );
 #else
-double pow(), log(), exp(), sin(), polevl(), p1evl(), floor(), fabs();
+double md_pow(), md_log(), md_exp(), md_sin(), polevl(), p1evl(), md_floor(), md_fabs();
 int isnan(), isfinite();
 static double stirf();
 double lgam();
@@ -305,15 +305,15 @@ double y, w, v;
 
 w = 1.0/x;
 w = 1.0 + w * polevl( w, STIR, 4 );
-y = exp(x);
+y = md_exp(x);
 if( x > MAXSTIR )
-	{ /* Avoid overflow in pow() */
-	v = pow( x, 0.5 * x - 0.25 );
+	{ /* Avoid overflow in md_pow() */
+	v = md_pow( x, 0.5 * x - 0.25 );
 	y = v * (v / y);
 	}
 else
 	{
-	y = pow( x, x - 0.5 ) / y;
+	y = md_pow( x, x - 0.5 ) / y;
 	}
 y = SQTPI * y * w;
 return( y );
@@ -321,7 +321,7 @@ return( y );
 
 
 
-double gamma(x)
+double md_gamma(x)
 double x;
 {
 double p, q, z;
@@ -343,18 +343,18 @@ if( !isfinite(x) )
 	return(x);
 #endif
 #endif
-q = fabs(x);
+q = md_fabs(x);
 
 if( q > 33.0 )
 	{
 	if( x < 0.0 )
 		{
-		p = floor(q);
+		p = md_floor(q);
 		if( p == q )
 			{
 #ifdef NANS
 gamnan:
-			mtherr( "gamma", DOMAIN );
+			mtherr( "md_gamma", DOMAIN );
 			return (NAN);
 #else
 			goto goverf;
@@ -369,18 +369,18 @@ gamnan:
 			p += 1.0;
 			z = q - p;
 			}
-		z = q * sin( PI * z );
+		z = q * md_sin( PI * z );
 		if( z == 0.0 )
 			{
 #ifdef INFINITIES
 			return( sgngam * INFINITY);
 #else
 goverf:
-			mtherr( "gamma", OVERFLOW );
+			mtherr( "md_gamma", OVERFLOW );
 			return( sgngam * MAXNUM);
 #endif
 			}
-		z = fabs(z);
+		z = md_fabs(z);
 		z = PI/(z * stirf(q) );
 		}
 	else
@@ -431,7 +431,7 @@ if( x == 0.0 )
 	  return( INFINITY );
 #endif
 #else
-	mtherr( "gamma", SING );
+	mtherr( "md_gamma", SING );
 	return( MAXNUM );
 #endif
 	}
@@ -441,8 +441,8 @@ else
 
 
 
-/* A[]: Stirling's formula expansion of log gamma
- * B[], C[]: log gamma function between 2 and 3
+/* A[]: Stirling's formula expansion of md_log md_gamma
+ * B[], C[]: md_log md_gamma function between 2 and 3
  */
 #ifdef UNK
 static double A[] = {
@@ -469,7 +469,7 @@ static double C[] = {
 -2.53252307177582951285E6,
 -2.01889141433532773231E6
 };
-/* log( sqrt( 2*pi ) ) */
+/* md_log( sqrt( 2*pi ) ) */
 static double LS2PI  =  0.91893853320467274178;
 #define MAXLGM 2.556348e305
 #endif
@@ -499,7 +499,7 @@ static unsigned short C[] = {
 0145432,0111254,0044577,0115142,
 0145366,0071133,0050217,0005122
 };
-/* log( sqrt( 2*pi ) ) */
+/* md_log( sqrt( 2*pi ) ) */
 static unsigned short LS2P[] = {040153,037616,041445,0172645,};
 #define LS2PI *(double *)LS2P
 #define MAXLGM 2.035093e36
@@ -530,7 +530,7 @@ static unsigned short C[] = {
 0xf34c,0x892f,0x5255,0xc143,
 0xe14a,0x6a11,0xce4b,0xc13e
 };
-/* log( sqrt( 2*pi ) ) */
+/* md_log( sqrt( 2*pi ) ) */
 static unsigned short LS2P[] = {
 0xbeb5,0xc864,0x67f1,0x3fed
 };
@@ -562,7 +562,7 @@ static unsigned short C[] = {
 0xc143,0x5255,0x892f,0xf34c,
 0xc13e,0xce4b,0x6a11,0xe14a
 };
-/* log( sqrt( 2*pi ) ) */
+/* md_log( sqrt( 2*pi ) ) */
 static unsigned short LS2P[] = {
 0x3fed,0x67f1,0xc864,0xbeb5
 };
@@ -571,7 +571,7 @@ static unsigned short LS2P[] = {
 #endif
 
 
-/* Logarithm of gamma function */
+/* Logarithm of md_gamma function */
 
 
 double lgam(x)
@@ -595,7 +595,7 @@ if( x < -34.0 )
 	{
 	q = -x;
 	w = lgam(q); /* note this modifies sgngam! */
-	p = floor(q);
+	p = md_floor(q);
 	if( p == q )
 		{
 lgsing:
@@ -617,11 +617,11 @@ lgsing:
 		p += 1.0;
 		z = p - q;
 		}
-	z = q * sin( PI * z );
+	z = q * md_sin( PI * z );
 	if( z == 0.0 )
 		goto lgsing;
-/*	z = log(PI) - log( z ) - w;*/
-	z = LOGPI - log( z ) - w;
+/*	z = md_log(PI) - md_log( z ) - w;*/
+	z = LOGPI - md_log( z ) - w;
 	return( z );
 	}
 
@@ -652,11 +652,11 @@ if( x < 13.0 )
 	else
 		sgngam = 1;
 	if( u == 2.0 )
-		return( log(z) );
+		return( md_log(z) );
 	p -= 2.0;
 	x = x + p;
 	p = x * polevl( x, B, 5 ) / p1evl( x, C, 6);
-	return( log(z) + p );
+	return( md_log(z) + p );
 	}
 
 if( x > MAXLGM )
@@ -670,7 +670,7 @@ loverf:
 #endif
 	}
 
-q = ( x - 0.5 ) * log(x) - x + LS2PI;
+q = ( x - 0.5 ) * md_log(x) - x + LS2PI;
 if( x > 1.0e8 )
 	return( q );
 

@@ -22,7 +22,7 @@
  *             -inf
  * 
  * Not defined for x <= 0.
- * See also expn.c.
+ * See also md_expn.c.
  *
  *
  *
@@ -41,12 +41,12 @@ Copyright 1999 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double log ( double );
-extern double exp ( double );
+extern double md_log ( double );
+extern double md_exp ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 #else
-extern double log(), exp(), polevl(), p1evl();
+extern double md_log(), md_exp(), polevl(), p1evl();
 #endif
 
 #define EUL 5.772156649015328606065e-1
@@ -329,7 +329,7 @@ static short B[36] = {
 #endif /* 0 */
 
 /* 8 <= x <= 20
-   x exp(-x) Ei(x) - 1 = 1/x R(1/x)
+   x md_exp(-x) Ei(x) - 1 = 1/x R(1/x)
    Theoretical peak absolute error = 1.07e-17  */
 #if UNK
 static double A2[10] = {
@@ -437,7 +437,7 @@ static short B2[36] = {
 #endif
 
 /* x > 20
-   x exp(-x) Ei(x) - 1  =  1/x A3(1/x)/B3(1/x)
+   x md_exp(-x) Ei(x) - 1  =  1/x A3(1/x)/B3(1/x)
    Theoretical absolute error = 6.15e-17  */
 #if UNK
 static double A3[9] = {
@@ -541,7 +541,7 @@ static short B3[36] = {
 #endif
 
 /* 16 <= x <= 32
-   x exp(-x) Ei(x) - 1  =  1/x A4(1/x) / B4(1/x)
+   x md_exp(-x) Ei(x) - 1  =  1/x A4(1/x) / B4(1/x)
    Theoretical absolute error = 1.22e-17  */
 #if UNK
 static double A4[8] = {
@@ -639,7 +639,7 @@ static short B4[32] = {
 
 #if 0
 /* 20 <= x <= 40
-   x exp(-x) Ei(x) - 1  =  1/x A4(1/x) / B4(1/x)
+   x md_exp(-x) Ei(x) - 1  =  1/x A4(1/x) / B4(1/x)
    Theoretical absolute error = 1.78e-17  */
 #if UNK
 static double A4[8] = {
@@ -732,7 +732,7 @@ static short B4[28] = {
 #endif /* 0 */
 
 /* 4 <= x <= 8
-   x exp(-x) Ei(x) - 1  =  1/x A5(1/x) / B5(1/x)
+   x md_exp(-x) Ei(x) - 1  =  1/x A5(1/x) / B5(1/x)
    Theoretical absolute error = 2.20e-17  */
 #if UNK
 static double A5[8] = {
@@ -827,7 +827,7 @@ static short B5[32] = {
 };
 #endif
 /* 2 <= x <= 4
-   x exp(-x) Ei(x) - 1  =  1/x A6(1/x) / B6(1/x)
+   x md_exp(-x) Ei(x) - 1  =  1/x A6(1/x) / B6(1/x)
    Theoretical absolute error = 4.89e-17  */
 #if UNK
 static double A6[8] = {
@@ -918,7 +918,7 @@ static short B6[28] = {
 };
 #endif
 /* 32 <= x <= 64
-   x exp(-x) Ei(x) - 1  =  1/x A7(1/x) / B7(1/x)
+   x md_exp(-x) Ei(x) - 1  =  1/x A7(1/x) / B7(1/x)
    Theoretical absolute error = 7.71e-18  */
 #if UNK
 static double A7[6] = {
@@ -1015,48 +1015,48 @@ double x;
       f = polevl(x,A,5) / p1evl(x,B,6);
       /*      f = polevl(x,A,6) / p1evl(x,B,7); */
       /*      f = polevl(x,A,8) / p1evl(x,B,9); */
-      return (EUL + log(x) + x * f);
+      return (EUL + md_log(x) + x * f);
     }
   else if (x < 4.0)
     {
   /* Asymptotic expansion.
                             1       2       6
-    x exp(-x) Ei(x) =  1 + ---  +  ---  +  ---- + ...
+    x md_exp(-x) Ei(x) =  1 + ---  +  ---  +  ---- + ...
                             x        2       3
                                     x       x
   */
       w = 1.0/x;
       f = polevl(w,A6,7) / p1evl(w,B6,7);
-      return (exp(x) * w * (1.0 + w * f));
+      return (md_exp(x) * w * (1.0 + w * f));
     }
   else if (x < 8.0)
     {
       w = 1.0/x;
       f = polevl(w,A5,7) / p1evl(w,B5,8);
-      return (exp(x) * w * (1.0 + w * f));
+      return (md_exp(x) * w * (1.0 + w * f));
     }
   else if (x < 16.0)
     {
       w = 1.0/x;
       f = polevl(w,A2,9) / p1evl(w,B2,9);
-      return (exp(x) * w * (1.0 + w * f));
+      return (md_exp(x) * w * (1.0 + w * f));
     }
   else if (x < 32.0)
     {
       w = 1.0/x;
       f = polevl(w,A4,7) / p1evl(w,B4,8);
-      return (exp(x) * w * (1.0 + w * f));
+      return (md_exp(x) * w * (1.0 + w * f));
     }
   else if (x < 64.0)
     {
       w = 1.0/x;
       f = polevl(w,A7,5) / p1evl(w,B7,5);
-      return (exp(x) * w * (1.0 + w * f));
+      return (md_exp(x) * w * (1.0 + w * f));
     }
   else
     {
       w = 1.0/x;
       f = polevl(w,A3,8) / p1evl(w,B3,9);
-      return (exp(x) * w * (1.0 + w * f));
+      return (md_exp(x) * w * (1.0 + w * f));
     }
 }

@@ -149,11 +149,11 @@ static double lossth = 1.0e14;
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double floor ( double );
-extern double ldexp ( double, int );
+extern double md_floor ( double );
+extern double md_ldexp ( double, int );
 static double tancot( double, int );
 #else
-double polevl(), p1evl(), floor(), ldexp();
+double polevl(), p1evl(), md_floor(), md_ldexp();
 static double tancot();
 #endif
 extern double MAXNUM;
@@ -202,12 +202,12 @@ if( x > lossth )
 	}
 
 /* compute x mod PIO4 */
-y = floor( x/45.0 );
+y = md_floor( x/45.0 );
 
 /* strip high bits of integer part */
-z = ldexp( y, -3 );
-z = floor(z);		/* integer part of y/8 */
-z = y - ldexp( z, 3 );  /* y - 16 * (y/16) */
+z = md_ldexp( y, -3 );
+z = md_floor(z);		/* integer part of y/8 */
+z = y - md_ldexp( z, 3 );  /* y - 16 * (y/16) */
 
 /* integer and fractional part modulo one octant */
 j = z;

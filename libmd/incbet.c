@@ -69,17 +69,17 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 
 extern double MACHEP, MINLOG, MAXLOG;
 #ifdef ANSIPROT
-extern double gamma ( double );
+extern double md_gamma ( double );
 extern double lgam ( double );
-extern double exp ( double );
-extern double log ( double );
-extern double pow ( double, double );
-extern double fabs ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
+extern double md_pow ( double, double );
+extern double md_fabs ( double );
 static double incbcf(double, double, double);
 static double incbd(double, double, double);
 static double pseries(double, double, double);
 #else
-double gamma(), lgam(), exp(), log(), pow(), fabs();
+double md_gamma(), lgam(), md_exp(), md_log(), md_pow(), md_fabs();
 static double incbcf(), incbd(), pseries();
 #endif
 
@@ -150,24 +150,24 @@ else
      a      b   _             _     _
     x  (1-x)   | (a+b) / ( a | (a) | (b) ) .   */
 
-y = a * log(x);
-t = b * log(xc);
-if( (a+b) < MAXGAM && fabs(y) < MAXLOG && fabs(t) < MAXLOG )
+y = a * md_log(x);
+t = b * md_log(xc);
+if( (a+b) < MAXGAM && md_fabs(y) < MAXLOG && md_fabs(t) < MAXLOG )
 	{
-	t = pow(xc,b);
-	t *= pow(x,a);
+	t = md_pow(xc,b);
+	t *= md_pow(x,a);
 	t /= a;
 	t *= w;
-	t *= gamma(a+b) / (gamma(a) * gamma(b));
+	t *= md_gamma(a+b) / (md_gamma(a) * md_gamma(b));
 	goto done;
 	}
 /* Resort to logarithms.  */
 y += t + lgam(a+b) - lgam(a) - lgam(b);
-y += log(w/a);
+y += md_log(w/a);
 if( y < MINLOG )
 	t = 0.0;
 else
-	t = exp(y);
+	t = md_exp(y);
 
 done:
 
@@ -233,7 +233,7 @@ do
 		r = pk/qk;
 	if( r != 0 )
 		{
-		t = fabs( (ans - r)/r );
+		t = md_fabs( (ans - r)/r );
 		ans = r;
 		}
 	else
@@ -251,14 +251,14 @@ do
 	k7 += 2.0;
 	k8 += 2.0;
 
-	if( (fabs(qk) + fabs(pk)) > big )
+	if( (md_fabs(qk) + md_fabs(pk)) > big )
 		{
 		pkm2 *= biginv;
 		pkm1 *= biginv;
 		qkm2 *= biginv;
 		qkm1 *= biginv;
 		}
-	if( (fabs(qk) < biginv) || (fabs(pk) < biginv) )
+	if( (md_fabs(qk) < biginv) || (md_fabs(pk) < biginv) )
 		{
 		pkm2 *= big;
 		pkm1 *= big;
@@ -326,7 +326,7 @@ do
 		r = pk/qk;
 	if( r != 0 )
 		{
-		t = fabs( (ans - r)/r );
+		t = md_fabs( (ans - r)/r );
 		ans = r;
 		}
 	else
@@ -344,14 +344,14 @@ do
 	k7 += 2.0;
 	k8 += 2.0;
 
-	if( (fabs(qk) + fabs(pk)) > big )
+	if( (md_fabs(qk) + md_fabs(pk)) > big )
 		{
 		pkm2 *= biginv;
 		pkm1 *= biginv;
 		qkm2 *= biginv;
 		qkm1 *= biginv;
 		}
-	if( (fabs(qk) < biginv) || (fabs(pk) < biginv) )
+	if( (md_fabs(qk) < biginv) || (md_fabs(pk) < biginv) )
 		{
 		pkm2 *= big;
 		pkm1 *= big;
@@ -380,7 +380,7 @@ t = u;
 n = 2.0;
 s = 0.0;
 z = MACHEP * ai;
-while( fabs(v) > z )
+while( md_fabs(v) > z )
 	{
 	u = (n - b) * x / n;
 	t *= u;
@@ -391,19 +391,19 @@ while( fabs(v) > z )
 s += t1;
 s += ai;
 
-u = a * log(x);
-if( (a+b) < MAXGAM && fabs(u) < MAXLOG )
+u = a * md_log(x);
+if( (a+b) < MAXGAM && md_fabs(u) < MAXLOG )
 	{
-	t = gamma(a+b)/(gamma(a)*gamma(b));
-	s = s * t * pow(x,a);
+	t = md_gamma(a+b)/(md_gamma(a)*md_gamma(b));
+	s = s * t * md_pow(x,a);
 	}
 else
 	{
-	t = lgam(a+b) - lgam(a) - lgam(b) + u + log(s);
+	t = lgam(a+b) - lgam(a) - lgam(b) + u + md_log(s);
 	if( t < MINLOG )
 		s = 0.0;
 	else
-	s = exp(t);
+	s = md_exp(t);
 	}
 return(s);
 }

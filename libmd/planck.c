@@ -40,7 +40,7 @@
  * ACCURACY:
  *
  * The left tail of the function experiences some relative error
- * amplification in computing the dominant term exp(-c2/(lambda T)).
+ * amplification in computing the dominant term md_exp(-c2/(lambda T)).
  * For the right-hand tail see planckc, below.
  *
  *                      Relative error.
@@ -59,13 +59,13 @@ Copyright 1999 by Stephen L. Moshier
 #include "mconf.h"
 #ifdef ANSIPROT
 extern double polylog (int, double);
-extern double exp (double);
-extern double log1p (double); /* log(1+x) */
-extern double expm1 (double); /* exp(x) - 1 */
+extern double md_exp (double);
+extern double md_log1p (double); /* md_log(1+x) */
+extern double expm1 (double); /* md_exp(x) - 1 */
 double planckc(double, double);
 double plancki(double, double);
 #else
-double polylog(), exp(), log1p(), expm1();
+double polylog(), md_exp(), md_log1p(), expm1();
 double planckc(), plancki();
 #endif
 
@@ -95,11 +95,11 @@ plancki(w, T)
       return y;
     }
 
-  h = exp(-planck_c2/(w*T));
+  h = md_exp(-planck_c2/(w*T));
   y =      6. * polylog (4, h)  * bw;
   y = (y + 6. * polylog (3, h)) * bw;
   y = (y + 3. * polylog (2, h)) * bw;
-  y = (y          - log1p (-h)) * bw;
+  y = (y          - md_log1p (-h)) * bw;
   h = w * w;
   h = h * h;
   y = y * (planck_c1 / h);
@@ -161,7 +161,7 @@ planckc (w, T)
   y = ((y + 3617./1081289781411840000.)*p - 1./5928123801600.)*p;
   y = ((y + 691./78460462080000.)*p - 1./2075673600.)*p;
   y = ((((y + 1./35481600.)*p - 1.0/544320.)*p + 1.0/6720.)*p -  1./40.)*p;
-  y = y + log(d * expm1(u));
+  y = y + md_log(d * expm1(u));
   y = y - 5.*u/8. + 1./3.;
 #else
   y = -236364091.*p/45733251691757079075225600000.;
@@ -207,7 +207,7 @@ double
 planckd(w, T)
   double w, T;
 {
-   return (planck_c2 / ((w*w*w*w*w) * (exp(planck_c2/(w*T)) - 1.0)));
+   return (planck_c2 / ((w*w*w*w*w) * (md_exp(planck_c2/(w*T)) - 1.0)));
 }
 
 

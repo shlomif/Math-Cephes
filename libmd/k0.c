@@ -76,11 +76,11 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 
-/* Chebyshev coefficients for K0(x) + log(x/2) I0(x)
+/* Chebyshev coefficients for K0(x) + md_log(x/2) I0(x)
  * in the interval [0,2].  The odd order coefficients are all
  * zero; only the even order coefficients are listed.
  * 
- * lim(x->0){ K0(x) + log(x/2) I0(x) } = -EUL.
+ * lim(x->0){ K0(x) + md_log(x/2) I0(x) } = -EUL.
  */
 
 #ifdef UNK
@@ -146,10 +146,10 @@ static unsigned short A[] = {
 
 
 
-/* Chebyshev coefficients for exp(x) sqrt(x) K0(x)
+/* Chebyshev coefficients for md_exp(x) sqrt(x) K0(x)
  * in the inverted interval [2,infinity].
  * 
- * lim(x->inf){ exp(x) sqrt(x) K0(x) } = sqrt(pi/2).
+ * lim(x->inf){ md_exp(x) sqrt(x) K0(x) } = sqrt(pi/2).
  */
 
 #ifdef UNK
@@ -275,12 +275,12 @@ static unsigned short B[] = {
 /*							k0.c	*/
 #ifdef ANSIPROT 
 extern double chbevl ( double, void *, int );
-extern double exp ( double );
+extern double md_exp ( double );
 extern double i0 ( double );
-extern double log ( double );
+extern double md_log ( double );
 extern double sqrt ( double );
 #else
-double chbevl(), exp(), i0(), log(), sqrt();
+double chbevl(), md_exp(), i0(), md_log(), sqrt();
 #endif
 extern double PI;
 extern double MAXNUM;
@@ -299,11 +299,11 @@ if( x <= 0.0 )
 if( x <= 2.0 )
 	{
 	y = x * x - 2.0;
-	y = chbevl( y, A, 10 ) - log( 0.5 * x ) * i0(x);
+	y = chbevl( y, A, 10 ) - md_log( 0.5 * x ) * i0(x);
 	return( y );
 	}
 z = 8.0/x - 2.0;
-y = exp(-x) * chbevl( z, B, 25 ) / sqrt(x);
+y = md_exp(-x) * chbevl( z, B, 25 ) / sqrt(x);
 return(y);
 }
 
@@ -324,8 +324,8 @@ if( x <= 0.0 )
 if( x <= 2.0 )
 	{
 	y = x * x - 2.0;
-	y = chbevl( y, A, 10 ) - log( 0.5 * x ) * i0(x);
-	return( y * exp(x) );
+	y = chbevl( y, A, 10 ) - md_log( 0.5 * x ) * i0(x);
+	return( y * md_exp(x) );
 	}
 
 y = chbevl( 8.0/x - 2.0, B, 25 ) / sqrt(x);

@@ -72,21 +72,21 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 #include "mconf.h"
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double cabs ( cmplx * );
+extern double md_fabs ( double );
+extern double md_cabs ( cmplx * );
 extern double sqrt ( double );
-extern double atan2 ( double, double );
-extern double cos ( double );
-extern double sin ( double );
+extern double md_atan2 ( double, double );
+extern double md_cos ( double );
+extern double md_sin ( double );
 extern double sqrt ( double );
-extern double frexp ( double, int * );
-extern double ldexp ( double, int );
+extern double md_frexp ( double, int * );
+extern double md_ldexp ( double, int );
 int isnan ( double );
 void cdiv ( cmplx *, cmplx *, cmplx * );
 void cadd ( cmplx *, cmplx *, cmplx * );
 #else
-double fabs(), cabs(), sqrt(), atan2(), cos(), sin();
-double sqrt(), frexp(), ldexp();
+double md_fabs(), md_cabs(), sqrt(), md_atan2(), md_cos(), md_sin();
+double sqrt(), md_frexp(), md_ldexp();
 int isnan();
 void cdiv(), cadd();
 #endif
@@ -158,7 +158,7 @@ q = b->i * a->r  -  b->r * a->i;
 if( y < 1.0 )
 	{
 	w = MAXNUM * y;
-	if( (fabs(p) > w) || (fabs(q) > w) || (y == 0.0) )
+	if( (md_fabs(p) > w) || (md_fabs(q) > w) || (y == 0.0) )
 		{
 		c->r = MAXNUM;
 		c->i = MAXNUM;
@@ -197,7 +197,7 @@ a->r = -a->r;
 a->i = -a->i;
 }
 
-/*							cabs()
+/*							md_cabs()
  *
  *	Complex absolute value
  *
@@ -205,11 +205,11 @@ a->i = -a->i;
  *
  * SYNOPSIS:
  *
- * double cabs();
+ * double md_cabs();
  * cmplx z;
  * double a;
  *
- * a = cabs( &z );
+ * a = md_cabs( &z );
  *
  *
  *
@@ -273,14 +273,14 @@ typedef struct
 #endif
 
 
-double cabs( z )
+double md_cabs( z )
 register cmplx *z;
 {
 double x, y, b, re, im;
 int ex, ey, e;
 
 #ifdef INFINITIES
-/* Note, cabs(INFINITY,NAN) = INFINITY. */
+/* Note, md_cabs(INFINITY,NAN) = INFINITY. */
 if( z->r == INFINITY || z->i == INFINITY
    || z->r == -INFINITY || z->i == -INFINITY )
   return( INFINITY );
@@ -293,8 +293,8 @@ if( isnan(z->i) )
   return(z->i);
 #endif
 
-re = fabs( z->r );
-im = fabs( z->i );
+re = md_fabs( z->r );
+im = md_fabs( z->i );
 
 if( re == 0.0 )
 	return( im );
@@ -302,8 +302,8 @@ if( im == 0.0 )
 	return( re );
 
 /* Get the exponents of the numbers */
-x = frexp( re, &ex );
-y = frexp( im, &ey );
+x = md_frexp( re, &ex );
+y = md_frexp( im, &ey );
 
 /* Check if one number is tiny compared to the other */
 e = ex - ey;
@@ -316,30 +316,30 @@ if( e < -PREC )
 e = (ex + ey) >> 1;
 
 /* Rescale so mean is about 1 */
-x = ldexp( re, -e );
-y = ldexp( im, -e );
+x = md_ldexp( re, -e );
+y = md_ldexp( im, -e );
 		
 /* Hypotenuse of the right triangle */
 b = sqrt( x * x  +  y * y );
 
 /* Compute the exponent of the answer. */
-y = frexp( b, &ey );
+y = md_frexp( b, &ey );
 ey = e + ey;
 
 /* Check it for overflow and underflow. */
 if( ey > MAXEXP )
 	{
-	mtherr( "cabs", OVERFLOW );
+	mtherr( "md_cabs", OVERFLOW );
 	return( INFINITY );
 	}
 if( ey < MINEXP )
 	return(0.0);
 
 /* Undo the scaling */
-b = ldexp( b, e );
+b = md_ldexp( b, e );
 return( b );
 }
-/*							csqrt()
+/*							md_csqrt()
  *
  *	Complex square root
  *
@@ -347,10 +347,10 @@ return( b );
  *
  * SYNOPSIS:
  *
- * void csqrt();
+ * void md_csqrt();
  * cmplx z, w;
  *
- * csqrt( &z, &w );
+ * md_csqrt( &z, &w );
  *
  *
  *
@@ -382,12 +382,12 @@ return( b );
  *    IEEE      -10,+10    100000       3.2e-16     7.7e-17
  *
  *                        2
- * Also tested by csqrt( z ) = z, and tested by arguments
+ * Also tested by md_csqrt( z ) = z, and tested by arguments
  * close to the real axis.
  */
 
 
-void csqrt( z, w )
+void md_csqrt( z, w )
 cmplx *z, *w;
 {
 cmplx q, s;
@@ -415,7 +415,7 @@ if( y == 0.0 )
 
 if( x == 0.0 )
 	{
-	r = fabs(y);
+	r = md_fabs(y);
 	r = sqrt(0.5*r);
 	if( y > 0 )
 		w->r = r;
@@ -428,14 +428,14 @@ if( x == 0.0 )
 /* Approximate  sqrt(x^2+y^2) - x  =  y^2/2x - y^4/24x^3 + ... .
  * The relative error in the first term is approximately y^2/12x^2 .
  */
-if( (fabs(y) < 2.e-4 * fabs(x))
+if( (md_fabs(y) < 2.e-4 * md_fabs(x))
    && (x > 0) )
 	{
 	t = 0.25*y*(y/x);
 	}
 else
 	{
-	r = cabs(z);
+	r = md_cabs(z);
 	t = 0.5*(r - x);
 	}
 
@@ -450,12 +450,12 @@ w->i *= 0.5;
 }
 
 
-double hypot( x, y )
+double md_hypot( x, y )
 double x, y;
 {
 cmplx z;
 
 z.r = x;
 z.i = y;
-return( cabs(&z) );
+return( md_cabs(&z) );
 }

@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double atan2 ( double, double );
+extern double md_atan2 ( double, double );
 extern double sqrt ( double );
-extern double fabs ( double );
-extern double sin ( double );
-extern double cos ( double );
+extern double md_fabs ( double );
+extern double md_sin ( double );
+extern double md_cos ( double );
 extern void polclr ( double *a, int n );
 extern void polmov ( double *a, int na, double *b );
 extern void polmul ( double a[], int na, double b[], int nb, double c[] );
@@ -21,7 +21,7 @@ extern void polsbt ( double a[], int na, double b[], int nb, double c[] );
 extern void * malloc ( long );
 extern void free ( void * );
 #else
-double atan2(), sqrt(), fabs(), sin(), cos();
+double md_atan2(), sqrt(), md_fabs(), md_sin(), md_cos();
 void polclr(), polmov(), polsbt(), poladd(), polsub(), polmul();
 int poldiv();
 void * malloc();
@@ -88,7 +88,7 @@ polatn( num, den, ans, nn )
       t = num[1];
       a = den[1];
     }
-  t = atan2( t, a );  /* arctan(num/den), the ANSI argument order */
+  t = md_atan2( t, a );  /* arctan(num/den), the ANSI argument order */
   polq = (double * )malloc( (MAXPOL+1) * sizeof (double) );
   polu = (double * )malloc( (MAXPOL+1) * sizeof (double) );
   polt = (double * )malloc( (MAXPOL+1) * sizeof (double) );
@@ -195,7 +195,7 @@ for( n=0; n<10; n++ )
 		y[i] *= 0.5;
 	for( i=0; i<=nn; i++ )
 		{
-		u = fabs( y[i] - z[i] );
+		u = md_fabs( y[i] - z[i] );
 		if( u > 1.0e-15 )
 			goto more;
 		}
@@ -215,10 +215,10 @@ free( x );
 
 /* Sine of a polynomial.
  * The computation uses
- *     sin(a+b) = sin(a) cos(b) + cos(a) sin(b)
+ *     md_sin(a+b) = md_sin(a) md_cos(b) + md_cos(a) md_sin(b)
  * where a is the constant term of the polynomial and
  * b is the sum of the rest of the terms.
- * Since sin(b) and cos(b) are computed by series expansions,
+ * Since md_sin(b) and md_cos(b) are computed by series expansions,
  * the value of b should be small.
  */
 void
@@ -242,17 +242,17 @@ polsin( x, y, nn )
   polclr( y, nn );
   /* a, in the description, is x[0].  b is the polynomial x - x[0].  */
   a = w[0];
-  /* c = cos (b) */
+  /* c = md_cos (b) */
   w[0] = 0.0;
   polsbt( w, nn, pcos, nn, c );
-  sc = sin(a);
-  /* sin(a) cos (b) */
+  sc = md_sin(a);
+  /* md_sin(a) md_cos (b) */
   for( i=0; i<=nn; i++ )
     c[i] *= sc;
-  /* y = sin (b)  */
+  /* y = md_sin (b)  */
   polsbt( w, nn, psin, nn, y );
-  sc = cos(a);
-  /* cos(a) sin(b) */
+  sc = md_cos(a);
+  /* md_cos(a) md_sin(b) */
   for( i=0; i<=nn; i++ )
     y[i] *= sc;
   poladd( c, nn, y, nn, y );
@@ -263,10 +263,10 @@ polsin( x, y, nn )
 
 /* Cosine of a polynomial.
  * The computation uses
- *     cos(a+b) = cos(a) cos(b) - sin(a) sin(b)
+ *     md_cos(a+b) = md_cos(a) md_cos(b) - md_sin(a) md_sin(b)
  * where a is the constant term of the polynomial and
  * b is the sum of the rest of the terms.
- * Since sin(b) and cos(b) are computed by series expansions,
+ * Since md_sin(b) and md_cos(b) are computed by series expansions,
  * the value of b should be small.
  */
 void
@@ -277,7 +277,7 @@ polcos( x, y, nn )
   double a, sc;
   double *w, *c;
   int i;
-  double sin(), cos();
+  double md_sin(), md_cos();
   if (nn > N)
     {
       mtherr ("polatn", OVERFLOW);
@@ -290,16 +290,16 @@ polcos( x, y, nn )
   polclr( y, nn );
   a = w[0];
   w[0] = 0.0;
-  /* c = cos(b)  */
+  /* c = md_cos(b)  */
   polsbt( w, nn, pcos, nn, c );
-  sc = cos(a);
-  /* cos(a) cos(b)  */
+  sc = md_cos(a);
+  /* md_cos(a) md_cos(b)  */
   for( i=0; i<=nn; i++ )
     c[i] *= sc;
-  /* y = sin(b) */
+  /* y = md_sin(b) */
   polsbt( w, nn, psin, nn, y );
-  sc = sin(a);
-  /* sin(a) sin(b) */
+  sc = md_sin(a);
+  /* md_sin(a) md_sin(b) */
   for( i=0; i<=nn; i++ )
     y[i] *= sc;
   polsub( y, nn, c, nn, y );

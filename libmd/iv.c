@@ -22,7 +22,7 @@
  * function, according to the formula
  *
  *              v  -x
- * Iv(x) = (x/2)  e   hyperg( v+0.5, 2v+1, 2x ) / gamma(v+1)
+ * Iv(x) = (x/2)  e   hyperg( v+0.5, 2v+1, 2x ) / md_gamma(v+1)
  *
  * If v is a negative integer, then v is replaced by -v.
  *
@@ -55,13 +55,13 @@ Copyright 1984, 1987, 1988, 2000 by Stephen L. Moshier
 #include "mconf.h"
 #ifdef ANSIPROT
 extern double hyperg ( double, double, double );
-extern double exp ( double );
-extern double gamma ( double );
-extern double log ( double );
-extern double fabs ( double );
-extern double floor ( double );
+extern double md_exp ( double );
+extern double md_gamma ( double );
+extern double md_log ( double );
+extern double md_fabs ( double );
+extern double md_floor ( double );
 #else
-double hyperg(), exp(), gamma(), log(), fabs(), floor();
+double hyperg(), md_exp(), md_gamma(), md_log(), md_fabs(), md_floor();
 #endif
 extern double MACHEP, MAXNUM;
 
@@ -72,7 +72,7 @@ int sign;
 double t, ax;
 
 /* If v is a negative integer, invoke symmetry */
-t = floor(v);
+t = md_floor(v);
 if( v < 0.0 )
 	{
 	if( t == v )
@@ -90,7 +90,7 @@ if( x < 0.0 )
 		mtherr( "iv", DOMAIN );
 		return( 0.0 );
 		}
-	if( v != 2.0 * floor(v/2.0) )
+	if( v != 2.0 * md_floor(v/2.0) )
 		sign = -1;
 	}
 
@@ -108,9 +108,9 @@ if( x == 0.0 )
 		return( 0.0 );
 	}
 
-ax = fabs(x);
-t = v * log( 0.5 * ax )  -  x;
-t = sign * exp(t) / gamma( v + 1.0 );
+ax = md_fabs(x);
+t = v * md_log( 0.5 * ax )  -  x;
+t = sign * md_exp(t) / md_gamma( v + 1.0 );
 ax = v + 0.5;
 return( t * hyperg( ax,  2.0 * ax,  2.0 * x ) );
 }

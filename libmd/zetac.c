@@ -27,10 +27,10 @@
  *	Riemann zeta(x) = zetac(x) + 1.
  *
  * Extension of the function definition for x < 1 is implemented.
- * Zero is returned for x > log2(MAXNUM).
+ * Zero is returned for x > md_log2(MAXNUM).
  *
  * An overflow error may occur for large negative x, due to the
- * gamma function in the reflection formula.
+ * md_gamma function in the reflection formula.
  *
  * ACCURACY:
  *
@@ -299,7 +299,7 @@ static unsigned short Q[32] = {
 };
 #endif
 
-/* log(zeta(x) - 1 - 2**-x), 10 <= x <= 50 */
+/* md_log(zeta(x) - 1 - 2**-x), 10 <= x <= 50 */
 #ifdef UNK
 static double A[11] = {
  8.70728567484590192539E6,
@@ -494,16 +494,16 @@ static unsigned short S[20] = {
  * Riemann zeta function, minus one
  */
 #ifdef ANSIPROT
-extern double sin ( double );
-extern double floor ( double );
-extern double gamma ( double );
-extern double pow ( double, double );
-extern double exp ( double );
+extern double md_sin ( double );
+extern double md_floor ( double );
+extern double md_gamma ( double );
+extern double md_pow ( double, double );
+extern double md_exp ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 double zetac ( double );
 #else
-double sin(), floor(), gamma(), pow(), exp();
+double md_sin(), md_floor(), md_gamma(), md_pow(), md_exp();
 double polevl(), p1evl(), zetac();
 #endif
 extern double MACHEP;
@@ -527,7 +527,7 @@ if( x < 0.0 )
 		}
 	s = 1.0 - x;
 	w = zetac( s );
-	b = sin(0.5*PI*x) * pow(2.0*PI, x) * gamma(s) * (1.0 + w) / PI;
+	b = md_sin(0.5*PI*x) * md_pow(2.0*PI, x) * md_gamma(s) * (1.0 + w) / PI;
 	return(b - 1.0);
 	}
 
@@ -535,7 +535,7 @@ if( x >= MAXL2 )
 	return(0.0);	/* because first term is 2**-x */
 
 /* Tabulated values for integer argument */
-w = floor(x);
+w = md_floor(x);
 if( w == x )
 	{
 	i = x;
@@ -565,7 +565,7 @@ if( x == 1.0 )
 
 if( x <= 10.0 )
 	{
-	b = pow( 2.0, x ) * (x - 1.0);
+	b = md_pow( 2.0, x ) * (x - 1.0);
 	w = 1.0/x;
 	s = (x * polevl( w, P, 8 )) / (b * p1evl( w, Q, 8 ));
 	return( s );
@@ -573,9 +573,9 @@ if( x <= 10.0 )
 
 if( x <= 50.0 )
 	{
-	b = pow( 2.0, -x );
+	b = md_pow( 2.0, -x );
 	w = polevl( x, A, 10 ) / p1evl( x, B, 10 );
-	w = exp(w) + b;
+	w = md_exp(w) + b;
 	return(w);
 	}
 
@@ -588,12 +588,12 @@ a = 1.0;
 do
 	{
 	a += 2.0;
-	b = pow( a, -x );
+	b = md_pow( a, -x );
 	s += b;
 	}
 while( b/s > MACHEP );
 
-b = pow( 2.0, -x );
+b = md_pow( 2.0, -x );
 s = (s + b)/(1.0-b);
 return(s);
 }

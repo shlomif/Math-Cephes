@@ -1,4 +1,4 @@
-/*							log10.c
+/*							md_log10.c
  *
  *	Common logarithm
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, log10();
+ * double x, y, md_log10();
  *
- * y = log10( x );
+ * y = md_log10( x );
  *
  *
  *
@@ -19,7 +19,7 @@
  * The argument is separated into its exponent and fractional
  * parts.  The logarithm of the fraction is approximated by
  *
- *     log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
+ *     md_log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
  *
  *
  *
@@ -37,8 +37,8 @@
  *
  * ERROR MESSAGES:
  *
- * log10 singularity:  x = 0; returns -INFINITY
- * log10 domain:       x < 0; returns NAN
+ * md_log10 singularity:  x = 0; returns -INFINITY
+ * md_log10 domain:       x < 0; returns NAN
  */
 
 /*
@@ -47,9 +47,9 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-static char fname[] = {"log10"};
+static char fname[] = {"md_log10"};
 
-/* Coefficients for log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
+/* Coefficients for md_log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
  * 1/sqrt(2) <= x < sqrt(2)
  */
 #ifdef UNK
@@ -142,19 +142,19 @@ static unsigned short Q[] = {
 #define L10EB 7.00731903251827651129E-4
 
 #ifdef ANSIPROT
-extern double frexp ( double, int * );
-extern double ldexp ( double, int );
+extern double md_frexp ( double, int * );
+extern double md_ldexp ( double, int );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double frexp(), ldexp(), polevl(), p1evl();
+double md_frexp(), md_ldexp(), polevl(), p1evl();
 int isnan(), isfinite();
 #endif
 extern double LOGE2, SQRT2, INFINITY, NAN;
 
-double log10(x)
+double md_log10(x)
 double x;
 {
 VOLATILE double z;
@@ -198,7 +198,7 @@ e = ((e >> 7) & 0377) - 0200;	/* the exponent */
 #endif
 
 #ifdef IBMPC
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 /*
 q = (short *)&x;
 q += 3;
@@ -211,19 +211,19 @@ e = ((e >> 4) & 0x0fff) - 0x3fe;
 
 /* Equivalent C language standard library function: */
 #ifdef UNK
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 #endif
 
 #ifdef MIEEE
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 #endif
 
-/* logarithm using log(1+x) = x - .5x**2 + x**3 P(x)/Q(x) */
+/* logarithm using md_log(1+x) = x - .5x**2 + x**3 P(x)/Q(x) */
 
 if( x < SQRTH )
 	{
 	e -= 1;
-	x = ldexp( x, 1 ) - 1.0; /*  2x - 1  */
+	x = md_ldexp( x, 1 ) - 1.0; /*  2x - 1  */
 	}	
 else
 	{
@@ -234,10 +234,10 @@ else
 /* rational form */
 z = x*x;
 y = x * ( z * polevl( x, P, 6 ) / p1evl( x, Q, 6 ) );
-y = y - ldexp( z, -1 );   /*  y - 0.5 * x**2  */
+y = y - md_ldexp( z, -1 );   /*  y - 0.5 * x**2  */
 
-/* multiply log of fraction by log10(e)
- * and base 2 exponent by log10(2)
+/* multiply md_log of fraction by md_log10(e)
+ * and base 2 exponent by md_log10(2)
  */
 z = (x + y) * L10EB;  /* accumulate terms in order of size */
 z += y * L10EA;

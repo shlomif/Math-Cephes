@@ -1,4 +1,4 @@
-/*							atanh.c
+/*							md_atanh.c
  *
  *	Inverse hyperbolic tangent
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, atanh();
+ * double x, y, md_atanh();
  *
- * y = atanh( x );
+ * y = md_atanh( x );
  *
  *
  *
@@ -19,7 +19,7 @@
  *
  * If |x| < 0.5, the rational form x + x**3 P(x)/Q(x) is
  * employed.  Otherwise,
- *        atanh(x) = 0.5 * log( (1+x)/(1-x) ).
+ *        md_atanh(x) = 0.5 * md_log( (1+x)/(1-x) ).
  *
  *
  *
@@ -32,7 +32,7 @@
  *
  */
 
-/*						atanh.c	*/
+/*						md_atanh.c	*/
 
 
 /*
@@ -113,16 +113,16 @@ static unsigned short Q[] = {
 #endif
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double log ( double x );
+extern double md_fabs ( double );
+extern double md_log ( double x );
 extern double polevl ( double x, void *P, int N );
 extern double p1evl ( double x, void *P, int N );
 #else
-double fabs(), log(), polevl(), p1evl();
+double md_fabs(), md_log(), polevl(), p1evl();
 #endif
 extern double INFINITY, NAN;
 
-double atanh(x)
+double md_atanh(x)
 double x;
 {
 double s, z;
@@ -131,14 +131,14 @@ double s, z;
 if( x == 0.0 )
 	return(x);
 #endif
-z = fabs(x);
+z = md_fabs(x);
 if( z >= 1.0 )
 	{
 	if( x == 1.0 )
 		return( INFINITY );
 	if( x == -1.0 )
 		return( -INFINITY );
-	mtherr( "atanh", DOMAIN );
+	mtherr( "md_atanh", DOMAIN );
 	return( NAN );
 	}
 
@@ -152,5 +152,5 @@ if( z < 0.5 )
 	return(s);
 	}
 
-return( 0.5 * log((1.0+x)/(1.0-x)) );
+return( 0.5 * md_log((1.0+x)/(1.0-x)) );
 }

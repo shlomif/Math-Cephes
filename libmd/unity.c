@@ -3,9 +3,9 @@
  * Relative error approximations for function arguments near
  * unity.
  *
- *    log1p(x) = log(1+x)
- *    expm1(x) = exp(x) - 1
- *    cosm1(x) = cos(x) - 1
+ *    md_log1p(x) = md_log(1+x)
+ *    expm1(x) = md_exp(x) - 1
+ *    cosm1(x) = md_cos(x) - 1
  *
  */
 
@@ -14,20 +14,20 @@
 #ifdef ANSIPROT
 extern int isnan (double);
 extern int isfinite (double);
-extern double log ( double );
+extern double md_log ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double exp ( double );
-extern double cos ( double );
+extern double md_exp ( double );
+extern double md_cos ( double );
 #else
-double log(), polevl(), p1evl(), exp(), cos();
+double md_log(), polevl(), p1evl(), md_exp(), md_cos();
 int isnan(), isfinite();
 #endif
 extern double INFINITY;
 
-/* log1p(x) = log(1 + x)  */
+/* md_log1p(x) = md_log(1 + x)  */
 
-/* Coefficients for log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
+/* Coefficients for md_log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
  * 1/sqrt(2) <= x < sqrt(2)
  * Theoretical peak relative error = 2.32e-20
  */
@@ -53,14 +53,14 @@ static double LQ[] = {
 #define SQRTH 0.70710678118654752440
 #define SQRT2 1.41421356237309504880
 
-double log1p(x)
+double md_log1p(x)
 double x;
 {
 double z;
 
 z = 1.0 + x;
 if( (z < SQRTH) || (z > SQRT2) )
-	return( log(z) );
+	return( md_log(z) );
 z = x*x;
 z = -0.5 * z + x * ( z * polevl( x, LP, 6 ) / p1evl( x, LQ, 6 ) );
 return (x + z);
@@ -68,7 +68,7 @@ return (x + z);
 
 
 
-/* expm1(x) = exp(x) - 1  */
+/* expm1(x) = md_exp(x) - 1  */
 
 /*  e^x =  1 + 2x P(x^2)/( Q(x^2) - P(x^2) )
  * -0.5 <= x <= 0.5
@@ -102,7 +102,7 @@ if( x == -INFINITY )
 	return(-1.0);
 #endif
 if( (x < -0.5) || (x > 0.5) )
-	return( exp(x) - 1.0 );
+	return( md_exp(x) - 1.0 );
 xx = x * x;
 r = x * polevl( xx, EP, 2 );
 r = r/( polevl( xx, EQ, 3 ) - r );
@@ -111,7 +111,7 @@ return (r + r);
 
 
 
-/* cosm1(x) = cos(x) - 1  */
+/* cosm1(x) = md_cos(x) - 1  */
 
 static double coscof[7] = {
  4.7377507964246204691685E-14,
@@ -131,7 +131,7 @@ double x;
 double xx;
 
 if( (x < -PIO4) || (x > PIO4) )
-	return( cos(x) - 1.0 );
+	return( md_cos(x) - 1.0 );
 xx = x * x;
 xx = -0.5*xx + xx * xx * polevl( xx, coscof, 6 );
 return xx;

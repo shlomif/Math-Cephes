@@ -1,4 +1,4 @@
-/*							pow.c
+/*							md_pow.c
  *
  *	Power function
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, z, pow();
+ * double x, y, z, md_pow();
  *
- * z = pow( x, y );
+ * z = md_pow( x, y );
  *
  *
  *
@@ -16,7 +16,7 @@
  *
  * Computes x raised to the yth power.  Analytically,
  *
- *      x**y  =  exp( y log(x) ).
+ *      x**y  =  md_exp( y md_log(x) ).
  *
  * Following Cody and Waite, this program uses a lookup table
  * of 2**-i/16 and pseudo extended precision arithmetic to
@@ -31,7 +31,7 @@
  * arithmetic   domain     # trials      peak         rms
  *    IEEE     -26,26       30000      4.2e-16      7.7e-17
  *    DEC      -26,26       60000      4.8e-17      9.1e-18
- * 1/26 < x < 26, with log(x) uniformly distributed.
+ * 1/26 < x < 26, with md_log(x) uniformly distributed.
  * -26 < y < 26, y uniformly distributed.
  *    IEEE     0,8700       30000      1.5e-14      2.1e-15
  * 0.99 < x < 1.01, 0 < y < 8700, uniformly distributed.
@@ -40,9 +40,9 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * pow overflow     x**y > MAXNUM      INFINITY
- * pow underflow   x**y < 1/MAXNUM       0.0
- * pow domain      x<0 and y noninteger  0.0
+ * md_pow overflow     x**y > MAXNUM      INFINITY
+ * md_pow underflow   x**y < 1/MAXNUM       0.0
+ * md_pow domain      x<0 and y noninteger  0.0
  *
  */
 
@@ -53,7 +53,7 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 
 
 #include "mconf.h"
-static char fname[] = {"pow"};
+static char fname[] = {"md_pow"};
 
 #define SQRTH 0.70710678118654752440
 
@@ -321,7 +321,7 @@ static unsigned short R[] = {
 #endif
 #endif
 
-/* log2(e) - 1 */
+/* md_log2(e) - 1 */
 #define LOG2EA 0.44269504088896340736
 
 #define F W
@@ -335,20 +335,20 @@ static unsigned short R[] = {
 #define Hb Wb
 
 #ifdef ANSIPROT
-extern double floor ( double );
-extern double fabs ( double );
-extern double frexp ( double, int * );
-extern double ldexp ( double, int );
+extern double md_floor ( double );
+extern double md_fabs ( double );
+extern double md_frexp ( double, int * );
+extern double md_ldexp ( double, int );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double powi ( double, int );
+extern double md_powi ( double, int );
 extern int signbit ( double );
 extern int isnan ( double );
 extern int isfinite ( double );
 static double reduc ( double );
 #else
-double floor(), fabs(), frexp(), ldexp();
-double polevl(), p1evl(), powi();
+double md_floor(), md_fabs(), md_frexp(), md_ldexp();
+double polevl(), p1evl(), md_powi();
 int signbit(), isnan(), isfinite();
 static double reduc();
 #endif
@@ -363,7 +363,7 @@ extern double NAN;
 extern double NEGZERO;
 #endif
 
-double pow( x, y )
+double md_pow( x, y )
 double x, y;
 {
 double w, z, W, Wa, Wb, ya, yb, u;
@@ -386,7 +386,7 @@ if( y == 1.0 )
 #ifdef INFINITIES
 if( !isfinite(y) && (x == 1.0 || x == -1.0) )
 	{
-	mtherr( "pow", DOMAIN );
+	mtherr( "md_pow", DOMAIN );
 #ifdef NANS
 	return( NAN );
 #else
@@ -454,7 +454,7 @@ if( x >= MAXNUM )
 	}
 /* Set iyflg to 1 if y is an integer.  */
 iyflg = 0;
-w = floor(y);
+w = md_floor(y);
 if( w == y )
 	iyflg = 1;
 
@@ -462,9 +462,9 @@ if( w == y )
 yoddint = 0;
 if( iyflg )
 	{
-	ya = fabs(y);
-	ya = floor(0.5 * ya);
-	yb = 0.5 * fabs(w);
+	ya = md_fabs(y);
+	ya = md_floor(0.5 * ya);
+	yb = 0.5 * md_fabs(w);
 	if( ya != yb )
 		yoddint = 1;
 	}
@@ -540,23 +540,23 @@ if( x <= 0.0 )
 if( iyflg )
 	{
 	i = w;
-	w = floor(x);
-	if( (w == x) && (fabs(y) < 32768.0) )
+	w = md_floor(x);
+	if( (w == x) && (md_fabs(y) < 32768.0) )
 		{
-		w = powi( x, (int) y );
+		w = md_powi( x, (int) y );
 		return( w );
 		}
 	}
 
 if( nflg )
-	x = fabs(x);
+	x = md_fabs(x);
 
 /* For results close to 1, use a series expansion.  */
 w = x - 1.0;
-aw = fabs(w);
-ay = fabs(y);
+aw = md_fabs(w);
+ay = md_fabs(y);
 wy = w * y;
-ya = fabs(wy);
+ya = md_fabs(wy);
 if((aw <= 1.0e-3 && ay <= 1.0)
    || (ya <= 1.0e-3 && ay >= 1.0))
 	{
@@ -566,8 +566,8 @@ if((aw <= 1.0e-3 && ay <= 1.0)
 	}
 /* These are probably too much trouble.  */
 #if 0
-w = y * log(x);
-if (aw > 1.0e-3 && fabs(w) < 1.0e-3)
+w = y * md_log(x);
+if (aw > 1.0e-3 && md_fabs(w) < 1.0e-3)
   {
     z = ((((((
     w/7. + 1.)*w/6. + 1.)*w/5. + 1.)*w/4. + 1.)*w/3. + 1.)*w/2. + 1.)*w + 1.;
@@ -589,7 +589,7 @@ if(ya <= 1.0e-3 && aw <= 1.0e-4)
 #endif
 
 /* separate significand from exponent */
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 
 #if 0
 /* For debugging, check for gross overflow. */
@@ -611,44 +611,44 @@ i += 1;
 
 
 /* Find (x - A[i])/A[i]
- * in order to compute log(x/A[i]):
+ * in order to compute md_log(x/A[i]):
  *
- * log(x) = log( a x/a ) = log(a) + log(x/a)
+ * md_log(x) = md_log( a x/a ) = md_log(a) + md_log(x/a)
  *
- * log(x/a) = log(1+v),  v = x/a - 1 = (x-a)/a
+ * md_log(x/a) = md_log(1+v),  v = x/a - 1 = (x-a)/a
  */
 x -= douba(i);
 x -= doubb(i/2);
 x /= douba(i);
 
 
-/* rational approximation for log(1+v):
+/* rational approximation for md_log(1+v):
  *
- * log(1+v)  =  v  -  v**2/2  +  v**3 P(v) / Q(v)
+ * md_log(1+v)  =  v  -  v**2/2  +  v**3 P(v) / Q(v)
  */
 z = x*x;
 w = x * ( z * polevl( x, P, 3 ) / p1evl( x, Q, 4 ) );
-w = w - ldexp( z, -1 );   /*  w - 0.5 * z  */
+w = w - md_ldexp( z, -1 );   /*  w - 0.5 * z  */
 
 /* Convert to base 2 logarithm:
- * multiply by log2(e)
+ * multiply by md_log2(e)
  */
 w = w + LOG2EA * w;
 /* Note x was not yet added in
  * to above rational approximation,
  * so do it now, while multiplying
- * by log2(e).
+ * by md_log2(e).
  */
 z = w + LOG2EA * x;
 z = z + x;
 
 /* Compute exponent term of the base 2 logarithm. */
 w = -i;
-w = ldexp( w, -4 );	/* divide by 16 */
+w = md_ldexp( w, -4 );	/* divide by 16 */
 w += e;
-/* Now base 2 log of x is w + z. */
+/* Now base 2 md_log of x is w + z. */
 
-/* Multiply base 2 log by y, in extended precision. */
+/* Multiply base 2 md_log by y, in extended precision. */
 
 /* separate y into large part ya
  * and small part yb less than 1/16
@@ -667,7 +667,7 @@ Gb = G - Ga;
 
 H = Fb + Gb;
 Ha = reduc(H);
-w = ldexp( Ga+Ha, 4 );
+w = md_ldexp( Ga+Ha, 4 );
 
 /* Test the power of 2 for overflow */
 if( w > MEXP )
@@ -707,7 +707,7 @@ if( Hb > 0.0 )
 	Hb -= 0.0625;
 	}
 
-/* Now the product y * log2(x)  =  Hb + e/16.0.
+/* Now the product y * md_log2(x)  =  Hb + e/16.0.
  *
  * Compute base 2 exponential of Hb,
  * where -0.0625 <= Hb <= 0.
@@ -725,7 +725,7 @@ i = e/16 + i;
 e = 16*i - e;
 w = douba( e );
 z = w + w * z;      /*    2**-e * ( 1 + (2**Hb-1) )    */
-z = ldexp( z, i );  /* multiply by integer power of 2 */
+z = md_ldexp( z, i );  /* multiply by integer power of 2 */
 
 done:
 
@@ -749,8 +749,8 @@ double x;
 {
 double t;
 
-t = ldexp( x, 4 );
-t = floor( t );
-t = ldexp( t, -4 );
+t = md_ldexp( x, 4 );
+t = md_floor( t );
+t = md_ldexp( t, -4 );
 return(t);
 }

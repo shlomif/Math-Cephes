@@ -20,14 +20,14 @@
  *            pi/2
  *             -
  *            | |                 2
- * E(m)  =    |    sqrt( 1 - m sin t ) dt
+ * E(m)  =    |    sqrt( 1 - m md_sin t ) dt
  *          | |    
  *           -
  *            0
  *
  * Where m = 1 - m1, using the approximation
  *
- *      P(x)  -  x log x Q(x).
+ *      P(x)  -  x md_log x Q(x).
  *
  * Though there are no singularities, the argument m1 is used
  * rather than m for compatibility with ellpk().
@@ -175,9 +175,9 @@ static unsigned short Q[] = {
 
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
-extern double log ( double );
+extern double md_log ( double );
 #else
-double polevl(), log();
+double polevl(), md_log();
 #endif
 
 double ellpe(x)
@@ -191,5 +191,5 @@ if( (x <= 0.0) || (x > 1.0) )
 	mtherr( "ellpe", DOMAIN );
 	return( 0.0 );
 	}
-return( polevl(x,P,10) - log(x) * (x * polevl(x,Q,9)) );
+return( polevl(x,P,10) - md_log(x) * (x * polevl(x,Q,9)) );
 }

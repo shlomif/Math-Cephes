@@ -67,7 +67,7 @@ where  p(m) is the psi function: p(1) = -EUL and
 For large x,
                                          2        2     2
                                       u-1     (u-1 )(u-3 )
-K (z)  =  sqrt(pi/2z) exp(-z) { 1 + ------- + ------------ + ...}
+K (z)  =  sqrt(pi/2z) md_exp(-z) { 1 + ------- + ------------ + ...}
  v                                        1            2
                                     1! (8z)     2! (8z)
 asymptotically, where
@@ -82,12 +82,12 @@ asymptotically, where
 #define EUL 5.772156649015328606065e-1
 #define MAXFAC 31
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double exp ( double );
-extern double log ( double );
+extern double md_fabs ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
 extern double sqrt ( double );
 #else
-double fabs(), exp(), log(), sqrt();
+double md_fabs(), md_exp(), md_log(), sqrt();
 #endif
 extern double MACHEP, MAXNUM, MAXLOG, PI;
 
@@ -163,14 +163,14 @@ if( n > 0 )
 			zn *= z;
 			t = nk1f * zn / kf;
 			s += t;   
-			if( (MAXNUM - fabs(t)) < fabs(s) )
+			if( (MAXNUM - md_fabs(t)) < md_fabs(s) )
 				goto overf;
 			if( (tox > 1.0) && ((MAXNUM/tox) < zmn) )
 				goto overf;
 			zmn *= tox;
 			}
 		s *= 0.5;
-		t = fabs(s);
+		t = md_fabs(s);
 		if( (zmn > 1.0) && ((MAXNUM/zmn) < t) )
 			goto overf;
 		if( (t > 1.0) && ((MAXNUM/t) < zmn) )
@@ -180,7 +180,7 @@ if( n > 0 )
 	}
 
 
-tlg = 2.0 * log( 0.5 * x );
+tlg = 2.0 * md_log( 0.5 * x );
 pk = -EUL;
 if( n == 0 )
 	{
@@ -202,7 +202,7 @@ do
 	s += (pk+pn-tlg)*t;
 	k += 1.0;
 	}
-while( fabs(t/s) > MACHEP );
+while( md_fabs(t/s) > MACHEP );
 
 s = 0.5 * s / zmn;
 if( n & 1 )
@@ -236,7 +236,7 @@ do
 	{
 	z = pn - pk * pk;
 	t = t * z /(fn * z0);
-	nk1f = fabs(t);
+	nk1f = md_fabs(t);
 	if( (i >= n) && (nk1f > nkf) )
 		{
 		goto adone;
@@ -247,9 +247,9 @@ do
 	pk += 2.0;
 	i += 1;
 	}
-while( fabs(t/s) > MACHEP );
+while( md_fabs(t/s) > MACHEP );
 
 adone:
-ans = exp(-x) * sqrt( PI/(2.0*x) ) * s;
+ans = md_exp(-x) * sqrt( PI/(2.0*x) ) * s;
 return(ans);
 }

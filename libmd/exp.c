@@ -1,4 +1,4 @@
-/*							exp.c
+/*							md_exp.c
  *
  *	Exponential function
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, exp();
+ * double x, y, md_exp();
  *
- * y = exp( x );
+ * y = md_exp( x );
  *
  *
  *
@@ -23,7 +23,7 @@
  *    e  = 2  e.
  *
  * A Pade' form  1 + 2x P(x**2)/( Q(x**2) - P(x**2) )
- * of degree 2/3 is used to approximate exp(f) in the basic
+ * of degree 2/3 is used to approximate md_exp(f) in the basic
  * interval [-0.5, 0.5].
  *
  *
@@ -37,7 +37,7 @@
  *
  * Error amplification in the exponential function can be
  * a serious matter.  The error propagation involves
- * exp( X(1+delta) ) = exp(X) ( 1 + X*delta + ... ),
+ * md_exp( X(1+delta) ) = md_exp(X) ( 1 + X*delta + ... ),
  * which shows that a 1 lsb error in representing X produces
  * a relative error of X times 1 lsb in the function.
  * While the routine gives an accurate result for arguments
@@ -49,8 +49,8 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * exp underflow    x < MINLOG         0.0
- * exp overflow     x > MAXLOG         INFINITY
+ * md_exp underflow    x < MINLOG         0.0
+ * md_exp overflow     x > MAXLOG         INFINITY
  *
  */
 
@@ -138,12 +138,12 @@ static unsigned short sc2[] = {0x3eb7,0xf7d1,0xcf79,0xabca};
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double floor ( double );
-extern double ldexp ( double, int );
+extern double md_floor ( double );
+extern double md_ldexp ( double, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double polevl(), p1evl(), floor(), ldexp();
+double polevl(), p1evl(), md_floor(), md_ldexp();
 int isnan(), isfinite();
 #endif
 extern double LOGE2, LOG2E, MAXLOG, MINLOG, MAXNUM;
@@ -151,7 +151,7 @@ extern double LOGE2, LOG2E, MAXLOG, MINLOG, MAXNUM;
 extern double INFINITY;
 #endif
 
-double exp(x)
+double md_exp(x)
 double x;
 {
 double px, xx;
@@ -166,7 +166,7 @@ if( x > MAXLOG)
 #ifdef INFINITIES
 	return( INFINITY );
 #else
-	mtherr( "exp", OVERFLOW );
+	mtherr( "md_exp", OVERFLOW );
 	return( MAXNUM );
 #endif
 	}
@@ -174,7 +174,7 @@ if( x > MAXLOG)
 if( x < MINLOG )
 	{
 #ifndef INFINITIES
-	mtherr( "exp", UNDERFLOW );
+	mtherr( "md_exp", UNDERFLOW );
 #endif
 	return(0.0);
 	}
@@ -183,7 +183,7 @@ if( x < MINLOG )
  *   = e**g e**( n loge(2) )
  *   = e**( g + n loge(2) )
  */
-px = floor( LOG2E * x + 0.5 ); /* floor() truncates toward -infinity. */
+px = md_floor( LOG2E * x + 0.5 ); /* md_floor() truncates toward -infinity. */
 n = px;
 x -= px * C1;
 x -= px * C2;
@@ -198,6 +198,6 @@ x =  px/( polevl( xx, Q, 3 ) - px );
 x = 1.0 + 2.0 * x;
 
 /* multiply by power of 2 */
-x = ldexp( x, n );
+x = md_ldexp( x, n );
 return(x);
 }

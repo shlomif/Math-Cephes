@@ -24,13 +24,13 @@
  *            |           dt
  * K(m)  =    |    ------------------
  *            |                   2
- *          | |    sqrt( 1 - m sin t )
+ *          | |    sqrt( 1 - m md_sin t )
  *           -
  *            0
  *
  * where m = 1 - m1, using the approximation
  *
- *     P(x)  -  log x Q(x).
+ *     P(x)  -  md_log x Q(x).
  *
  * The argument m1 is used rather than m so that the logarithmic
  * singularity at m = 1 will be shifted to the origin; this
@@ -193,15 +193,15 @@ static double Q[] =
  1.24999999999870820058E-1,
  4.99999999999999999821E-1
 };
-static double C1 = 1.3862943611198906188E0; /* log(4) */
+static double C1 = 1.3862943611198906188E0; /* md_log(4) */
 #endif
 
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double log ( double );
+extern double md_log ( double );
 #else
-double polevl(), p1evl(), log();
+double polevl(), p1evl(), md_log();
 #endif
 extern double MACHEP, MAXNUM;
 
@@ -217,7 +217,7 @@ if( (x < 0.0) || (x > 1.0) )
 
 if( x > MACHEP )
 	{
-	return( polevl(x,P,10) - log(x) * polevl(x,Q,10) );
+	return( polevl(x,P,10) - md_log(x) * polevl(x,Q,10) );
 	}
 else
 	{
@@ -228,7 +228,7 @@ else
 		}
 	else
 		{
-		return( C1 - 0.5 * log(x) );
+		return( C1 - 0.5 * md_log(x) );
 		}
 	}
 }

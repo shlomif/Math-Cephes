@@ -28,11 +28,11 @@
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double floor ( double );
+extern double md_fabs ( double );
+extern double md_floor ( double );
 double euclid( double *, double * );
 #else
-double fabs(), floor(), euclid();
+double md_fabs(), md_floor(), euclid();
 #endif
 
 extern double MACHEP;
@@ -136,7 +136,7 @@ euclid( &n2, &d1 );
 ff3->n = n1 * n2;
 ff3->d = d1 * d2;
 /* Report overflow. */
-if( (fabs(ff3->n) >= BIG) || (fabs(ff3->d) >= BIG) )
+if( (md_fabs(ff3->n) >= BIG) || (md_fabs(ff3->d) >= BIG) )
 	{
 	mtherr( "rmul", OVERFLOW );
 	return;
@@ -174,7 +174,7 @@ euclid( &n2, &d1 );
 ff3->n = n1 * n2;
 ff3->d = d1 * d2;
 /* Report overflow. */
-if( (fabs(ff3->n) >= BIG) || (fabs(ff3->d) >= BIG) )
+if( (md_fabs(ff3->n) >= BIG) || (md_fabs(ff3->d) >= BIG) )
 	{
 	mtherr( "rdiv", OVERFLOW );
 	return;
@@ -233,7 +233,7 @@ if(n == 0.0)
 while( d > 0.5 )
 	{
 /* Find integer part of n divided by d. */
-	q = floor( n/d );
+	q = md_floor( n/d );
 /* Find remainder after dividing n by d. */
 	r = n - d * q;
 /* The next fraction is d/r. */

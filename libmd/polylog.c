@@ -210,17 +210,17 @@ extern double spence ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 extern double zetac ( double );
-extern double pow ( double, double );
-extern double powi ( double, int );
-extern double log ( double );
+extern double md_pow ( double, double );
+extern double md_powi ( double, int );
+extern double md_log ( double );
 extern double fac ( int i );
-extern double fabs (double);
+extern double md_fabs (double);
 double polylog (int, double);
 #else
 extern double spence(), polevl(), p1evl(), zetac();
-extern double pow(), powi(), log();
+extern double md_pow(), md_powi(), md_log();
 extern double fac(); /* factorial */
-extern double fabs();
+extern double md_fabs();
 double polylog();
 #endif
 extern double MACHEP;
@@ -265,7 +265,7 @@ polylog (n, x)
 
   if (n == 1)
     {
-      s = -log (1.0 - x);
+      s = -md_log (1.0 - x);
       return s;
     }
 
@@ -285,14 +285,14 @@ polylog (n, x)
     {
       /* Li_n(1) = zeta(n) */
       s = zetac ((double) n) + 1.0;
-      s = s * (powi (2.0, 1 - n) - 1.0);
+      s = s * (md_powi (2.0, 1 - n) - 1.0);
       return s;
     }
 
 /*  Inversion formula:
  *                                                   [n/2]   n-2r
- *                n                  1     n           -  log    (z)
- *  Li (-z) + (-1)  Li (-1/z)  =  - --- log (z)  +  2  >  ----------- Li  (-1)
+ *                n                  1     n           -  md_log    (z)
+ *  Li (-z) + (-1)  Li (-1/z)  =  - --- md_log (z)  +  2  >  ----------- Li  (-1)
  *    n               n              n!                -   (n - 2r)!    2r
  *                                                    r=1
  */
@@ -301,7 +301,7 @@ polylog (n, x)
       double q, w;
       int r;
 
-      w = log (-x);
+      w = md_log (-x);
       s = 0.0;
       for (r = 1; r <= n / 2; r++)
 	{
@@ -314,7 +314,7 @@ polylog (n, x)
 	      break;
 	    }
 	  q = (double) j;
-	  q = pow (w, q) * p / fac (j);
+	  q = md_pow (w, q) * p / fac (j);
 	  s = s + q;
 	}
       s = 2.0 * s;
@@ -322,7 +322,7 @@ polylog (n, x)
       if (n & 1)
 	q = -q;
       s = s - q;
-      s = s - pow (w, (double) n) / fac (n);
+      s = s - md_pow (w, (double) n) / fac (n);
       return s;
     }
 
@@ -340,7 +340,7 @@ polylog (n, x)
       Li (-x/(1-x)) + Li (1-x) + Li (x)
         3               3          3
                      2                               2                 3
-       = Li (1) + (pi /6) log(1-x) - (1/2) log(x) log (1-x) + (1/6) log (1-x)
+       = Li (1) + (pi /6) md_log(1-x) - (1/2) md_log(x) md_log (1-x) + (1/6) md_log (1-x)
            3
   */
 
@@ -349,10 +349,10 @@ polylog (n, x)
       p = x * x * x;
       if (x > 0.8)
 	{
-	  u = log(x);
+	  u = md_log(x);
 	  s = p / 6.0;
 	  xc = 1.0 - x;
-	  s = s - 0.5 * u * u * log(xc);
+	  s = s - 0.5 * u * u * md_log(xc);
           s = s + PI * PI * u / 6.0;
           s = s - polylog (3, -xc/x);
 	  s = s - polylog (3, xc);
@@ -374,7 +374,7 @@ polylog (n, x)
 	  s = s + h;
 	  k += 1.0;
 	}
-      while (fabs(h/s) > 1.1e-16);
+      while (md_fabs(h/s) > 1.1e-16);
       return (s + t);
     }
 
@@ -396,13 +396,13 @@ if (n == 4)
     goto pseries;
 
 
-/*  This expansion in powers of log(x) is especially useful when
+/*  This expansion in powers of md_log(x) is especially useful when
     x is near 1.
 
     See also the pari gp calculator.
 
                       inf                  j
-                       -    z(n-j) (log(x))
+                       -    z(n-j) (md_log(x))
     polylog(n,x)  =    >   -----------------
                        -           j!
                       j=0
@@ -413,13 +413,13 @@ if (n == 4)
 
                               n-1
                                -
-      z(1) =  -log(-log(x)) +  >  1/k
+      z(1) =  -md_log(-md_log(x)) +  >  1/k
                                -
                               k=1
   */
 
-  z = log(x);
-  h = -log(-z);
+  z = md_log(x);
+  h = -md_log(-z);
   for (i = 1; i < n; i++)
     h = h + 1.0/i;
   p = 1.0;
@@ -440,7 +440,7 @@ if (n == 4)
       h = (zetac((double)(n-j)) + 1.0);
       h = h * p;
       s = s + h;
-      if (fabs(h/s) < MACHEP)
+      if (md_fabs(h/s) < MACHEP)
 	break;
       j += 2;
     }
@@ -456,12 +456,12 @@ pseries:
     {
       p = p * x;
       k += 1.0;
-      h = p / powi(k, n);
+      h = p / md_powi(k, n);
       s = s + h;
     }
-  while (fabs(h/s) > MACHEP);
-  s += x * x * x / powi(3.0,n);
-  s += x * x / powi(2.0,n);
+  while (md_fabs(h/s) > MACHEP);
+  s += x * x * x / md_powi(3.0,n);
+  s += x * x / md_powi(2.0,n);
   s += x;
   return s;
 }

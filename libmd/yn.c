@@ -1,4 +1,4 @@
-/*							yn.c
+/*							md_yn.c
  *
  *	Bessel function of second kind of integer order
  *
@@ -6,10 +6,10 @@
  *
  * SYNOPSIS:
  *
- * double x, y, yn();
+ * double x, y, md_yn();
  * int n;
  *
- * y = yn( n, x );
+ * y = md_yn( n, x );
  *
  *
  *
@@ -20,9 +20,9 @@
  *
  * The function is evaluated by forward recurrence on
  * n, starting with values computed by the routines
- * y0() and y1().
+ * md_y0() and md_y1().
  *
- * If n = 0 or 1 the routine for y0 or y1 is called
+ * If n = 0 or 1 the routine for md_y0 or md_y1 is called
  * directly.
  *
  *
@@ -40,8 +40,8 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * yn singularity   x = 0              MAXNUM
- * yn overflow                         MAXNUM
+ * md_yn singularity   x = 0              MAXNUM
+ * md_yn overflow                         MAXNUM
  *
  * Spot checked against tables for x, n between 0 and 100.
  *
@@ -54,15 +54,15 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double y0 ( double );
-extern double y1 ( double );
-extern double log ( double );
+extern double md_y0 ( double );
+extern double md_y1 ( double );
+extern double md_log ( double );
 #else
-double y0(), y1(), log();
+double md_y0(), md_y1(), md_log();
 #endif
 extern double MAXNUM, MAXLOG;
 
-double yn( n, x )
+double md_yn( n, x )
 int n;
 double x;
 {
@@ -82,21 +82,21 @@ else
 
 
 if( n == 0 )
-	return( sign * y0(x) );
+	return( sign * md_y0(x) );
 if( n == 1 )
-	return( sign * y1(x) );
+	return( sign * md_y1(x) );
 
 /* test for overflow */
 if( x <= 0.0 )
 	{
-	mtherr( "yn", SING );
+	mtherr( "md_yn", SING );
 	return( -MAXNUM );
 	}
 
 /* forward recurrence on n */
 
-anm2 = y0(x);
-anm1 = y1(x);
+anm2 = md_y0(x);
+anm1 = md_y1(x);
 k = 1;
 r = 2 * k;
 do

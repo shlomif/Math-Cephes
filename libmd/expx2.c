@@ -15,11 +15,11 @@
  *
  * DESCRIPTION:
  *
- * Computes y = exp(x*x) while suppressing error amplification
+ * Computes y = md_exp(x*x) while suppressing error amplification
  * that would ordinarily arise from the inexactness of the
  * exponential argument x*x.
  *
- * If sign < 0, the result is inverted; i.e., y = exp(-x*x) .
+ * If sign < 0, the result is inverted; i.e., y = md_exp(-x*x) .
  * 
  *
  * ACCURACY:
@@ -38,13 +38,13 @@ Copyright 2000 by Stephen L. Moshier
 #include "mconf.h"
 
 #ifdef ANSIPROT
-extern double fabs (double);
-extern double floor (double);
-extern double exp (double);
+extern double md_fabs (double);
+extern double md_floor (double);
+extern double md_exp (double);
 #else
-double fabs();
-double floor();
-double exp();
+double md_fabs();
+double md_floor();
+double md_exp();
 #endif
 
 #ifdef DEC
@@ -64,14 +64,14 @@ double expx2 (x, sign)
 {
   double u, u1, m, f;
 
-  x = fabs (x);
+  x = md_fabs (x);
   if (sign < 0)
     x = -x;
 
   /* Represent x as an exact multiple of M plus a residual.
-     M is a power of 2 chosen so that exp(m * m) does not overflow
+     M is a power of 2 chosen so that md_exp(m * m) does not overflow
      or underflow and so that |x - m| is small.  */
-  m = MINV * floor(M * x + 0.5);
+  m = MINV * md_floor(M * x + 0.5);
   f = x - m;
 
   /* x^2 = m^2 + 2mf + f^2 */
@@ -88,6 +88,6 @@ double expx2 (x, sign)
     return (INFINITY);
 
   /* u is exact, u1 is small.  */
-  u = exp(u) * exp(u1);
+  u = md_exp(u) * md_exp(u1);
   return(u);
 }

@@ -1,4 +1,4 @@
-/*							fabs.c
+/*							md_fabs.c
  *
  *		Absolute value
  *
@@ -8,7 +8,7 @@
  *
  * double x, y;
  *
- * y = fabs( x );
+ * y = md_fabs( x );
  *
  *
  *
@@ -29,7 +29,7 @@
 #endif
 #endif
 
-double fabs(x)
+double md_fabs(x)
 double x;
 {
 union

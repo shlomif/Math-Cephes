@@ -1,4 +1,4 @@
-/*							cosh.c
+/*							md_cosh.c
  *
  *	Hyperbolic cosine
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, cosh();
+ * double x, y, md_cosh();
  *
- * y = cosh( x );
+ * y = md_cosh( x );
  *
  *
  *
@@ -17,7 +17,7 @@
  * Returns hyperbolic cosine of argument in the range MINLOG to
  * MAXLOG.
  *
- * cosh(x)  =  ( exp(x) + exp(-x) )/2.
+ * md_cosh(x)  =  ( md_exp(x) + md_exp(-x) )/2.
  *
  *
  *
@@ -32,12 +32,12 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * cosh overflow    |x| > MAXLOG       MAXNUM
+ * md_cosh overflow    |x| > MAXLOG       MAXNUM
  *
  *
  */
 
-/*							cosh.c */
+/*							md_cosh.c */
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -46,16 +46,16 @@ Copyright 1985, 1995, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double exp ( double );
+extern double md_exp ( double );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double exp();
+double md_exp();
 int isnan(), isfinite();
 #endif
 extern double MAXLOG, INFINITY, LOGE2;
 
-double cosh(x)
+double md_cosh(x)
 double x;
 {
 double y;
@@ -68,16 +68,16 @@ if( x < 0 )
 	x = -x;
 if( x > (MAXLOG + LOGE2) )
 	{
-	mtherr( "cosh", OVERFLOW );
+	mtherr( "md_cosh", OVERFLOW );
 	return( INFINITY );
 	}	
 if( x >= (MAXLOG - LOGE2) )
 	{
-	y = exp(0.5 * x);
+	y = md_exp(0.5 * x);
 	y = (0.5 * y) * y;
 	return(y);
 	}
-y = exp(x);
+y = md_exp(x);
 y = 0.5 * (y + 1.0 / y);
 return( y );
 }

@@ -1,4 +1,4 @@
-/*							exp10.c
+/*							md_exp10.c
  *
  *	Base 10 exponential function
  *      (Common antilogarithm)
@@ -7,9 +7,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, exp10();
+ * double x, y, md_exp10();
  *
- * y = exp10( x );
+ * y = md_exp10( x );
  *
  *
  *
@@ -18,7 +18,7 @@
  * Returns 10 raised to the x power.
  *
  * Range reduction is accomplished by expressing the argument
- * as 10**x = 2**n 10**f, with |f| < 0.5 log10(2).
+ * as 10**x = 2**n 10**f, with |f| < 0.5 md_log10(2).
  * The Pade' form
  *
  *    1 + 2x P(x**2)/( Q(x**2) - P(x**2) )
@@ -38,8 +38,8 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * exp10 underflow    x < -MAXL10        0.0
- * exp10 overflow     x > MAXL10       MAXNUM
+ * md_exp10 underflow    x < -MAXL10        0.0
+ * md_exp10 overflow     x > MAXL10       MAXNUM
  *
  * DEC arithmetic: MAXL10 = 38.230809449325611792.
  * IEEE arithmetic: MAXL10 = 308.2547155599167.
@@ -155,14 +155,14 @@ static double MAXL10 = 308.2547155599167;
 #endif
 
 #ifdef ANSIPROT
-extern double floor ( double );
-extern double ldexp ( double, int );
+extern double md_floor ( double );
+extern double md_ldexp ( double, int );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double floor(), ldexp(), polevl(), p1evl();
+double md_floor(), md_ldexp(), polevl(), p1evl();
 int isnan(), isfinite();
 #endif
 extern double MAXNUM;
@@ -170,7 +170,7 @@ extern double MAXNUM;
 extern double INFINITY;
 #endif
 
-double exp10(x)
+double md_exp10(x)
 double x;
 {
 double px, xx;
@@ -185,7 +185,7 @@ if( x > MAXL10 )
 #ifdef INFINITIES
 	return( INFINITY );
 #else
-	mtherr( "exp10", OVERFLOW );
+	mtherr( "md_exp10", OVERFLOW );
 	return( MAXNUM );
 #endif
 	}
@@ -193,16 +193,16 @@ if( x > MAXL10 )
 if( x < -MAXL10 )	/* Would like to use MINLOG but can't */
 	{
 #ifndef INFINITIES
-	mtherr( "exp10", UNDERFLOW );
+	mtherr( "md_exp10", UNDERFLOW );
 #endif
 	return(0.0);
 	}
 
 /* Express 10**x = 10**g 2**n
- *   = 10**g 10**( n log10(2) )
- *   = 10**( g + n log10(2) )
+ *   = 10**g 10**( n md_log10(2) )
+ *   = 10**( g + n md_log10(2) )
  */
-px = floor( LOG210 * x + 0.5 );
+px = md_floor( LOG210 * x + 0.5 );
 n = px;
 x -= px * LG102A;
 x -= px * LG102B;
@@ -214,10 +214,10 @@ x -= px * LG102B;
 xx = x * x;
 px = x * polevl( xx, P, 3 );
 x =  px/( p1evl( xx, Q, 3 ) - px );
-x = 1.0 + ldexp( x, 1 );
+x = 1.0 + md_ldexp( x, 1 );
 
 /* multiply by power of 2 */
-x = ldexp( x, n );
+x = md_ldexp( x, n );
 
 return(x);
 }

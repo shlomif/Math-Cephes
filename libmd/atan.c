@@ -1,4 +1,4 @@
-/*							atan.c
+/*							md_atan.c
  *
  *	Inverse circular tangent
  *      (arctangent)
@@ -7,9 +7,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, atan();
+ * double x, y, md_atan();
  *
- * y = atan( x );
+ * y = md_atan( x );
  *
  *
  *
@@ -32,7 +32,7 @@
  *    IEEE      -10, 10      10^6       1.8e-16     5.0e-17
  *
  */
-/*							atan2()
+/*							md_atan2()
  *
  *	Quadrant correct inverse circular tangent
  *
@@ -40,9 +40,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, z, atan2();
+ * double x, y, z, md_atan2();
  *
- * z = atan2( y, x );
+ * z = md_atan2( y, x );
  *
  *
  *
@@ -60,11 +60,11 @@
  *                      Relative error:
  * arithmetic   domain     # trials      peak         rms
  *    IEEE      -10, 10      10^6       2.5e-16     6.9e-17
- * See atan.c.
+ * See md_atan.c.
  *
  */
 
-/*							atan.c */
+/*							md_atan.c */
 
 
 /*
@@ -95,7 +95,7 @@ static double Q[5] = {
  1.945506571482613964425E2,
 };
 
-/* tan( 3*pi/8 ) */
+/* md_tan( 3*pi/8 ) */
 static double T3P8 = 2.41421356237309504880;
 #endif
 
@@ -116,7 +116,7 @@ static short Q[20] = {
 0042102,0106367,0156753,0013541,
 };
 
-/* tan( 3*pi/8 ) = 2.41421356237309504880 */
+/* md_tan( 3*pi/8 ) = 2.41421356237309504880 */
 static unsigned short T3P8A[] = {040432,0101171,0114774,0167462,};
 #define T3P8 *(double *)T3P8A
 #endif
@@ -138,7 +138,7 @@ static short Q[20] = {
 0x62ec,0xfbbd,0x519e,0x4068,
 };
 
-/* tan( 3*pi/8 ) = 2.41421356237309504880 */
+/* md_tan( 3*pi/8 ) = 2.41421356237309504880 */
 static unsigned short T3P8A[] = {0x9de6,0x333f,0x504f,0x4003};
 #define T3P8 *(double *)T3P8A
 #endif
@@ -160,7 +160,7 @@ static short Q[20] = {
 0x4068,0x519e,0xfbbd,0x62ec,
 };
 
-/* tan( 3*pi/8 ) = 2.41421356237309504880 */
+/* md_tan( 3*pi/8 ) = 2.41421356237309504880 */
 static unsigned short T3P8A[] = {
 0x4003,0x504f,0x333f,0x9de6
 };
@@ -170,12 +170,12 @@ static unsigned short T3P8A[] = {
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double atan ( double );
-extern double fabs ( double );
+extern double md_atan ( double );
+extern double md_fabs ( double );
 extern int signbit ( double );
 extern int isnan ( double );
 #else
-double polevl(), p1evl(), atan(), fabs();
+double polevl(), p1evl(), md_atan(), md_fabs();
 int signbit(), isnan();
 #endif
 extern double PI, PIO2, PIO4, INFINITY, NEGZERO, MAXNUM;
@@ -188,7 +188,7 @@ extern double PI, PIO2, PIO4, INFINITY, NEGZERO, MAXNUM;
 #endif
 
 
-double atan(x)
+double md_atan(x)
 double x;
 {
 double y, z;
@@ -242,12 +242,12 @@ if( sign < 0 )
 return(y);
 }
 
-/*							atan2	*/
+/*							md_atan2	*/
 
 #ifdef ANSIC
-double atan2( y, x )
+double md_atan2( y, x )
 #else
-double atan2( x, y )
+double md_atan2( x, y )
 #endif
 double x, y;
 {
@@ -343,7 +343,7 @@ if( y < 0.0 )
 #ifdef INFINITIES
 if( x == 0.0 )
 #else
-if( fabs(x) <= (fabs(y) / MAXNUM) )
+if( md_fabs(x) <= (md_fabs(y) / MAXNUM) )
 #endif
 	{
 	if( code & 1 )
@@ -384,7 +384,7 @@ switch( code )
 #endif
 	}
 
-z = w + atan( y/x );
+z = w + md_atan( y/x );
 #ifdef MINUSZERO
 if( z == 0.0 && y < 0 )
 	z = NEGZERO;

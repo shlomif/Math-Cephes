@@ -58,21 +58,21 @@ Copyright 1984, 1987, 1989, 1992, 2000 by Stephen L. Moshier
 
 #ifdef ANSIPROT
 extern int airy ( double, double *, double *, double *, double * );
-extern double fabs ( double );
-extern double floor ( double );
-extern double frexp ( double, int * );
+extern double md_fabs ( double );
+extern double md_floor ( double );
+extern double md_frexp ( double, int * );
 extern double polevl ( double, void *, int );
-extern double j0 ( double );
-extern double j1 ( double );
+extern double md_j0 ( double );
+extern double md_j1 ( double );
 extern double sqrt ( double );
-extern double cbrt ( double );
-extern double exp ( double );
-extern double log ( double );
-extern double sin ( double );
-extern double cos ( double );
-extern double acos ( double );
-extern double pow ( double, double );
-extern double gamma ( double );
+extern double md_cbrt ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
+extern double md_sin ( double );
+extern double md_cos ( double );
+extern double md_acos ( double );
+extern double md_pow ( double, double );
+extern double md_gamma ( double );
 extern double lgam ( double );
 static double recur(double *, double, double *, int);
 static double jvs(double, double);
@@ -81,8 +81,8 @@ static double jnx(double, double);
 static double jnt(double, double);
 #else
 int airy();
-double fabs(), floor(), frexp(), polevl(), j0(), j1(), sqrt(), cbrt();
-double exp(), log(), sin(), cos(), acos(), pow(), gamma(), lgam();
+double md_fabs(), md_floor(), md_frexp(), polevl(), md_j0(), md_j1(), sqrt(), md_cbrt();
+double md_exp(), md_log(), md_sin(), md_cos(), md_acos(), md_pow(), md_gamma(), lgam();
 static double recur(), jvs(), hankel(), jnx(), jnt();
 #endif
 
@@ -97,12 +97,12 @@ int i, sign, nint;
 
 nint = 0;	/* Flag for integer n */
 sign = 1;	/* Flag for sign inversion */
-an = fabs( n );
-y = floor( an );
+an = md_fabs( n );
+y = md_floor( an );
 if( y == an )
 	{
 	nint = 1;
-	i = an - 16384.0 * floor( an/16384.0 );
+	i = an - 16384.0 * md_floor( an/16384.0 );
 	if( n < 0.0 )
 		{
 		if( i & 1 )
@@ -116,9 +116,9 @@ if( y == an )
 		x = -x;
 		}
 	if( n == 0.0 )
-		return( j0(x) );
+		return( md_j0(x) );
 	if( n == 1.0 )
-		return( sign * j1(x) );
+		return( sign * md_j1(x) );
 	}
 
 if( (x < 0.0) && (y != an) )
@@ -128,7 +128,7 @@ if( (x < 0.0) && (y != an) )
 	goto done;
  	}
 
-y = fabs(x);
+y = md_fabs(x);
 
 if( y < MACHEP )
 	goto underf;
@@ -152,12 +152,12 @@ if( an < 500.0 )
 		q = recur( &n, x, &k, 1 );
 		if( k == 0.0 )
 			{
-			y = j0(x)/q;
+			y = md_j0(x)/q;
 			goto done;
 			}
 		if( k == 1.0 )
 			{
-			y = j1(x)/q;
+			y = md_j1(x)/q;
 			goto done;
 			}
 		}
@@ -176,7 +176,7 @@ rlarger:
 		y = y + an + 1.0;
 		if( y < 30.0 )
 			y = 30.0;
-		y = n + floor(y-n);
+		y = n + md_floor(y-n);
 		q = recur( &y, x, &k, 0 );
 		y = jvs(y,x) * q;
 		goto done;
@@ -194,8 +194,8 @@ rlarger:
 		{
 		if( n < 0.0 )
 			k = -k;
-		q = n - floor(n);
-		k = floor(k) + q;
+		q = n - md_floor(n);
+		k = md_floor(k) + q;
 		if( n > 0.0 )
 			q = recur( &n, x, &k, 1 );
 		else
@@ -221,7 +221,7 @@ underf:
 /* boundary between convergence of
  * power series and Hankel expansion
  */
-	y = fabs(k);
+	y = md_fabs(k);
 	if( y < 26.0 )
 		t = (0.0083*y + 0.09)*y + 12.9;
 	else
@@ -316,7 +316,7 @@ do
 		r = 0.0;
 	if( r != 0 )
 		{
-		t = fabs( (ans - r)/r );
+		t = md_fabs( (ans - r)/r );
 		ans = r;
 		}
 	else
@@ -330,7 +330,7 @@ do
 	if( t < MACHEP )
 		goto done;
 
-	if( fabs(pk) > big )
+	if( md_fabs(pk) > big )
 		{
 		pkm2 /= big;
 		pkm1 /= big;
@@ -350,7 +350,7 @@ printf( "%.6e\n", ans );
  */
 if( nflag > 0 )
 	{
-	if( fabs(ans) < 0.125 )
+	if( md_fabs(ans) < 0.125 )
 		{
 		nflag = -1;
 		*n = *n - 1.0;
@@ -379,8 +379,8 @@ do
 	pkm1 = pkm2;
 	r -= 2.0;
 /*
-	t = fabs(pkp1) + fabs(pk);
-	if( (k > (kf + 2.5)) && (fabs(pkm1) < 0.25*t) )
+	t = md_fabs(pkp1) + md_fabs(pk);
+	if( (k > (kf + 2.5)) && (md_fabs(pkm1) < 0.25*t) )
 		{
 		k -= 1.0;
 		t = x*x;
@@ -401,7 +401,7 @@ while( k > (kf + 0.5) );
 
 if( cancel )
 	{
-	if( (kf >= 0.0) && (fabs(pk) > fabs(pkm1)) )
+	if( (kf >= 0.0) && (md_fabs(pk) > md_fabs(pkm1)) )
 		{
 		k += 1.0;
 		pkm2 = pk;
@@ -441,42 +441,42 @@ while( t > MACHEP )
 	y += u;
 	k += 1.0;
 	if( y != 0 )
-		t = fabs( u/y );
+		t = md_fabs( u/y );
 	}
 #if DEBUG
 printf( "power series=%.5e ", y );
 #endif
-t = frexp( 0.5*x, &ex );
+t = md_frexp( 0.5*x, &ex );
 ex = ex * n;
 if(  (ex > -1023)
   && (ex < 1023) 
   && (n > 0.0)
   && (n < (MAXGAM-1.0)) )
 	{
-	t = pow( 0.5*x, n ) / gamma( n + 1.0 );
+	t = md_pow( 0.5*x, n ) / md_gamma( n + 1.0 );
 #if DEBUG
-printf( "pow(.5*x, %.4e)/gamma(n+1)=%.5e\n", n, t );
+printf( "md_pow(.5*x, %.4e)/md_gamma(n+1)=%.5e\n", n, t );
 #endif
 	y *= t;
 	}
 else
 	{
 #if DEBUG
-	z = n * log(0.5*x);
+	z = n * md_log(0.5*x);
 	k = lgam( n+1.0 );
 	t = z - k;
-	printf( "log pow=%.5e, lgam(%.4e)=%.5e\n", z, n+1.0, k );
+	printf( "md_log md_pow=%.5e, lgam(%.4e)=%.5e\n", z, n+1.0, k );
 #else
-	t = n * log(0.5*x) - lgam(n + 1.0);
+	t = n * md_log(0.5*x) - lgam(n + 1.0);
 #endif
 	if( y < 0 )
 		{
 		sgngam = -sgngam;
 		y = -y;
 		}
-	t += log(y);
+	t += md_log(y);
 #if DEBUG
-printf( "log y=%.5e\n", log(y) );
+printf( "md_log y=%.5e\n", md_log(y) );
 #endif
 	if( t < -MAXLOG )
 		{
@@ -487,7 +487,7 @@ printf( "log y=%.5e\n", log(y) );
 		mtherr( "Jv", OVERFLOW );
 		return( MAXNUM );
 		}
-	y = sgngam * exp( t );
+	y = sgngam * md_exp( t );
 	}
 return(y);
 }
@@ -529,7 +529,7 @@ while( t > MACHEP )
 	j += 1.0;
 	u *= (m - k * k)/(j * z);
 	q += sign * u;
-	t = fabs(u/p);
+	t = md_fabs(u/p);
 	if( t < conv )
 		{
 		conv = t;
@@ -549,7 +549,7 @@ while( t > MACHEP )
 
 hank1:
 u = x - (0.5*n + 0.25) * PI;
-t = sqrt( 2.0/(PI*x) ) * ( pp * cos(u) - qq * sin(u) );
+t = sqrt( 2.0/(PI*x) ) * ( pp * md_cos(u) - qq * md_sin(u) );
 #if DEBUG
 printf( "hank: %.6e\n", t );
 #endif
@@ -652,9 +652,9 @@ static double ai, aip, bi, bip;
 /* Test for x very close to n.
  * Use expansion for transition region if so.
  */
-cbn = cbrt(n);
+cbn = md_cbrt(n);
 z = (x - n)/cbn;
-if( fabs(z) <= 0.7 )
+if( md_fabs(z) <= 0.7 )
 	return( jnt(n,x) );
 
 z = x/n;
@@ -665,22 +665,22 @@ if( zz == 0.0 )
 if( zz > 0.0 )
 	{
 	sz = sqrt( zz );
-	t = 1.5 * (log( (1.0+sz)/z ) - sz );	/* zeta ** 3/2		*/
-	zeta = cbrt( t * t );
+	t = 1.5 * (md_log( (1.0+sz)/z ) - sz );	/* zeta ** 3/2		*/
+	zeta = md_cbrt( t * t );
 	nflg = 1;
 	}
 else
 	{
 	sz = sqrt(-zz);
-	t = 1.5 * (sz - acos(1.0/z));
-	zeta = -cbrt( t * t );
+	t = 1.5 * (sz - md_acos(1.0/z));
+	zeta = -md_cbrt( t * t );
 	nflg = -1;
 	}
-z32i = fabs(1.0/t);
-sqz = cbrt(t);
+z32i = md_fabs(1.0/t);
+sqz = md_cbrt(t);
 
 /* Airy function */
-n23 = cbrt( n * n );
+n23 = md_cbrt( n * n );
 t = n23 * zeta;
 
 #if DEBUG
@@ -748,7 +748,7 @@ for( k=0; k<=3; k++ )
 	if( doa )
 		{
 		ak *= np;
-		t = fabs(ak);
+		t = md_fabs(ak);
 		if( t < akl )
 			{
 			akl = t;
@@ -762,7 +762,7 @@ for( k=0; k<=3; k++ )
 		{
 		bk += lambda[tkp1] * zp * u[0];
 		bk *= -np/sqz;
-		t = fabs(bk);
+		t = md_fabs(bk);
 		if( t < bkl )
 			{
 			bkl = t;
@@ -783,7 +783,7 @@ for( k=0; k<=3; k++ )
 t = 4.0 * zeta/zz;
 t = sqrt( sqrt(t) );
 
-t *= ai*pp/cbrt(n)  +  aip*qq/(n23*n);
+t *= ai*pp/md_cbrt(n)  +  aip*qq/(n23*n);
 return(t);
 }
 
@@ -833,9 +833,9 @@ double nk, fk, gk, pp, qq;
 double F[5], G[4];
 int k;
 
-cbn = cbrt(n);
+cbn = md_cbrt(n);
 z = (x - n)/cbn;
-cbtwo = cbrt( 2.0 );
+cbtwo = md_cbrt( 2.0 );
 
 /* Airy function */
 zz = -cbtwo * z;
@@ -862,7 +862,7 @@ for( k=0; k<=3; k++ )
 pp = 0.0;
 qq = 0.0;
 nk = 1.0;
-n23 = cbrt( n * n );
+n23 = md_cbrt( n * n );
 
 for( k=0; k<=4; k++ )
 	{
@@ -879,6 +879,6 @@ for( k=0; k<=4; k++ )
 	nk /= n23;
 	}
 
-fk = cbtwo * ai * pp/cbn  +  cbrt(4.0) * aip * qq/n;
+fk = cbtwo * ai * pp/cbn  +  md_cbrt(4.0) * aip * qq/n;
 return(fk);
 }

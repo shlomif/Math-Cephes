@@ -20,16 +20,16 @@
  *                            x
  *                             -
  *                   1        | |          2
- *    ndtr(x)  = ---------    |    exp( - t /2 ) dt
+ *    ndtr(x)  = ---------    |    md_exp( - t /2 ) dt
  *               sqrt(2pi)  | |
  *                           -
  *                          -inf.
  *
- *             =  ( 1 + erf(z) ) / 2
- *             =  erfc(z) / 2
+ *             =  ( 1 + md_erf(z) ) / 2
+ *             =  md_erfc(z) / 2
  *
  * where z = x/sqrt(2). Computation is via the functions
- * erf and erfc with care to avoid error amplification in computing exp(-x^2).
+ * md_erf and md_erfc with care to avoid error amplification in computing md_exp(-x^2).
  *
  *
  * ACCURACY:
@@ -42,10 +42,10 @@
  * ERROR MESSAGES:
  *
  *   message         condition         value returned
- * erfc underflow    x > 37.519379347       0.0
+ * md_erfc underflow    x > 37.519379347       0.0
  *
  */
-/*							erf.c
+/*							md_erf.c
  *
  *	Error function
  *
@@ -53,9 +53,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, erf();
+ * double x, y, md_erf();
  *
- * y = erf( x );
+ * y = md_erf( x );
  *
  *
  *
@@ -66,7 +66,7 @@
  *                           x 
  *                            -
  *                 2         | |          2
- *   erf(x)  =  --------     |    exp( - t  ) dt.
+ *   md_erf(x)  =  --------     |    md_exp( - t  ) dt.
  *              sqrt(pi)   | |
  *                          -
  *                           0
@@ -74,8 +74,8 @@
  * The magnitude of x is limited to 9.231948545 for DEC
  * arithmetic; 1 or -1 is returned outside this range.
  *
- * For 0 <= |x| < 1, erf(x) = x * P4(x**2)/Q5(x**2); otherwise
- * erf(x) = 1 - erfc(x).
+ * For 0 <= |x| < 1, md_erf(x) = x * P4(x**2)/Q5(x**2); otherwise
+ * md_erf(x) = 1 - md_erfc(x).
  *
  *
  *
@@ -87,7 +87,7 @@
  *    IEEE      0,1         30000       3.7e-16     1.0e-16
  *
  */
-/*							erfc.c
+/*							md_erfc.c
  *
  *	Complementary error function
  *
@@ -95,31 +95,31 @@
  *
  * SYNOPSIS:
  *
- * double x, y, erfc();
+ * double x, y, md_erfc();
  *
- * y = erfc( x );
+ * y = md_erfc( x );
  *
  *
  *
  * DESCRIPTION:
  *
  *
- *  1 - erf(x) =
+ *  1 - md_erf(x) =
  *
  *                           inf. 
  *                             -
  *                  2         | |          2
- *   erfc(x)  =  --------     |    exp( - t  ) dt
+ *   md_erfc(x)  =  --------     |    md_exp( - t  ) dt
  *               sqrt(pi)   | |
  *                           -
  *                            x
  *
  *
- * For small x, erfc(x) = 1 - erf(x); otherwise rational
+ * For small x, md_erfc(x) = 1 - md_erf(x); otherwise rational
  * approximations are computed.
  *
  * A special function expx2.c is used to suppress error amplification
- * in computing exp(-x^2).
+ * in computing md_exp(-x^2).
  *
  *
  * ACCURACY:
@@ -132,7 +132,7 @@
  * ERROR MESSAGES:
  *
  *   message         condition              value returned
- * erfc underflow    x > 9.231948545 (DEC)       0.0
+ * md_erfc underflow    x > 9.231948545 (DEC)       0.0
  *
  *
  */
@@ -149,7 +149,7 @@ Copyright 1984, 1987, 1988, 1992, 2000 by Stephen L. Moshier
 extern double SQRTH;
 extern double MAXLOG;
 
-/* Define this macro to suppress error propagation in exp(x^2)
+/* Define this macro to suppress error propagation in md_exp(x^2)
    by using the expx2 function.  The tradeoff is that doing so
    generates two calls to the exponential function instead of one.  */
 #define USE_EXPXSQ 1
@@ -387,17 +387,17 @@ static unsigned short U[] = {
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double exp ( double );
-extern double log ( double );
-extern double fabs ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
+extern double md_fabs ( double );
 extern double sqrt ( double );
 extern double expx2 ( double, int );
-double erf ( double );
-double erfc ( double );
+double md_erf ( double );
+double md_erfc ( double );
 static double erfce ( double );
 #else
-double polevl(), p1evl(), exp(), log(), fabs();
-double erf(), erfc(), expx2(), sqrt();
+double polevl(), p1evl(), md_exp(), md_log(), md_fabs();
+double md_erf(), md_erfc(), expx2(), sqrt();
 static double erfce();
 #endif
 
@@ -407,22 +407,22 @@ double a;
 double x, y, z;
 
 x = a * SQRTH;
-z = fabs(x);
+z = md_fabs(x);
 
 /* if( z < SQRTH ) */
 if( z < 1.0 )
-	y = 0.5 + 0.5 * erf(x);
+	y = 0.5 + 0.5 * md_erf(x);
 
 else
 	{
 #ifdef USE_EXPXSQ
 	/* See below for erfce. */
 	y = 0.5 * erfce(z);
-	/* Multiply by exp(-x^2 / 2)  */
+	/* Multiply by md_exp(-x^2 / 2)  */
 	z = expx2(a, -1);
 	y = y * sqrt(z);
 #else
-	y = 0.5 * erfc(z);
+	y = 0.5 * md_erfc(z);
 #endif
 	if( x > 0 )
 		y = 1.0 - y;
@@ -432,7 +432,7 @@ return(y);
 }
 
 
-double erfc(a)
+double md_erfc(a)
 double a;
 {
 double p,q,x,y,z;
@@ -444,14 +444,14 @@ else
 	x = a;
 
 if( x < 1.0 )
-	return( 1.0 - erf(a) );
+	return( 1.0 - md_erf(a) );
 
 z = -a * a;
 
 if( z < -MAXLOG )
 	{
 under:
-	mtherr( "erfc", UNDERFLOW );
+	mtherr( "md_erfc", UNDERFLOW );
 	if( a < 0 )
 		return( 2.0 );
 	else
@@ -459,10 +459,10 @@ under:
 	}
 
 #ifdef USE_EXPXSQ
-/* Compute z = exp(z).  */
+/* Compute z = md_exp(z).  */
 z = expx2(a, -1);
 #else
-z = exp(z);
+z = md_exp(z);
 #endif
 if( x < 8.0 )
 	{
@@ -486,8 +486,8 @@ return(y);
 }
 
 
-/* Exponentially scaled erfc function
-   exp(x^2) erfc(x)
+/* Exponentially scaled md_erfc function
+   md_exp(x^2) md_erfc(x)
    valid for x > 1.
    Use with ndtr and expx2.  */
 static double erfce(x)
@@ -510,13 +510,13 @@ return (p/q);
 
 
 
-double erf(x)
+double md_erf(x)
 double x;
 {
 double y, z;
 
-if( fabs(x) > 1.0 )
-	return( 1.0 - erfc(x) );
+if( md_fabs(x) > 1.0 )
+	return( 1.0 - md_erfc(x) );
 z = x * x;
 y = x * polevl( z, T, 4 ) / p1evl( z, U, 5 );
 return( y );

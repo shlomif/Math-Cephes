@@ -1,4 +1,4 @@
-/*							expn.c
+/*							md_expn.c
  *
  *		Exponential integral En
  *
@@ -7,9 +7,9 @@
  * SYNOPSIS:
  *
  * int n;
- * double x, y, expn();
+ * double x, y, md_expn();
  *
- * y = expn( n, x );
+ * y = md_expn( n, x );
  *
  *
  *
@@ -43,26 +43,26 @@
  *
  */
 
-/*							expn.c	*/
+/*							md_expn.c	*/
 
 /* Cephes Math Library Release 2.8:  June, 2000
    Copyright 1985, 2000 by Stephen L. Moshier */
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double pow ( double, double );
-extern double gamma ( double );
-extern double log ( double );
-extern double exp ( double );
-extern double fabs ( double );
+extern double md_pow ( double, double );
+extern double md_gamma ( double );
+extern double md_log ( double );
+extern double md_exp ( double );
+extern double md_fabs ( double );
 #else
-double pow(), gamma(), log(), exp(), fabs();
+double md_pow(), md_gamma(), md_log(), md_exp(), md_fabs();
 #endif
 #define EUL 0.57721566490153286060
 #define BIG  1.44115188075855872E+17
 extern double MAXNUM, MACHEP, MAXLOG;
 
-double expn( n, x )
+double md_expn( n, x )
 int n;
 double x;
 {
@@ -77,7 +77,7 @@ if( n < 0 )
 
 if( x < 0 )
 	{
-domerr:	mtherr( "expn", DOMAIN );
+domerr:	mtherr( "md_expn", DOMAIN );
 	return( MAXNUM );
 	}
 
@@ -88,7 +88,7 @@ if( x == 0.0 )
 	{
 	if( n < 2 )
 		{
-		mtherr( "expn", SING );
+		mtherr( "md_expn", SING );
 		return( MAXNUM );
 		}
 	else
@@ -96,9 +96,9 @@ if( x == 0.0 )
 	}
 
 if( n == 0 )
-	return( exp(-x)/x );
+	return( md_exp(-x)/x );
 
-/*							expn.c	*/
+/*							md_expn.c	*/
 /*		Expansion for large n		*/
 
 if( n > 5000 )
@@ -109,18 +109,18 @@ if( n > 5000 )
 	ans = yk * t * (6.0 * x * x  -  8.0 * t * x  +  t * t);
 	ans = yk * (ans + t * (t  -  2.0 * x));
 	ans = yk * (ans + t);
-	ans = (ans + 1.0) * exp( -x ) / xk;
+	ans = (ans + 1.0) * md_exp( -x ) / xk;
 	goto done;
 	}
 
 if( x > 1.0 )
 	goto cfrac;
 
-/*							expn.c	*/
+/*							md_expn.c	*/
 
 /*		Power series expansion		*/
 
-psi = -EUL - log(x);
+psi = -EUL - md_log(x);
 for( i=1; i<n; i++ )
 	psi = psi + 1.0/i;
 
@@ -142,7 +142,7 @@ do
 		ans += yk/pk;
 		}
 	if( ans != 0.0 )
-		t = fabs(yk/ans);
+		t = md_fabs(yk/ans);
 	else
 		t = 1.0;
 	}
@@ -150,10 +150,10 @@ while( t > MACHEP );
 k = xk;
 t = n;
 r = n - 1;
-ans = (pow(z, r) * psi / gamma(t)) - ans;
+ans = (md_pow(z, r) * psi / md_gamma(t)) - ans;
 goto done;
 
-/*							expn.c	*/
+/*							md_expn.c	*/
 /*		continued fraction		*/
 cfrac:
 k = 1;
@@ -181,7 +181,7 @@ do
 	if( qk != 0 )
 		{
 		r = pk/qk;
-		t = fabs( (ans - r)/r );
+		t = md_fabs( (ans - r)/r );
 		ans = r;
 		}
 	else
@@ -190,7 +190,7 @@ do
 	pkm1 = pk;
 	qkm2 = qkm1;
 	qkm1 = qk;
-if( fabs(pk) > big )
+if( md_fabs(pk) > big )
 		{
 		pkm2 /= big;
 		pkm1 /= big;
@@ -200,7 +200,7 @@ if( fabs(pk) > big )
 	}
 while( t > MACHEP );
 
-ans *= exp( -x );
+ans *= md_exp( -x );
 
 done:
 return( ans );

@@ -23,13 +23,13 @@ sub ok {
   my ($value, $true, $skip) = @_;
   $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < $eps ? "ok $count $skip\n" : 
+  print($error < $eps ? "ok $count $skip ($value)\n" : 
 	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
 
-my $k = 3;
-my $n = 5;
-my $p = 0.7;
+my $k = 2;
+my $n = 10;
+my $p = 0.5;
 my $y = 0.6;
 ok( bdtr($k, $n, $p), incbet($n-$k, $k+1, 1-$p));
 ok( bdtrc($k, $n, $p), incbet($k+1, $n-$k, $p));

@@ -1,4 +1,4 @@
-/*							acosh.c
+/*							md_acosh.c
  *
  *	Inverse hyperbolic cosine
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, acosh();
+ * double x, y, md_acosh();
  *
- * y = acosh( x );
+ * y = md_acosh( x );
  *
  *
  *
@@ -22,7 +22,7 @@
  *
  * where z = x-1, is used.  Otherwise,
  *
- * acosh(x)  =  log( x + sqrt( (x-1)(x+1) ).
+ * md_acosh(x)  =  md_log( x + sqrt( (x-1)(x+1) ).
  *
  *
  *
@@ -37,11 +37,11 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * acosh domain       |x| < 1            NAN
+ * md_acosh domain       |x| < 1            NAN
  *
  */
 
-/*							acosh.c	*/
+/*							md_acosh.c	*/
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -49,7 +49,7 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 
-/* acosh(z) = sqrt(x) * R(x), z = x + 1, interval 0 < x < 0.5 */
+/* md_acosh(z) = sqrt(x) * R(x), z = x + 1, interval 0 < x < 0.5 */
 
 #include "mconf.h"
 
@@ -127,21 +127,21 @@ static unsigned short Q[] = {
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double log ( double );
+extern double md_log ( double );
 extern double sqrt ( double );
 #else
-double log(), sqrt(), polevl(), p1evl();
+double md_log(), sqrt(), polevl(), p1evl();
 #endif
 extern double LOGE2, INFINITY, NAN;
 
-double acosh(x)
+double md_acosh(x)
 double x;
 {
 double a, z;
 
 if( x < 1.0 )
 	{
-	mtherr( "acosh", DOMAIN );
+	mtherr( "md_acosh", DOMAIN );
 	return(NAN);
 	}
 
@@ -151,7 +151,7 @@ if( x > 1.0e8 )
 	if( x == INFINITY )
 		return( INFINITY );
 #endif
-	return( log(x) + LOGE2 );
+	return( md_log(x) + LOGE2 );
 	}
 
 z = x - 1.0;
@@ -163,5 +163,5 @@ if( z < 0.5 )
 	}
 
 a = sqrt( z*(x+1.0) );
-return( log(x + a) );
+return( md_log(x + a) );
 }

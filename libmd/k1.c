@@ -56,7 +56,7 @@
  * Returns exponentially scaled modified Bessel function
  * of the third kind of order one of the argument:
  *
- *      k1e(x) = exp(x) * k1(x).
+ *      k1e(x) = md_exp(x) * k1(x).
  *
  *
  *
@@ -76,10 +76,10 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 
-/* Chebyshev coefficients for x(K1(x) - log(x/2) I1(x))
+/* Chebyshev coefficients for x(K1(x) - md_log(x/2) I1(x))
  * in the interval [0,2].
  * 
- * lim(x->0){ x(K1(x) - log(x/2) I1(x)) } = 1.
+ * lim(x->0){ x(K1(x) - md_log(x/2) I1(x)) } = 1.
  */
 
 #ifdef UNK
@@ -149,10 +149,10 @@ static unsigned short A[] = {
 
 
 
-/* Chebyshev coefficients for exp(x) sqrt(x) K1(x)
+/* Chebyshev coefficients for md_exp(x) sqrt(x) K1(x)
  * in the interval [2,infinity].
  *
- * lim(x->inf){ exp(x) sqrt(x) K1(x) } = sqrt(pi/2).
+ * lim(x->inf){ md_exp(x) sqrt(x) K1(x) } = sqrt(pi/2).
  */
 
 #ifdef UNK
@@ -278,12 +278,12 @@ static unsigned short B[] = {
 
 #ifdef ANSIPROT
 extern double chbevl ( double, void *, int );
-extern double exp ( double );
+extern double md_exp ( double );
 extern double i1 ( double );
-extern double log ( double );
+extern double md_log ( double );
 extern double sqrt ( double );
 #else
-double chbevl(), exp(), i1(), log(), sqrt();
+double chbevl(), md_exp(), i1(), md_log(), sqrt();
 #endif
 extern double PI;
 extern double MINLOG, MAXNUM;
@@ -303,11 +303,11 @@ if( z <= 0.0 )
 if( x <= 2.0 )
 	{
 	y = x * x - 2.0;
-	y =  log(z) * i1(x)  +  chbevl( y, A, 11 ) / x;
+	y =  md_log(z) * i1(x)  +  chbevl( y, A, 11 ) / x;
 	return( y );
 	}
 
-return(  exp(-x) * chbevl( 8.0/x - 2.0, B, 25 ) / sqrt(x) );
+return(  md_exp(-x) * chbevl( 8.0/x - 2.0, B, 25 ) / sqrt(x) );
 }
 
 
@@ -327,8 +327,8 @@ if( x <= 0.0 )
 if( x <= 2.0 )
 	{
 	y = x * x - 2.0;
-	y =  log( 0.5 * x ) * i1(x)  +  chbevl( y, A, 11 ) / x;
-	return( y * exp(x) );
+	y =  md_log( 0.5 * x ) * i1(x)  +  chbevl( y, A, 11 ) / x;
+	return( y * md_exp(x) );
 	}
 
 return(  chbevl( 8.0/x - 2.0, B, 25 ) / sqrt(x) );

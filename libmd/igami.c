@@ -1,6 +1,6 @@
 /*							igami()
  *
- *      Inverse of complemented imcomplete gamma integral
+ *      Inverse of complemented imcomplete md_gamma integral
  *
  *
  *
@@ -54,17 +54,17 @@ extern double MACHEP, MAXNUM, MAXLOG, MINLOG;
 #ifdef ANSIPROT
 extern double igamc ( double, double );
 extern double ndtri ( double );
-extern double exp ( double );
-extern double fabs ( double );
-extern double log ( double );
+extern double md_exp ( double );
+extern double md_fabs ( double );
+extern double md_log ( double );
 extern double sqrt ( double );
 extern double lgam ( double );
 #else
-double igamc(), ndtri(), exp(), fabs(), log(), sqrt(), lgam();
+double igamc(), ndtri(), md_exp(), md_fabs(), md_log(), sqrt(), lgam();
 #endif
 
-double igami( a, y0 )
-double a, y0;
+double igami( a, md_y0 )
+double a, md_y0;
 {
 double x0, x1, x, yl, yh, y, d, lgm, dithresh;
 int i, dir;
@@ -78,7 +78,7 @@ dithresh = 5.0 * MACHEP;
 
 /* approximation to inverse function */
 d = 1.0/(9.0*a);
-y = ( 1.0 - d - ndtri(y0) * sqrt(d) );
+y = ( 1.0 - d - ndtri(md_y0) * sqrt(d) );
 x = a * y * y * y;
 
 lgm = lgam(a);
@@ -90,7 +90,7 @@ for( i=0; i<10; i++ )
 	y = igamc(a,x);
 	if( y < yl || y > yh )
 		goto ihalve;
-	if( y < y0 )
+	if( y < md_y0 )
 		{
 		x0 = x;
 		yl = y;
@@ -101,13 +101,13 @@ for( i=0; i<10; i++ )
 		yh = y;
 		}
 /* compute the derivative of the function at this point */
-	d = (a - 1.0) * log(x) - x - lgm;
+	d = (a - 1.0) * md_log(x) - x - lgm;
 	if( d < -MAXLOG )
 		goto ihalve;
-	d = -exp(d);
+	d = -md_exp(d);
 /* compute the step to the next approximation of x */
-	d = (y - y0)/d;
-	if( fabs(d/x) < MACHEP )
+	d = (y - md_y0)/d;
+	if( md_fabs(d/x) < MACHEP )
 		goto done;
 	x = x - d;
 	}
@@ -124,7 +124,7 @@ if( x0 == MAXNUM )
 		{
 		x = (1.0 + d) * x;
 		y = igamc( a, x );
-		if( y < y0 )
+		if( y < md_y0 )
 			{
 			x0 = x;
 			yl = y;
@@ -141,14 +141,14 @@ for( i=0; i<400; i++ )
 	x = x1  +  d * (x0 - x1);
 	y = igamc( a, x );
 	lgm = (x0 - x1)/(x1 + x0);
-	if( fabs(lgm) < dithresh )
+	if( md_fabs(lgm) < dithresh )
 		break;
-	lgm = (y - y0)/y0;
-	if( fabs(lgm) < dithresh )
+	lgm = (y - md_y0)/md_y0;
+	if( md_fabs(lgm) < dithresh )
 		break;
 	if( x <= 0.0 )
 		break;
-	if( y >= y0 )
+	if( y >= md_y0 )
 		{
 		x1 = x;
 		yh = y;
@@ -160,7 +160,7 @@ for( i=0; i<400; i++ )
 		else if( dir > 1 )
 			d = 0.5 * d + 0.5; 
 		else
-			d = (y0 - yl)/(yh - yl);
+			d = (md_y0 - yl)/(yh - yl);
 		dir += 1;
 		}
 	else
@@ -175,7 +175,7 @@ for( i=0; i<400; i++ )
 		else if( dir < -1 )
 			d = 0.5 * d;
 		else
-			d = (y0 - yl)/(yh - yl);
+			d = (md_y0 - yl)/(yh - yl);
 		dir -= 1;
 		}
 	}

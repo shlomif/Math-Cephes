@@ -1,4 +1,4 @@
-/*							tanh.c
+/*							md_tanh.c
  *
  *	Hyperbolic tangent
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, tanh();
+ * double x, y, md_tanh();
  *
- * y = tanh( x );
+ * y = md_tanh( x );
  *
  *
  *
@@ -20,7 +20,7 @@
  * A rational function is used for |x| < 0.625.  The form
  * x + x**3 P(x)/Q(x) of Cody _& Waite is employed.
  * Otherwise,
- *    tanh(x) = sinh(x)/cosh(x) = 1  -  2/(exp(2x) + 1).
+ *    md_tanh(x) = md_sinh(x)/md_cosh(x) = 1  -  2/(md_exp(2x) + 1).
  *
  *
  *
@@ -95,16 +95,16 @@ static unsigned short Q[] = {
 #endif
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double exp ( double );
+extern double md_fabs ( double );
+extern double md_exp ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 #else
-double fabs(), exp(), polevl(), p1evl();
+double md_fabs(), md_exp(), polevl(), p1evl();
 #endif
 extern double MAXLOG;
 
-double tanh(x)
+double md_tanh(x)
 double x;
 {
 double s, z;
@@ -113,7 +113,7 @@ double s, z;
 if( x == 0.0 )
 	return(x);
 #endif
-z = fabs(x);
+z = md_fabs(x);
 if( z > 0.5 * MAXLOG )
 	{
 	if( x > 0 )
@@ -123,7 +123,7 @@ if( z > 0.5 * MAXLOG )
 	}
 if( z >= 0.625 )
 	{
-	s = exp(2.0*z);
+	s = md_exp(2.0*z);
 	z =  1.0  - 2.0/(s + 1.0);
 	if( x < 0 )
 		z = -z;

@@ -25,8 +25,8 @@
  * ellpk(1.0-m).
  *
  * Relation to incomplete elliptic integral:
- * If u = ellik(phi,m), then sn(u|m) = sin(phi),
- * and cn(u|m) = cos(phi).  Phi is called the amplitude of u.
+ * If u = ellik(phi,m), then sn(u|m) = md_sin(phi),
+ * and cn(u|m) = md_cos(phi).  Phi is called the amplitude of u.
  *
  * Computation is by means of the arithmetic-geometric mean
  * algorithm, except when m is within 1e-9 of 0 or 1.  In the
@@ -64,18 +64,18 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 #include "mconf.h"
 #ifdef ANSIPROT
 extern double sqrt ( double );
-extern double fabs ( double );
-extern double sin ( double );
-extern double cos ( double );
-extern double asin ( double );
-extern double tanh ( double );
-extern double sinh ( double );
-extern double cosh ( double );
-extern double atan ( double );
-extern double exp ( double );
+extern double md_fabs ( double );
+extern double md_sin ( double );
+extern double md_cos ( double );
+extern double md_asin ( double );
+extern double md_tanh ( double );
+extern double md_sinh ( double );
+extern double md_cosh ( double );
+extern double md_atan ( double );
+extern double md_exp ( double );
 #else
-double sqrt(), fabs(), sin(), cos(), asin(), tanh();
-double sinh(), cosh(), atan(), exp();
+double sqrt(), md_fabs(), md_sin(), md_cos(), md_asin(), md_tanh();
+double md_sinh(), md_cosh(), md_atan(), md_exp();
 #endif
 extern double PIO2, MACHEP;
 
@@ -101,8 +101,8 @@ if( m < 0.0 || m > 1.0 )
 	}
 if( m < 1.0e-9 )
 	{
-	t = sin(u);
-	b = cos(u);
+	t = md_sin(u);
+	b = md_cos(u);
 	ai = 0.25 * m * (u - t*b);
 	*sn = t - ai*b;
 	*cn = b + ai*t;
@@ -114,12 +114,12 @@ if( m < 1.0e-9 )
 if( m >= 0.9999999999 )
 	{
 	ai = 0.25 * (1.0-m);
-	b = cosh(u);
-	t = tanh(u);
+	b = md_cosh(u);
+	t = md_tanh(u);
 	phi = 1.0/b;
-	twon = b * sinh(u);
+	twon = b * md_sinh(u);
 	*sn = t + ai * (twon - u)/(b*b);
-	*ph = 2.0*atan(exp(u)) - PIO2 + ai*(twon - u)/b;
+	*ph = 2.0*md_atan(md_exp(u)) - PIO2 + ai*(twon - u)/b;
 	ai *= t * phi;
 	*cn = phi - ai * (twon - u);
 	*dn = phi + ai * (twon + u);
@@ -134,7 +134,7 @@ c[0] = sqrt(m);
 twon = 1.0;
 i = 0;
 
-while( fabs(c[i]/a[i]) > MACHEP )
+while( md_fabs(c[i]/a[i]) > MACHEP )
 	{
 	if( i > 7 )
 		{
@@ -156,16 +156,16 @@ done:
 phi = twon * a[i] * u;
 do
 	{
-	t = c[i] * sin(phi) / a[i];
+	t = c[i] * md_sin(phi) / a[i];
 	b = phi;
-	phi = (asin(t) + phi)/2.0;
+	phi = (md_asin(t) + phi)/2.0;
 	}
 while( --i );
 
-*sn = sin(phi);
-t = cos(phi);
+*sn = md_sin(phi);
+t = md_cos(phi);
 *cn = t;
-*dn = t/cos(phi-b);
+*dn = t/md_cos(phi-b);
 *ph = phi;
 return(0);
 }

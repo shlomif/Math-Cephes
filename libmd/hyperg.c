@@ -67,17 +67,17 @@ Copyright 1984, 1987, 1988, 2000 by Stephen L. Moshier
 #include "mconf.h"
 
 #ifdef ANSIPROT
-extern double exp ( double );
-extern double log ( double );
-extern double gamma ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
+extern double md_gamma ( double );
 extern double lgam ( double );
-extern double fabs ( double );
+extern double md_fabs ( double );
 double hyp2f0 ( double, double, double, int, double * );
 static double hy1f1p(double, double, double, double *);
 static double hy1f1a(double, double, double, double *);
 double hyperg (double, double, double);
 #else
-double exp(), log(), gamma(), lgam(), fabs(), hyp2f0();
+double md_exp(), md_log(), md_gamma(), lgam(), md_fabs(), hyp2f0();
 static double hy1f1p();
 static double hy1f1a();
 double hyperg();
@@ -91,8 +91,8 @@ double asum, psum, acanc, pcanc, temp;
 
 /* See if a Kummer transformation will help */
 temp = b - a;
-if( fabs(temp) < 0.001 * fabs(a) )
-	return( exp(x) * hyperg( temp, b, -x )  );
+if( md_fabs(temp) < 0.001 * md_fabs(a) )
+	return( md_exp(x) * hyperg( temp, b, -x )  );
 
 
 psum = hy1f1p( a, b, x, &pcanc );
@@ -158,7 +158,7 @@ while( t > MACHEP )
 	u = x * ( an / (bn * n) );
 
 	/* check for blowup */
-	temp = fabs(u);
+	temp = md_fabs(u);
 	if( (temp > 1.0 ) && (maxt > (MAXNUM/temp)) )
 		{
 		pcanc = 1.0;	/* estimate 100% error */
@@ -167,11 +167,11 @@ while( t > MACHEP )
 
 	a0 *= u;
 	sum += a0;
-	t = fabs(a0);
+	t = md_fabs(a0);
 	if( t > maxt )
 		maxt = t;
 /*
-	if( (maxt/fabs(sum)) > 1.0e17 )
+	if( (maxt/md_fabs(sum)) > 1.0e17 )
 		{
 		pcanc = 1.0;
 		goto blowup;
@@ -186,9 +186,9 @@ pdone:
 
 /* estimate error due to roundoff and cancellation */
 if( sum != 0.0 )
-	maxt /= fabs(sum);
+	maxt /= md_fabs(sum);
 maxt *= MACHEP; 	/* this way avoids multiply overflow */
-pcanc = fabs( MACHEP * n  +  maxt );
+pcanc = md_fabs( MACHEP * n  +  maxt );
 
 blowup:
 
@@ -227,7 +227,7 @@ if( x == 0 )
 	asum = MAXNUM;
 	goto adone;
 	}
-temp = log( fabs(x) );
+temp = md_log( md_fabs(x) );
 t = x + temp * (a-b);
 u = -temp * a;
 
@@ -240,16 +240,16 @@ if( b > 0 )
 
 h1 = hyp2f0( a, a-b+1, -1.0/x, 1, &err1 );
 
-temp = exp(u) / gamma(b-a);
+temp = md_exp(u) / md_gamma(b-a);
 h1 *= temp;
 err1 *= temp;
 
 h2 = hyp2f0( b-a, 1.0-a, 1.0/x, 2, &err2 );
 
 if( a < 0 )
-	temp = exp(t) / gamma(a);
+	temp = md_exp(t) / md_gamma(a);
 else
-	temp = exp( t - lgam(a) );
+	temp = md_exp( t - lgam(a) );
 
 h2 *= temp;
 err2 *= temp;
@@ -259,19 +259,19 @@ if( x < 0.0 )
 else
 	asum = h2;
 
-acanc = fabs(err1) + fabs(err2);
+acanc = md_fabs(err1) + md_fabs(err2);
 
 
 if( b < 0 )
 	{
-	temp = gamma(b);
+	temp = md_gamma(b);
 	asum *= temp;
-	acanc *= fabs(temp);
+	acanc *= md_fabs(temp);
 	}
 
 
 if( asum != 0.0 )
-	acanc /= fabs(asum);
+	acanc /= md_fabs(asum);
 
 acanc *= 30.0;	/* fudge factor, since error of asymptotic formula
 		 * often seems this much larger than advertised */
@@ -313,12 +313,12 @@ do
 	u = an * (bn * x / n);
 
 	/* check for blowup */
-	temp = fabs(u);
+	temp = md_fabs(u);
 	if( (temp > 1.0 ) && (maxt > (MAXNUM/temp)) )
 		goto error;
 
 	a0 *= u;
-	t = fabs(a0);
+	t = md_fabs(a0);
 
 	/* terminating condition for asymptotic series */
 	if( t > tlast )
@@ -343,7 +343,7 @@ while( t > MACHEP );
 pdone:	/* series converged! */
 
 /* estimate error due to roundoff and cancellation */
-*err = fabs(  MACHEP * (n + maxt)  );
+*err = md_fabs(  MACHEP * (n + maxt)  );
 
 alast = a0;
 goto done;
@@ -371,7 +371,7 @@ default:
 }
 
 /* estimate error due to roundoff, cancellation, and nonconvergence */
-*err = MACHEP * (n + maxt)  +  fabs ( a0 );
+*err = MACHEP * (n + maxt)  +  md_fabs ( a0 );
 
 
 done:

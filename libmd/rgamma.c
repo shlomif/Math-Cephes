@@ -1,6 +1,6 @@
 /*						rgamma.c
  *
- *	Reciprocal gamma function
+ *	Reciprocal md_gamma function
  *
  *
  *
@@ -14,7 +14,7 @@
  *
  * DESCRIPTION:
  *
- * Returns one divided by the gamma function of the argument.
+ * Returns one divided by the md_gamma function of the argument.
  *
  * The function is approximated by a Chebyshev expansion in
  * the interval [0,1].  Range reduction is by recurrence
@@ -24,7 +24,7 @@
  * reflection formula is applied; lograrithms are employed
  * to avoid unnecessary overflow.
  *
- * The reciprocal gamma function has no singularities,
+ * The reciprocal md_gamma function has no singularities,
  * but overflow and underflow may occur for large arguments.
  * These conditions return either MAXNUM or 1/MAXNUM with
  * appropriate sign.
@@ -46,8 +46,8 @@ Copyright 1985, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 
-/* Chebyshev coefficients for reciprocal gamma function
- * in interval 0 to 1.  Function is 1/(x gamma(x)) - 1
+/* Chebyshev coefficients for reciprocal md_gamma function
+ * in interval 0 to 1.  Function is 1/(x md_gamma(x)) - 1
  */
 
 #ifdef UNK
@@ -138,12 +138,12 @@ static char name[] = "rgamma";
 
 #ifdef ANSIPROT
 extern double chbevl ( double, void *, int );
-extern double exp ( double );
-extern double log ( double );
-extern double sin ( double );
+extern double md_exp ( double );
+extern double md_log ( double );
+extern double md_sin ( double );
 extern double lgam ( double );
 #else
-double chbevl(), exp(), log(), sin(), lgam();
+double chbevl(), md_exp(), md_log(), md_sin(), lgam();
 #endif
 extern double PI, MAXLOG, MAXNUM;
 
@@ -162,7 +162,7 @@ if( x > 34.84425627277176174)
 if( x < -34.034 )
 	{
 	w = -x;
-	z = sin( PI*w );
+	z = md_sin( PI*w );
 	if( z == 0.0 )
 		return(0.0);
 	if( z < 0.0 )
@@ -173,7 +173,7 @@ if( x < -34.034 )
 	else
 		sign = -1;
 
-	y = log( w * z ) - log(PI) + lgam(w);
+	y = md_log( w * z ) - md_log(PI) + lgam(w);
 	if( y < -MAXLOG )
 		{
 		mtherr( name, UNDERFLOW );
@@ -184,7 +184,7 @@ if( x < -34.034 )
 		mtherr( name, OVERFLOW );
 		return( sign * MAXNUM );
 		}
-	return( sign * exp(y));
+	return( sign * md_exp(y));
 	}
 z = 1.0;
 w = x;

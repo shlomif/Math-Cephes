@@ -1,5 +1,15 @@
 Revision history for Math::Cephes
 
+0.40    Dec 20, 2003
+
+  - move Cephes_wrap.c and arrays.c to top-level directory
+    and configure Makefile.PL to build static libmd.
+  - generate a mconf.h for darwin (thanks to Thomas Puzia)
+  - upgraded Cephes_wrap.c swig wrapper
+  - prepended md_ prefix to many functions, to avoid
+    collisions with system functions (thanks to Thomas
+    Puzia and David Martin for pointing out the problem)
+
 0.36    Sept 12, 2002
 
   - added functions that require arrays into and out from

@@ -1,7 +1,7 @@
-/*							ceil()
- *							floor()
- *							frexp()
- *							ldexp()
+/*							md_ceil()
+ *							md_floor()
+ *							md_frexp()
+ *							md_ldexp()
  *							signbit()
  *							isnan()
  *							isfinite()
@@ -12,15 +12,15 @@
  *
  * SYNOPSIS:
  *
- * double ceil(), floor(), frexp(), ldexp();
+ * double md_ceil(), md_floor(), md_frexp(), md_ldexp();
  * int signbit(), isnan(), isfinite();
  * double x, y;
  * int expnt, n;
  *
- * y = floor(x);
- * y = ceil(x);
- * y = frexp( x, &expnt );
- * y = ldexp( x, n );
+ * y = md_floor(x);
+ * y = md_ceil(x);
+ * y = md_frexp( x, &expnt );
+ * y = md_ldexp( x, n );
  * n = signbit(x);
  * n = isnan(x);
  * n = isfinite(x);
@@ -32,17 +32,17 @@
  * All four routines return a double precision floating point
  * result.
  *
- * floor() returns the largest integer less than or equal to x.
+ * md_floor() returns the largest integer less than or equal to x.
  * It truncates toward minus infinity.
  *
- * ceil() returns the smallest integer greater than or equal
+ * md_ceil() returns the smallest integer greater than or equal
  * to x.  It truncates toward plus infinity.
  *
- * frexp() extracts the exponent from x.  It returns an integer
+ * md_frexp() extracts the exponent from x.  It returns an integer
  * power of two to expnt and the significand between 0.5 and 1
- * to y.  Thus  x = y * 2**expn.
+ * to y.  Thus  x = y * 2**md_expn.
  *
- * ldexp() multiplies x by 2**n.
+ * md_ldexp() multiplies x by 2**n.
  *
  * signbit(x) returns 1 if the sign bit of x is 1, else 0.
  *
@@ -67,7 +67,7 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 #include "mconf.h"
 
 #ifdef UNK
-/* ceil(), floor(), frexp(), ldexp() may need to be rewritten. */
+/* md_ceil(), md_floor(), md_frexp(), md_ldexp() may need to be rewritten. */
 #undef UNK
 #if BIGENDIAN
 #define MIEEE 1
@@ -96,23 +96,23 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 
 extern double MAXNUM, NEGZERO;
 #ifdef ANSIPROT
-double floor ( double );
+double md_floor ( double );
 int isnan ( double );
 int isfinite ( double );
-double ldexp ( double, int );
+double md_ldexp ( double, int );
 #else
-double floor();
+double md_floor();
 int isnan(), isfinite();
-double ldexp();
+double md_ldexp();
 #endif
 
-double ceil(x)
+double md_ceil(x)
 double x;
 {
 double y;
 
 #ifdef UNK
-mtherr( "ceil", DOMAIN );
+mtherr( "md_ceil", DOMAIN );
 return(0.0);
 #endif
 #ifdef NANS
@@ -124,7 +124,7 @@ if(!isfinite(x))
 	return(x);
 #endif
 
-y = floor(x);
+y = md_floor(x);
 if( y < x )
 	y += 1.0;
 #ifdef MINUSZERO
@@ -163,7 +163,7 @@ static unsigned short bmask[] = {
 
 
 
-double floor(x)
+double md_floor(x)
 double x;
 {
 union
@@ -175,7 +175,7 @@ unsigned short *p;
 int e;
 
 #ifdef UNK
-mtherr( "floor", DOMAIN );
+mtherr( "md_floor", DOMAIN );
 return(0.0);
 #endif
 #ifdef NANS
@@ -249,7 +249,7 @@ return(u.y);
 
 
 
-double frexp( x, pw2 )
+double md_frexp( x, pw2 )
 double x;
 int *pw2;
 {
@@ -267,7 +267,7 @@ short *q;
 u.y = x;
 
 #ifdef UNK
-mtherr( "frexp", DOMAIN );
+mtherr( "md_frexp", DOMAIN );
 return(0.0);
 #endif
 
@@ -356,7 +356,7 @@ return( u.y );
 
 
 
-double ldexp( x, pw2 )
+double md_ldexp( x, pw2 )
 double x;
 int pw2;
 {
@@ -369,7 +369,7 @@ short *q;
 int e;
 
 #ifdef UNK
-mtherr( "ldexp", DOMAIN );
+mtherr( "md_ldexp", DOMAIN );
 return(0.0);
 #endif
 
@@ -433,7 +433,7 @@ if( e < 1 )
 	/* For denormals, significant bits may be lost even
 	   when dividing by 2.  Construct 2^-(1-e) so the result
 	   is obtained with only one multiplication.  */
-	u.y *= ldexp(1.0, e-1);
+	u.y *= md_ldexp(1.0, e-1);
 	return(u.y);
 #else
 	return(0.0);

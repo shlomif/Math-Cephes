@@ -1,4 +1,4 @@
-/*							asinh.c
+/*							md_asinh.c
  *
  *	Inverse hyperbolic sine
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, asinh();
+ * double x, y, md_asinh();
  *
- * y = asinh( x );
+ * y = md_asinh( x );
  *
  *
  *
@@ -19,7 +19,7 @@
  * If |x| < 0.5, the function is approximated by a rational
  * form  x + x**3 P(x)/Q(x).  Otherwise,
  *
- *     asinh(x) = log( x + sqrt(1 + x*x) ).
+ *     md_asinh(x) = md_log( x + sqrt(1 + x*x) ).
  *
  *
  *
@@ -33,7 +33,7 @@
  *
  */
 
-/*						asinh.c	*/
+/*						md_asinh.c	*/
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -114,13 +114,13 @@ static unsigned short Q[] = {
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 extern double sqrt ( double );
-extern double log ( double );
+extern double md_log ( double );
 #else
-double log(), sqrt(), polevl(), p1evl();
+double md_log(), sqrt(), polevl(), p1evl();
 #endif
 extern double LOGE2, INFINITY;
 
-double asinh(xx)
+double md_asinh(xx)
 double xx;
 {
 double a, z, x;
@@ -147,7 +147,7 @@ if( x > 1.0e8 )
 	  if( x == INFINITY )
 	    return(xx);
 #endif
-	return( sign * (log(x) + LOGE2) );
+	return( sign * (md_log(x) + LOGE2) );
 	}
 
 z = x * x;
@@ -161,5 +161,5 @@ if( x < 0.5 )
 	}	
 
 a = sqrt( z + 1.0 );
-return( sign * log(x + a) );
+return( sign * md_log(x + a) );
 }

@@ -3,7 +3,7 @@
 use lib '../blib/lib','../blib/arch';
 use strict;
 use vars qw($loaded);
-BEGIN {$| = 1; print "1..161\n";}
+BEGIN {$| = 1; print "1..157\n";}
 END {print "not ok 1\n" unless $loaded;}
 use Math::Cephes::Polynomial qw(poly);
 $loaded = 1;
@@ -220,19 +220,15 @@ ok( $f6->{d}->[2], 2);
 my $f7 = $f2->sin()->coef;
 ok($f7->[0], 0.4794255386);
 ok($f7->[1], 0.8775825619);
-ok($f7->[2], -0.2397127693);
 $f7 = $f2->cos()->coef;
 ok($f7->[0], 0.8775825619);
 ok($f7->[1], -0.4794255386);
-ok($f7->[2], -0.438791281);
 $f7 = $f2->sqt()->coef;
 ok($f7->[0], 0.707106781);
 ok($f7->[1], 0.707106781);
-ok($f7->[2], -0.3535533905);
 $f7 = $f2->atn($f1)->coef;
 ok($f7->[0], 0.7853981635);
 ok($f7->[1], -1);
-ok($f7->[2], 2.5);
 
 
 if ($skip_mf) {

@@ -1,4 +1,4 @@
-/*							j0.c
+/*							md_j0.c
  *
  *	Bessel function of order zero
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, j0();
+ * double x, y, md_j0();
  *
- * y = j0( x );
+ * y = md_j0( x );
  *
  *
  *
@@ -42,7 +42,7 @@
  *    IEEE      0, 30       60000       4.2e-16     1.1e-16
  *
  */
-/*							y0.c
+/*							md_y0.c
  *
  *	Bessel function of the second kind, order zero
  *
@@ -50,9 +50,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, y0();
+ * double x, y, md_y0();
  *
- * y = y0( x );
+ * y = md_y0( x );
  *
  *
  *
@@ -64,8 +64,8 @@
  * The domain is divided into the intervals [0, 5] and
  * (5, infinity). In the first interval a rational approximation
  * R(x) is employed to compute
- *   y0(x)  = R(x)  +   2 * log(x) * j0(x) / PI.
- * Thus a call to j0() is required.
+ *   md_y0(x)  = R(x)  +   2 * md_log(x) * md_j0(x) / PI.
+ * Thus a call to md_j0() is required.
  *
  * In the second interval, the Hankel asymptotic expansion
  * is employed with two rational functions of degree 6/6
@@ -75,7 +75,7 @@
  *
  * ACCURACY:
  *
- *  Absolute error, when y0(x) < 1; else relative error:
+ *  Absolute error, when md_y0(x) < 1; else relative error:
  *
  * arithmetic   domain     # trials      peak         rms
  *    DEC       0, 30        9400       7.0e-17     7.9e-18
@@ -461,18 +461,18 @@ static unsigned short RQ[32] = {
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double log ( double );
-extern double sin ( double );
-extern double cos ( double );
+extern double md_log ( double );
+extern double md_sin ( double );
+extern double md_cos ( double );
 extern double sqrt ( double );
-double j0 ( double );
+double md_j0 ( double );
 #else
-double polevl(), p1evl(), log(), sin(), cos(), sqrt();
-double j0();
+double polevl(), p1evl(), md_log(), md_sin(), md_cos(), sqrt();
+double md_j0();
 #endif
 extern double TWOOPI, SQ2OPI, PIO4;
 
-double j0(x)
+double md_j0(x)
 double x;
 {
 double w, z, p, q, xn;
@@ -496,16 +496,16 @@ q = 25.0/(x*x);
 p = polevl( q, PP, 6)/polevl( q, PQ, 6 );
 q = polevl( q, QP, 7)/p1evl( q, QQ, 7 );
 xn = x - PIO4;
-p = p * cos(xn) - w * q * sin(xn);
+p = p * md_cos(xn) - w * q * md_sin(xn);
 return( p * SQ2OPI / sqrt(x) );
 }
 
-/*							y0() 2	*/
+/*							md_y0() 2	*/
 /* Bessel function of second kind, order zero	*/
 
 /* Rational approximation coefficients YP[], YQ[] are used here.
- * The function computed is  y0(x)  -  2 * log(x) * j0(x) / PI,
- * whose value at x = 0 is  2 * ( log(0.5) + EUL ) / PI
+ * The function computed is  md_y0(x)  -  2 * md_log(x) * md_j0(x) / PI,
+ * whose value at x = 0 is  2 * ( md_log(0.5) + EUL ) / PI
  * = 0.073804295108687225.
  */
 
@@ -515,7 +515,7 @@ return( p * SQ2OPI / sqrt(x) );
 */
 extern double MAXNUM;
 
-double y0(x)
+double md_y0(x)
 double x;
 {
 double w, z, p, q, xn;
@@ -524,12 +524,12 @@ if( x <= 5.0 )
 	{
 	if( x <= 0.0 )
 		{
-		mtherr( "y0", DOMAIN );
+		mtherr( "md_y0", DOMAIN );
 		return( -MAXNUM );
 		}
 	z = x * x;
 	w = polevl( z, YP, 7) / p1evl( z, YQ, 7 );
-	w += TWOOPI * log(x) * j0(x);
+	w += TWOOPI * md_log(x) * md_j0(x);
 	return( w );
 	}
 
@@ -538,6 +538,6 @@ z = 25.0 / (x * x);
 p = polevl( z, PP, 6)/polevl( z, PQ, 6 );
 q = polevl( z, QP, 7)/p1evl( z, QQ, 7 );
 xn = x - PIO4;
-p = p * sin(xn) + w * q * cos(xn);
+p = p * md_sin(xn) + w * q * md_cos(xn);
 return( p * SQ2OPI / sqrt(x) );
 }

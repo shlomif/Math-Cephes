@@ -1,4 +1,4 @@
-/*							asin.c
+/*							md_asin.c
  *
  *	Inverse circular sine
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, asin();
+ * double x, y, md_asin();
  *
- * y = asin( x );
+ * y = md_asin( x );
  *
  *
  *
@@ -20,7 +20,7 @@
  * is used for |x| in the interval [0, 0.5].  If |x| > 0.5 it is
  * transformed by the identity
  *
- *    asin(x) = pi/2 - 2 asin( sqrt( (1-x)/2 ) ).
+ *    md_asin(x) = pi/2 - 2 md_asin( sqrt( (1-x)/2 ) ).
  *
  *
  * ACCURACY:
@@ -34,10 +34,10 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * asin domain        |x| > 1           NAN
+ * md_asin domain        |x| > 1           NAN
  *
  */
-/*							acos()
+/*							md_acos()
  *
  *	Inverse circular cosine
  *
@@ -45,9 +45,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, acos();
+ * double x, y, md_acos();
  *
- * y = acos( x );
+ * y = md_acos( x );
  *
  *
  *
@@ -56,15 +56,15 @@
  * Returns radian angle between 0 and pi whose cosine
  * is x.
  *
- * Analytically, acos(x) = pi/2 - asin(x).  However if |x| is
- * near 1, there is cancellation error in subtracting asin(x)
+ * Analytically, md_acos(x) = pi/2 - md_asin(x).  However if |x| is
+ * near 1, there is cancellation error in subtracting md_asin(x)
  * from pi/2.  Hence if x < -0.5,
  *
- *    acos(x) =	 pi - 2.0 * asin( sqrt((1+x)/2) );
+ *    md_acos(x) =	 pi - 2.0 * md_asin( sqrt((1+x)/2) );
  *
  * or if x > +0.5,
  *
- *    acos(x) =	 2.0 * asin(  sqrt((1-x)/2) ).
+ *    md_acos(x) =	 2.0 * md_asin(  sqrt((1-x)/2) ).
  *
  *
  * ACCURACY:
@@ -78,10 +78,10 @@
  * ERROR MESSAGES:
  *
  *   message         condition      value returned
- * asin domain        |x| > 1           NAN
+ * md_asin domain        |x| > 1           NAN
  */
 
-/*							asin.c	*/
+/*							md_asin.c	*/
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -245,14 +245,14 @@ static short S[16] = {
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 extern double sqrt ( double );
-double asin ( double );
+double md_asin ( double );
 #else
 double sqrt(), polevl(), p1evl();
-double asin();
+double md_asin();
 #endif
 extern double PIO2, PIO4, NAN;
 
-double asin(x)
+double md_asin(x)
 double x;
 {
 double a, p, z, zz;
@@ -271,7 +271,7 @@ else
 
 if( a > 1.0 )
 	{
-	mtherr( "asin", DOMAIN );
+	mtherr( "md_asin", DOMAIN );
 	return( NAN );
 	}
 
@@ -303,21 +303,21 @@ return(z);
 
 
 
-double acos(x)
+double md_acos(x)
 double x;
 {
 double z;
 
 if( (x < -1.0) || (x > 1.0) )
 	{
-	mtherr( "acos", DOMAIN );
+	mtherr( "md_acos", DOMAIN );
 	return( NAN );
 	}
 if( x > 0.5 )
 	{
-	return( 2.0 * asin(  sqrt(0.5 - 0.5*x) ) );
+	return( 2.0 * md_asin(  sqrt(0.5 - 0.5*x) ) );
 	}
-z = PIO4 - asin(x);
+z = PIO4 - md_asin(x);
 z = z + MOREBITS;
 z = z + PIO4;
 return( z );

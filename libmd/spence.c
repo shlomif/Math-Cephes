@@ -18,7 +18,7 @@
  *
  *                    x
  *                    -
- *                   | | log t
+ *                   | | md_log t
  * spence(x)  =  -   |   ----- dt
  *                 | |   t - 1
  *                  -
@@ -140,11 +140,11 @@ static unsigned short B[32] = {
 #endif
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double log ( double );
+extern double md_fabs ( double );
+extern double md_log ( double );
 extern double polevl ( double, void *, int );
 #else
-double fabs(), log(), polevl();
+double md_fabs(), md_log(), polevl();
 #endif
 extern double PI, MACHEP;
 
@@ -193,11 +193,11 @@ else
 y = -w * polevl( w, A, 7) / polevl( w, B, 7 );
 
 if( flag & 1 )
-	y = (PI * PI)/6.0  - log(x) * log(1.0-x) - y;
+	y = (PI * PI)/6.0  - md_log(x) * md_log(1.0-x) - y;
 
 if( flag & 2 )
 	{
-	z = log(x);
+	z = md_log(x);
 	y = -0.5 * z * z  -  y;
 	}
 

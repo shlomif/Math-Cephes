@@ -1,4 +1,4 @@
-/*							clog.c
+/*							md_clog.c
  *
  *	Complex natural logarithm
  *
@@ -6,10 +6,10 @@
  *
  * SYNOPSIS:
  *
- * void clog();
+ * void md_clog();
  * cmplx z, w;
  *
- * clog( &z, &w );
+ * md_clog( &z, &w );
  *
  *
  *
@@ -20,7 +20,7 @@
  *
  * If z = x + iy, r = sqrt( x**2 + y**2 ),
  * then
- *       w = log(r) + i arctan(y/x).
+ *       w = md_log(r) + i arctan(y/x).
  * 
  * The arctangent ranges from -PI to +PI.
  *
@@ -47,61 +47,61 @@ static void cchsh ( double x, double *c, double *s );
 static double redupi ( double x );
 static double ctans ( cmplx *z );
 /* These are supposed to be in some standard place. */
-double fabs (double);
+double md_fabs (double);
 double sqrt (double);
-double pow (double, double);
-double log (double);
-double exp (double);
-double atan2 (double, double);
-double cosh (double);
-double sinh (double);
-double asin (double);
-double sin (double);
-double cos (double);
-double cabs (cmplx *);
+double md_pow (double, double);
+double md_log (double);
+double md_exp (double);
+double md_atan2 (double, double);
+double md_cosh (double);
+double md_sinh (double);
+double md_asin (double);
+double md_sin (double);
+double md_cos (double);
+double md_cabs (cmplx *);
 void cadd ( cmplx *, cmplx *, cmplx * );
 void cmul ( cmplx *, cmplx *, cmplx * );
-void csqrt ( cmplx *, cmplx * );
+void md_csqrt ( cmplx *, cmplx * );
 static void cchsh ( double, double *, double * );
 static double redupi ( double );
 static double ctans ( cmplx * );
-void clog ( cmplx *, cmplx * );
-void casin ( cmplx *, cmplx * );
-void cacos ( cmplx *, cmplx * );
-void catan ( cmplx *, cmplx * );
+void md_clog ( cmplx *, cmplx * );
+void md_casin ( cmplx *, cmplx * );
+void md_cacos ( cmplx *, cmplx * );
+void md_catan ( cmplx *, cmplx * );
 #else
 static void cchsh();
 static double redupi();
 static double ctans();
-double cabs(), fabs(), sqrt(), pow();
-double log(), exp(), atan2(), cosh(), sinh();
-double asin(), sin(), cos();
-void cadd(), cmul(), csqrt();
-void clog(), casin(), cacos(), catan();
+double md_cabs(), md_fabs(), sqrt(), md_pow();
+double md_log(), md_exp(), md_atan2(), md_cosh(), md_sinh();
+double md_asin(), md_sin(), md_cos();
+void cadd(), cmul(), md_csqrt();
+void md_clog(), md_casin(), md_cacos(), md_catan();
 #endif
 
 
 extern double MAXNUM, MACHEP, PI, PIO2;
 
-void clog( z, w )
+void md_clog( z, w )
 register cmplx *z, *w;
 {
 double p, rr;
 
 /*rr = sqrt( z->r * z->r  +  z->i * z->i );*/
-rr = cabs(z);
-p = log(rr);
+rr = md_cabs(z);
+p = md_log(rr);
 #if ANSIC
-rr = atan2( z->i, z->r );
+rr = md_atan2( z->i, z->r );
 #else
-rr = atan2( z->r, z->i );
+rr = md_atan2( z->r, z->i );
 if( rr > PI )
 	rr -= PI + PI;
 #endif
 w->i = rr;
 w->r = p;
 }
-/*							cexp()
+/*							md_cexp()
  *
  *	Complex exponential function
  *
@@ -109,10 +109,10 @@ w->r = p;
  *
  * SYNOPSIS:
  *
- * void cexp();
+ * void md_cexp();
  * cmplx z, w;
  *
- * cexp( &z, &w );
+ * md_cexp( &z, &w );
  *
  *
  *
@@ -123,11 +123,11 @@ w->r = p;
  *
  * If
  *     z = x + iy,
- *     r = exp(x),
+ *     r = md_exp(x),
  *
  * then
  *
- *     w = r cos y + i r sin y.
+ *     w = r md_cos y + i r md_sin y.
  *
  *
  * ACCURACY:
@@ -139,16 +139,16 @@ w->r = p;
  *
  */
 
-void cexp( z, w )
+void md_cexp( z, w )
 register cmplx *z, *w;
 {
 double r;
 
-r = exp( z->r );
-w->r = r * cos( z->i );
-w->i = r * sin( z->i );
+r = md_exp( z->r );
+w->r = r * md_cos( z->i );
+w->i = r * md_sin( z->i );
 }
-/*							csin()
+/*							md_csin()
  *
  *	Complex circular sine
  *
@@ -156,10 +156,10 @@ w->i = r * sin( z->i );
  *
  * SYNOPSIS:
  *
- * void csin();
+ * void md_csin();
  * cmplx z, w;
  *
- * csin( &z, &w );
+ * md_csin( &z, &w );
  *
  *
  *
@@ -170,7 +170,7 @@ w->i = r * sin( z->i );
  *
  * then
  *
- *     w = sin x  cosh y  +  i cos x sinh y.
+ *     w = md_sin x  md_cosh y  +  i md_cos x md_sinh y.
  *
  *
  *
@@ -180,37 +180,37 @@ w->i = r * sin( z->i );
  * arithmetic   domain     # trials      peak         rms
  *    DEC       -10,+10      8400       5.3e-17     1.3e-17
  *    IEEE      -10,+10     30000       3.8e-16     1.0e-16
- * Also tested by csin(casin(z)) = z.
+ * Also tested by md_csin(md_casin(z)) = z.
  *
  */
 
-void csin( z, w )
+void md_csin( z, w )
 register cmplx *z, *w;
 {
 double ch, sh;
 
 cchsh( z->i, &ch, &sh );
-w->r = sin( z->r ) * ch;
-w->i = cos( z->r ) * sh;
+w->r = md_sin( z->r ) * ch;
+w->i = md_cos( z->r ) * sh;
 }
 
 
 
-/* calculate cosh and sinh */
+/* calculate md_cosh and md_sinh */
 
 static void cchsh( x, c, s )
 double x, *c, *s;
 {
 double e, ei;
 
-if( fabs(x) <= 0.5 )
+if( md_fabs(x) <= 0.5 )
 	{
-	*c = cosh(x);
-	*s = sinh(x);
+	*c = md_cosh(x);
+	*s = md_sinh(x);
 	}
 else
 	{
-	e = exp(x);
+	e = md_exp(x);
 	ei = 0.5/e;
 	e = 0.5 * e;
 	*s = e - ei;
@@ -218,7 +218,7 @@ else
 	}
 }
 
-/*							ccos()
+/*							md_ccos()
  *
  *	Complex circular cosine
  *
@@ -226,10 +226,10 @@ else
  *
  * SYNOPSIS:
  *
- * void ccos();
+ * void md_ccos();
  * cmplx z, w;
  *
- * ccos( &z, &w );
+ * md_ccos( &z, &w );
  *
  *
  *
@@ -240,7 +240,7 @@ else
  *
  * then
  *
- *     w = cos x  cosh y  -  i sin x sinh y.
+ *     w = md_cos x  md_cosh y  -  i md_sin x md_sinh y.
  *
  *
  *
@@ -252,16 +252,16 @@ else
  *    IEEE      -10,+10     30000       3.8e-16     1.0e-16
  */
 
-void ccos( z, w )
+void md_ccos( z, w )
 register cmplx *z, *w;
 {
 double ch, sh;
 
 cchsh( z->i, &ch, &sh );
-w->r = cos( z->r ) * ch;
-w->i = -sin( z->r ) * sh;
+w->r = md_cos( z->r ) * ch;
+w->i = -md_sin( z->r ) * sh;
 }
-/*							ctan()
+/*							md_ctan()
  *
  *	Complex circular tangent
  *
@@ -269,10 +269,10 @@ w->i = -sin( z->r ) * sh;
  *
  * SYNOPSIS:
  *
- * void ctan();
+ * void md_ctan();
  * cmplx z, w;
  *
- * ctan( &z, &w );
+ * md_ctan( &z, &w );
  *
  *
  *
@@ -283,9 +283,9 @@ w->i = -sin( z->r ) * sh;
  *
  * then
  *
- *           sin 2x  +  i sinh 2y
+ *           md_sin 2x  +  i md_sinh 2y
  *     w  =  --------------------.
- *            cos 2x  +  cosh 2y
+ *            md_cos 2x  +  md_cosh 2y
  *
  * On the real axis the denominator is zero at odd multiples
  * of PI/2.  The denominator is evaluated by its Taylor
@@ -298,29 +298,29 @@ w->i = -sin( z->r ) * sh;
  * arithmetic   domain     # trials      peak         rms
  *    DEC       -10,+10      5200       7.1e-17     1.6e-17
  *    IEEE      -10,+10     30000       7.2e-16     1.2e-16
- * Also tested by ctan * ccot = 1 and catan(ctan(z))  =  z.
+ * Also tested by md_ctan * ccot = 1 and md_catan(md_ctan(z))  =  z.
  */
 
-void ctan( z, w )
+void md_ctan( z, w )
 register cmplx *z, *w;
 {
 double d;
 
-d = cos( 2.0 * z->r ) + cosh( 2.0 * z->i );
+d = md_cos( 2.0 * z->r ) + md_cosh( 2.0 * z->i );
 
-if( fabs(d) < 0.25 )
+if( md_fabs(d) < 0.25 )
 	d = ctans(z);
 
 if( d == 0.0 )
 	{
-	mtherr( "ctan", OVERFLOW );
+	mtherr( "md_ctan", OVERFLOW );
 	w->r = MAXNUM;
 	w->i = MAXNUM;
 	return;
 	}
 
-w->r = sin( 2.0 * z->r ) / d;
-w->i = sinh( 2.0 * z->i ) / d;
+w->r = md_sin( 2.0 * z->r ) / d;
+w->i = md_sinh( 2.0 * z->i ) / d;
 }
 /*							ccot()
  *
@@ -344,9 +344,9 @@ w->i = sinh( 2.0 * z->i ) / d;
  *
  * then
  *
- *           sin 2x  -  i sinh 2y
+ *           md_sin 2x  -  i md_sinh 2y
  *     w  =  --------------------.
- *            cosh 2y  -  cos 2x
+ *            md_cosh 2y  -  md_cos 2x
  *
  * On the real axis, the denominator has zeros at even
  * multiples of PI/2.  Near these points it is evaluated
@@ -359,7 +359,7 @@ w->i = sinh( 2.0 * z->i ) / d;
  * arithmetic   domain     # trials      peak         rms
  *    DEC       -10,+10      3000       6.5e-17     1.6e-17
  *    IEEE      -10,+10     30000       9.2e-16     1.2e-16
- * Also tested by ctan * ccot = 1 + i0.
+ * Also tested by md_ctan * ccot = 1 + i0.
  */
 
 void ccot( z, w )
@@ -367,9 +367,9 @@ register cmplx *z, *w;
 {
 double d;
 
-d = cosh(2.0 * z->i) - cos(2.0 * z->r);
+d = md_cosh(2.0 * z->i) - md_cos(2.0 * z->r);
 
-if( fabs(d) < 0.25 )
+if( md_fabs(d) < 0.25 )
 	d = ctans(z);
 
 if( d == 0.0 )
@@ -380,8 +380,8 @@ if( d == 0.0 )
 	return;
 	}
 
-w->r = sin( 2.0 * z->r ) / d;
-w->i = -sinh( 2.0 * z->i ) / d;
+w->r = md_sin( 2.0 * z->r ) / d;
+w->i = -md_sinh( 2.0 * z->i ) / d;
 }
 
 /* Program to subtract nearest integer multiple of PI */
@@ -443,7 +443,7 @@ t = ((x - t * DP1) - t * DP2) - t * DP3;
 return(t);
 }
 
-/*  Taylor series expansion for cosh(2y) - cos(2x)	*/
+/*  Taylor series expansion for md_cosh(2y) - md_cos(2x)	*/
 
 static double ctans(z)
 cmplx *z;
@@ -451,8 +451,8 @@ cmplx *z;
 double f, x, x2, y, y2, rn, t;
 double d;
 
-x = fabs( 2.0 * z->r );
-y = fabs( 2.0 * z->i );
+x = md_fabs( 2.0 * z->r );
+y = md_fabs( 2.0 * z->i );
 
 x = redupi(x);
 
@@ -485,10 +485,10 @@ do
 	t /= f;
 	d += t;
 	}
-while( fabs(t/d) > MACHEP );
+while( md_fabs(t/d) > MACHEP );
 return(d);
 }
-/*							casin()
+/*							md_casin()
  *
  *	Complex circular arc sine
  *
@@ -496,10 +496,10 @@ return(d);
  *
  * SYNOPSIS:
  *
- * void casin();
+ * void md_casin();
  * cmplx z, w;
  *
- * casin( &z, &w );
+ * md_casin( &z, &w );
  *
  *
  *
@@ -508,7 +508,7 @@ return(d);
  * Inverse complex sine:
  *
  *                               2
- * w = -i clog( iz + csqrt( 1 - z ) ).
+ * w = -i md_clog( iz + md_csqrt( 1 - z ) ).
  *
  *
  * ACCURACY:
@@ -518,10 +518,10 @@ return(d);
  *    DEC       -10,+10     10100       2.1e-15     3.4e-16
  *    IEEE      -10,+10     30000       2.2e-14     2.7e-15
  * Larger relative error can be observed for z near zero.
- * Also tested by csin(casin(z)) = z.
+ * Also tested by md_csin(md_casin(z)) = z.
  */
 
-void casin( z, w )
+void md_casin( z, w )
 cmplx *z, *w;
 {
 static cmplx ca, ct, zz, z2;
@@ -532,15 +532,15 @@ y = z->i;
 
 if( y == 0.0 )
 	{
-	if( fabs(x) > 1.0 )
+	if( md_fabs(x) > 1.0 )
 		{
 		w->r = PIO2;
 		w->i = 0.0;
-		mtherr( "casin", DOMAIN );
+		mtherr( "md_casin", DOMAIN );
 		}
 	else
 		{
-		w->r = asin(x);
+		w->r = md_asin(x);
 		w->i = 0.0;
 		}
 	return;
@@ -548,7 +548,7 @@ if( y == 0.0 )
 
 /* Power series expansion */
 /*
-b = cabs(z);
+b = md_cabs(z);
 if( b < 0.125 )
 {
 z2.r = (x - y) * (x + y);
@@ -577,7 +577,7 @@ do
 	ct.i *= b;
 	sum.r += ct.r;
 	sum.i += ct.i;
-	b = fabs(ct.r) + fabs(ct.i);
+	b = md_fabs(ct.r) + md_fabs(ct.i);
 	}
 while( b > MACHEP );
 w->r = sum.r;
@@ -600,15 +600,15 @@ zz.i = 2.0 * ca.r * ca.i;
 
 zz.r = 1.0 - zz.r;
 zz.i = -zz.i;
-csqrt( &zz, &z2 );
+md_csqrt( &zz, &z2 );
 
 cadd( &z2, &ct, &zz );
-clog( &zz, &zz );
+md_clog( &zz, &zz );
 w->r = zz.i;	/* mult by 1/i = -i */
 w->i = -zz.r;
 return;
 }
-/*							cacos()
+/*							md_cacos()
  *
  *	Complex circular arc cosine
  *
@@ -616,10 +616,10 @@ return;
  *
  * SYNOPSIS:
  *
- * void cacos();
+ * void md_cacos();
  * cmplx z, w;
  *
- * cacos( &z, &w );
+ * md_cacos( &z, &w );
  *
  *
  *
@@ -639,15 +639,15 @@ return;
  *    IEEE      -10,+10     30000      1.8e-14      2.2e-15
  */
 
-void cacos( z, w )
+void md_cacos( z, w )
 cmplx *z, *w;
 {
 
-casin( z, w );
+md_casin( z, w );
 w->r = PIO2  -  w->r;
 w->i = -w->i;
 }
-/*							catan()
+/*							md_catan()
  *
  *	Complex circular arc tangent
  *
@@ -655,10 +655,10 @@ w->i = -w->i;
  *
  * SYNOPSIS:
  *
- * void catan();
+ * void md_catan();
  * cmplx z, w;
  *
- * catan( &z, &w );
+ * md_catan( &z, &w );
  *
  *
  *
@@ -675,7 +675,7 @@ w->i = -w->i;
  *
  *               ( 2         2)
  *          1    (x  +  (y+1) )
- * Im w  =  - log(------------)
+ * Im w  =  - md_log(------------)
  *          4    ( 2         2)
  *               (x  +  (y-1) )
  *
@@ -689,12 +689,12 @@ w->i = -w->i;
  * arithmetic   domain     # trials      peak         rms
  *    DEC       -10,+10      5900       1.3e-16     7.8e-18
  *    IEEE      -10,+10     30000       2.3e-15     8.5e-17
- * The check catan( ctan(z) )  =  z, with |x| and |y| < PI/2,
+ * The check md_catan( md_ctan(z) )  =  z, with |x| and |y| < PI/2,
  * had peak relative error 1.5e-16, rms relative error
- * 2.9e-17.  See also clog().
+ * 2.9e-17.  See also md_clog().
  */
 
-void catan( z, w )
+void md_catan( z, w )
 cmplx *z, *w;
 {
 double a, t, x, x2, y;
@@ -711,9 +711,9 @@ if( a == 0.0 )
 	goto ovrf;
 
 #if ANSIC
-t = atan2( 2.0 * x, a )/2.0;
+t = md_atan2( 2.0 * x, a )/2.0;
 #else
-t = atan2( a, 2.0 * x )/2.0;
+t = md_atan2( a, 2.0 * x )/2.0;
 #endif
 w->r = redupi( t );
 
@@ -724,17 +724,17 @@ if( a == 0.0 )
 
 t = y + 1.0;
 a = (x2 + (t * t))/a;
-w->i = log(a)/4.0;
+w->i = md_log(a)/4.0;
 return;
 
 ovrf:
-mtherr( "catan", OVERFLOW );
+mtherr( "md_catan", OVERFLOW );
 w->r = MAXNUM;
 w->i = MAXNUM;
 }
 
 
-/*							csinh
+/*							md_csinh
  *
  *	Complex hyperbolic sine
  *
@@ -742,16 +742,16 @@ w->i = MAXNUM;
  *
  * SYNOPSIS:
  *
- * void csinh();
+ * void md_csinh();
  * cmplx z, w;
  *
- * csinh( &z, &w );
+ * md_csinh( &z, &w );
  *
  *
  * DESCRIPTION:
  *
- * csinh z = (cexp(z) - cexp(-z))/2
- *         = sinh x * cos y  +  i cosh x * sin y .
+ * md_csinh z = (md_cexp(z) - md_cexp(-z))/2
+ *         = md_sinh x * md_cos y  +  i md_cosh x * md_sin y .
  *
  * ACCURACY:
  *
@@ -762,19 +762,19 @@ w->i = MAXNUM;
  */
 
 void
-csinh (z, w)
+md_csinh (z, w)
      cmplx *z, *w;
 {
   double x, y;
 
   x = z->r;
   y = z->i;
-  w->r = sinh (x) * cos (y);
-  w->i = cosh (x) * sin (y);
+  w->r = md_sinh (x) * md_cos (y);
+  w->i = md_cosh (x) * md_sin (y);
 }
 
 
-/*							casinh
+/*							md_casinh
  *
  *	Complex inverse hyperbolic sine
  *
@@ -782,16 +782,16 @@ csinh (z, w)
  *
  * SYNOPSIS:
  *
- * void casinh();
+ * void md_casinh();
  * cmplx z, w;
  *
- * casinh (&z, &w);
+ * md_casinh (&z, &w);
  *
  *
  *
  * DESCRIPTION:
  *
- * casinh z = -i casin iz .
+ * md_casinh z = -i md_casin iz .
  *
  * ACCURACY:
  *
@@ -802,7 +802,7 @@ csinh (z, w)
  */
 
 void
-casinh (z, w)
+md_casinh (z, w)
      cmplx *z, *w;
 {
   cmplx u;
@@ -810,13 +810,13 @@ casinh (z, w)
   u.r = 0.0;
   u.i = 1.0;
   cmul( z, &u, &u );
-  casin( &u, w );
+  md_casin( &u, w );
   u.r = 0.0;
   u.i = -1.0;
   cmul( &u, w, w );
 }
 
-/*							ccosh
+/*							md_ccosh
  *
  *	Complex hyperbolic cosine
  *
@@ -824,16 +824,16 @@ casinh (z, w)
  *
  * SYNOPSIS:
  *
- * void ccosh();
+ * void md_ccosh();
  * cmplx z, w;
  *
- * ccosh (&z, &w);
+ * md_ccosh (&z, &w);
  *
  *
  *
  * DESCRIPTION:
  *
- * ccosh(z) = cosh x  cos y + i sinh x sin y .
+ * md_ccosh(z) = md_cosh x  md_cos y + i md_sinh x md_sin y .
  *
  * ACCURACY:
  *
@@ -844,19 +844,19 @@ casinh (z, w)
  */
 
 void
-ccosh (z, w)
+md_ccosh (z, w)
      cmplx *z, *w;
 {
   double x, y;
 
   x = z->r;
   y = z->i;
-  w->r = cosh (x) * cos (y);
-  w->i = sinh (x) * sin (y);
+  w->r = md_cosh (x) * md_cos (y);
+  w->i = md_sinh (x) * md_sin (y);
 }
 
 
-/*							cacosh
+/*							md_cacosh
  *
  *	Complex inverse hyperbolic cosine
  *
@@ -864,16 +864,16 @@ ccosh (z, w)
  *
  * SYNOPSIS:
  *
- * void cacosh();
+ * void md_cacosh();
  * cmplx z, w;
  *
- * cacosh (&z, &w);
+ * md_cacosh (&z, &w);
  *
  *
  *
  * DESCRIPTION:
  *
- * acosh z = i acos z .
+ * md_acosh z = i md_acos z .
  *
  * ACCURACY:
  *
@@ -884,19 +884,19 @@ ccosh (z, w)
  */
 
 void
-cacosh (z, w)
+md_cacosh (z, w)
      cmplx *z, *w;
 {
   cmplx u;
 
-  cacos( z, w );
+  md_cacos( z, w );
   u.r = 0.0;
   u.i = 1.0;
   cmul( &u, w, w );
 }
 
 
-/*							ctanh
+/*							md_ctanh
  *
  *	Complex hyperbolic tangent
  *
@@ -904,16 +904,16 @@ cacosh (z, w)
  *
  * SYNOPSIS:
  *
- * void ctanh();
+ * void md_ctanh();
  * cmplx z, w;
  *
- * ctanh (&z, &w);
+ * md_ctanh (&z, &w);
  *
  *
  *
  * DESCRIPTION:
  *
- * tanh z = (sinh 2x  +  i sin 2y) / (cosh 2x + cos 2y) .
+ * md_tanh z = (md_sinh 2x  +  i md_sin 2y) / (md_cosh 2x + md_cos 2y) .
  *
  * ACCURACY:
  *
@@ -926,21 +926,21 @@ cacosh (z, w)
 /* 5.253E-02,1.550E+00 1.643E+01,6.553E+00 1.729E-14  21355  */
 
 void
-ctanh (z, w)
+md_ctanh (z, w)
      cmplx *z, *w;
 {
   double x, y, d;
 
   x = z->r;
   y = z->i;
-  d = cosh (2.0 * x) + cos (2.0 * y);
-  w->r = sinh (2.0 * x) / d;
-  w->i = sin (2.0 * y) / d;
+  d = md_cosh (2.0 * x) + md_cos (2.0 * y);
+  w->r = md_sinh (2.0 * x) / d;
+  w->i = md_sin (2.0 * y) / d;
   return;
 }
 
 
-/*							catanh
+/*							md_catanh
  *
  *	Complex inverse hyperbolic tangent
  *
@@ -948,16 +948,16 @@ ctanh (z, w)
  *
  * SYNOPSIS:
  *
- * void catanh();
+ * void md_catanh();
  * cmplx z, w;
  *
- * catanh (&z, &w);
+ * md_catanh (&z, &w);
  *
  *
  *
  * DESCRIPTION:
  *
- * Inverse tanh, equal to  -i catan (iz);
+ * Inverse md_tanh, equal to  -i md_catan (iz);
  *
  * ACCURACY:
  *
@@ -968,7 +968,7 @@ ctanh (z, w)
  */
 
 void
-catanh (z, w)
+md_catanh (z, w)
      cmplx *z, *w;
 {
   cmplx u;
@@ -976,15 +976,15 @@ catanh (z, w)
   u.r = 0.0;
   u.i = 1.0;
   cmul (z, &u, &u);  /* i z */
-  catan (&u, w);
+  md_catan (&u, w);
   u.r = 0.0;
   u.i = -1.0;
-  cmul (&u, w, w);  /* -i catan iz */
+  cmul (&u, w, w);  /* -i md_catan iz */
   return;
 }
 
 
-/*							cpow
+/*							md_cpow
  *
  *	Complex power function
  *
@@ -992,10 +992,10 @@ catanh (z, w)
  *
  * SYNOPSIS:
  *
- * void cpow();
+ * void md_cpow();
  * cmplx a, z, w;
  *
- * cpow (&a, &z, &w);
+ * md_cpow (&a, &z, &w);
  *
  *
  *
@@ -1003,7 +1003,7 @@ catanh (z, w)
  *
  * Raises complex A to the complex Zth power.
  * Definition is per AMS55 # 4.2.8,
- * analytically equivalent to cpow(a,z) = cexp(z clog(a)).
+ * analytically equivalent to md_cpow(a,z) = md_cexp(z md_clog(a)).
  *
  * ACCURACY:
  *
@@ -1015,29 +1015,29 @@ catanh (z, w)
 
 
 void
-cpow (a, z, w)
+md_cpow (a, z, w)
      cmplx *a, *z, *w;
 {
   double x, y, r, theta, absa, arga;
 
   x = z->r;
   y = z->i;
-  absa = cabs (a);
+  absa = md_cabs (a);
   if (absa == 0.0)
     {
       w->r = 0.0;
       w->i = 0.0;
       return;
     }
-  arga = atan2 (a->i, a->r);
-  r = pow (absa, x);
+  arga = md_atan2 (a->i, a->r);
+  r = md_pow (absa, x);
   theta = x * arga;
   if (y != 0.0)
     {
-      r = r * exp (-y * arga);
-      theta = theta + y * log (absa);
+      r = r * md_exp (-y * arga);
+      theta = theta + y * md_log (absa);
     }
-  w->r = r * cos (theta);
-  w->i = r * sin (theta);
+  w->r = r * md_cos (theta);
+  w->i = r * md_sin (theta);
   return;
 }

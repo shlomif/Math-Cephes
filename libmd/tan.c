@@ -1,4 +1,4 @@
-/*							tan.c
+/*							md_tan.c
  *
  *	Circular tangent
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, tan();
+ * double x, y, md_tan();
  *
- * y = tan( x );
+ * y = md_tan( x );
  *
  *
  *
@@ -32,7 +32,7 @@
  * ERROR MESSAGES:
  *
  *   message         condition          value returned
- * tan total loss   x > 1.073741824e9     0.0
+ * md_tan total loss   x > 1.073741824e9     0.0
  *
  */
 /*							cot.c
@@ -182,13 +182,13 @@ static double lossth = 1.073741824e9;
 #ifdef ANSIPROT
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
-extern double floor ( double );
-extern double ldexp ( double, int );
+extern double md_floor ( double );
+extern double md_ldexp ( double, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 static double tancot(double, int);
 #else
-double polevl(), p1evl(), floor(), ldexp();
+double polevl(), p1evl(), md_floor(), md_ldexp();
 static double tancot();
 int isnan(), isfinite();
 #endif
@@ -196,7 +196,7 @@ extern double PIO4;
 extern double INFINITY;
 extern double NAN;
 
-double tan(x)
+double md_tan(x)
 double x;
 {
 #ifdef MINUSZERO
@@ -208,7 +208,7 @@ if( isnan(x) )
 	return(x);
 if( !isfinite(x) )
 	{
-	mtherr( "tan", DOMAIN );
+	mtherr( "md_tan", DOMAIN );
 	return(NAN);
 	}
 #endif
@@ -253,17 +253,17 @@ if( x > lossth )
 	if( cotflg )
 		mtherr( "cot", TLOSS );
 	else
-		mtherr( "tan", TLOSS );
+		mtherr( "md_tan", TLOSS );
 	return(0.0);
 	}
 
 /* compute x mod PIO4 */
-y = floor( x/PIO4 );
+y = md_floor( x/PIO4 );
 
 /* strip high bits of integer part */
-z = ldexp( y, -3 );
-z = floor(z);		/* integer part of y/8 */
-z = y - ldexp( z, 3 );  /* y - 16 * (y/16) */
+z = md_ldexp( y, -3 );
+z = md_floor(z);		/* integer part of y/8 */
+z = y - md_ldexp( z, 3 );  /* y - 16 * (y/16) */
 
 /* integer and fractional part modulo one octant */
 j = z;

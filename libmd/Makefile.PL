@@ -1,80 +1,116 @@
-use ExtUtils::MakeMaker;
-use Config;
-use File::Copy;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 
-my $from = ($Config{archname} =~ /sun4-solaris|sparc/) ?
-    'mconf.h.sol' : 'mconf.h.gen';
-my $to = 'mconf.h';
-copy($from, $to) unless (-e $to);
+use strict;
+use ExtUtils::MakeMaker;
+use Config;
+use File::Copy;
 
-$from = ($Config{cc} =~ /^cl/) ? 'setpmsvc.c.win32' : 'setprec.c.unix';
-$to = 'setprec.c';
-copy($from, $to) unless (-e $to);
+my $arch = $Config{archname};
+my $is_win32 = ($arch =~ /MSWin32/i);
+my $is_387 = ($arch =~ /^i\d+-linux/);
+my $is_sol = ($arch =~ /sun4-solaris|sparc/);
+my $is_dar = ($arch =~ /darwin/);
 
-opendir(DIR, ".") or die "Cannot open .: $!\n";
-my @objects = map {s/\.c$/.o/; $_} grep { /\.c$/ } readdir DIR;
+unless ($is_387 or $is_dar) {
+    my $from = $is_win32 ? 'setpmsvc.c.win32' : 'setprec.c.unix';
+    my $to = 'setprec.c';
+    unless (-e $to) {
+        copy($from, $to) or die "Cannot copy $from to $to: $!";
+    }
+}
+
+unless ($is_387 or $is_sol or $is_dar) {
+    my $from = 'sqrt.c.src';
+    my $to = 'sqrt.c';
+    unless (-e $to) {
+        copy($from, $to) or die "Cannot copy $from to $to: $!";
+    }
+}
+
+opendir(DIR, '.') or die "Cannot opendir '.': $!\n";
+my @objs = map {s/\.c$/.o/; $_} grep { /\.c$/ } readdir DIR;
 closedir DIR;
-my $OLDFLAGS = $Config{ccflags};
+my %objs = map {$_ => 1} @objs;
+foreach (qw(setprec.o sqrt.o)) {
+    push @objs, $_ unless $objs{$_};
+}
 
 my %opts = (
-            'NAME'      => 'Math::Cephes',
-#            'VERSION_FROM' => '../lib/Math/Cephes.pm', # finds $VERSION
-	    'LIBS'	=> [''],   # e.g., '-lm' 
-	    'DEFINE'	=> '',     # e.g., '-DHAVE_SOMETHING' 
-	    'INC'	=> '',     # e.g., '-I/usr/include/other' 
-	    'OBJECT' => join(' ', @objects),
-	    'dist'   => {
-			 SUFFIX   => 'gz',
-			 COMPRESS => 'gzip -9f',
-			},
+            NAME      => 'Math::Cephes::libmd',
+            VERSION_FROM => '../lib/Math/Cephes.pm', # finds $VERSION
+	    OBJECT => join(' ', @objs),
+            SKIP      =>  [ qw( dynamic test ) ] ,
+            LINKTYPE  =>  'static',
+            clean => {FILES => 'libmd$(LIB_EXT)'},
 	   );
 
-if ($^O =~ /Win32/) {
-   (my $ccflags = $Config{ccflags}) =~ s!-O\d+!!;
-   (my $optimize = $Config{optimize}) =~ s!-O\d+!!;
-   $opts{CCFLAGS} = $ccflags;
-   $opts{OPTIMIZE} = $optimize;
-}
 
-if ($Config{gccversion}) {
-   $opts{CCFLAGS} = "$OLDFLAGS -g -Wall -fno-builtin";
-}
+$opts{CCFLAGS} = $Config{ccflags} . ' -Wall -fno-builtin ' 
+    if $Config{gccversion};
 
+WriteMakefile(%opts);
 
-
-sub MY::post_constants {
-   my $postconstant;
-   my $AS = '$(AS)';
-   my $archname = $Config{archname};
-   if ($archname =~ /i\d+-linux/) {
-      $postconstant = << "END";
+package MY;
+sub c_o {
+    my $self = shift;
+    my $c_o = $self->SUPER::c_o(@_);
+   if ($is_387) {
+      $c_o .= << 'END';
 
 sqrt.o: sqrtelf.387
-	$AS -o sqrt.o sqrtelf.387
+	$(AS) -o sqrt.o sqrtelf.387
 
 setprec.o: setprelf.387
-	$AS -o setprec.o setprelf.387
-
-Cephes_wrap.o: Cephes_wrap.c
-	$Config{cc} -o Cephes_wrap.o $OLDFLAGS -I\$(PERL_INC) \$(DEFINE) -c Cephes_wrap.c
+	$(AS) -o setprec.o setprelf.387
 
 END
    }
-    elsif ($archname =~ /sun4-solaris|sparc/) {
-       $postconstant = << "END";
+    elsif ($is_sol) {
+       $c_o .= << 'END';
 
 sqrt.o: sqrt.spa
-	$AS -o sqrt.o sqrt.spa
+	$(AS) -o sqrt.o sqrt.spa
+
+END
+   }
+   elsif ($is_dar) {
+      $c_o .= << 'END';
+
+sqrt.o: sqrt.688
+	$(AS) -o sqrt.o sqrt.688
+
+setprec.o: setprec.688
+	$(AS) -o setprec.o setprec.688
 
 END
    }
    else {
-       $postconstant = '';
-   } 
-  $postconstant;
+
+   }
+   return $c_o;
+}
+  
+sub post_constants {
+    my $postconstant = <<'END';
+INST_STATIC = libmd$(LIB_EXT)
+END
+
+  return $postconstant;
 }
 
-WriteMakefile(%opts);
+sub top_targets {
+    my $top_targets = <<'END';
+all    ::    static
+	@$(NOOP)
 
+static ::    libmd$(LIB_EXT)
+	@$(NOOP)
+
+config ::
+
+test :	
+
+END
+   return $top_targets;
+}

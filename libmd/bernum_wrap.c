@@ -14,10 +14,10 @@ fract p[PD+1] = {0.0};
 */
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double log10 ( double );
+extern double md_fabs ( double );
+extern double md_log10 ( double );
 #else
-double fabs(), log10();
+double md_fabs(), md_log10();
 #endif
 extern double MACHEP;
 

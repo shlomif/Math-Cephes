@@ -48,9 +48,9 @@
 #include "mconf.h"
 #ifdef ANSIPROT
 extern double sqrt ( double );
-extern double fabs ( double );
+extern double md_fabs ( double );
 #else
-double sqrt(), fabs();
+double sqrt(), md_fabs();
 #endif
 
 void eigens( A, RR, E, N )
@@ -110,7 +110,7 @@ for( M=L+1; M<N; M++ )
 	MQ=(M*M+M)/2;
 	LM=L+MQ;
 	ALM=A[LM];
-	if( fabs(ALM) < THR )
+	if( md_fabs(ALM) < THR )
 		continue;
 
 	IND=1;

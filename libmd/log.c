@@ -1,4 +1,4 @@
-/*							log.c
+/*							md_log.c
  *
  *	Natural logarithm
  *
@@ -6,9 +6,9 @@
  *
  * SYNOPSIS:
  *
- * double x, y, log();
+ * double x, y, md_log();
  *
- * y = log( x );
+ * y = md_log( x );
  *
  *
  *
@@ -20,11 +20,11 @@
  * parts.  If the exponent is between -1 and +1, the logarithm
  * of the fraction is approximated by
  *
- *     log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
+ *     md_log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
  *
  * Otherwise, setting  z = 2(x-1)/x+1),
  * 
- *     log(x) = z + z**3 P(z)/Q(z).
+ *     md_log(x) = z + z**3 P(z)/Q(z).
  *
  *
  *
@@ -42,8 +42,8 @@
  *
  * ERROR MESSAGES:
  *
- * log singularity:  x = 0; returns -INFINITY
- * log domain:       x < 0; returns NAN
+ * md_log singularity:  x = 0; returns -INFINITY
+ * md_log domain:       x < 0; returns NAN
  */
 
 /*
@@ -52,9 +52,9 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-static char fname[] = {"log"};
+static char fname[] = {"md_log"};
 
-/* Coefficients for log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
+/* Coefficients for md_log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
  * 1/sqrt(2) <= x < sqrt(2)
  */
 #ifdef UNK
@@ -134,7 +134,7 @@ static unsigned short Q[] = {
 };
 #endif
 
-/* Coefficients for log(x) = z + z**3 P(z)/Q(z),
+/* Coefficients for md_log(x) = z + z**3 P(z)/Q(z),
  * where z = 2(x-1)/(x+1)
  * 1/sqrt(2) <= x < sqrt(2)
  */
@@ -193,20 +193,20 @@ static unsigned short S[12] = {
 #endif
 
 #ifdef ANSIPROT
-extern double frexp ( double, int * );
-extern double ldexp ( double, int );
+extern double md_frexp ( double, int * );
+extern double md_ldexp ( double, int );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 extern int isnan ( double );
 extern int isfinite ( double );
 #else
-double frexp(), ldexp(), polevl(), p1evl();
+double md_frexp(), md_ldexp(), polevl(), p1evl();
 int isnan(), isfinite();
 #endif
 #define SQRTH 0.70710678118654752440
 extern double INFINITY, NAN;
 
-double log(x)
+double md_log(x)
 double x;
 {
 int e;
@@ -248,11 +248,11 @@ e = ((e >> 7) & 0377) - 0200;	/* the exponent */
 *q |= 040000;	/* x now between 0.5 and 1 */
 #endif
 
-/* Note, frexp is used so that denormal numbers
+/* Note, md_frexp is used so that denormal numbers
  * will be handled properly.
  */
 #ifdef IBMPC
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 /*
 q = (short *)&x;
 q += 3;
@@ -265,16 +265,16 @@ e = ((e >> 4) & 0x0fff) - 0x3fe;
 
 /* Equivalent C language standard library function: */
 #ifdef UNK
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 #endif
 
 #ifdef MIEEE
-x = frexp( x, &e );
+x = md_frexp( x, &e );
 #endif
 
 
 
-/* logarithm using log(x) = z + z**3 P(z)/Q(z),
+/* logarithm using md_log(x) = z + z**3 P(z)/Q(z),
  * where z = 2(x-1)/x+1)
  */
 
@@ -308,12 +308,12 @@ goto ldone;
 
 
 
-/* logarithm using log(1+x) = x - .5x**2 + x**3 P(x)/Q(x) */
+/* logarithm using md_log(1+x) = x - .5x**2 + x**3 P(x)/Q(x) */
 
 if( x < SQRTH )
 	{
 	e -= 1;
-	x = ldexp( x, 1 ) - 1.0; /*  2x - 1  */
+	x = md_ldexp( x, 1 ) - 1.0; /*  2x - 1  */
 	}	
 else
 	{
@@ -330,7 +330,7 @@ y = x * ( z * polevl( x, P, 5 ) / p1evl( x, Q, 5 ) );
 #endif
 if( e )
 	y = y - e * 2.121944400546905827679e-4;
-y = y - ldexp( z, -1 );   /*  y - 0.5 * z  */
+y = y - md_ldexp( z, -1 );   /*  y - 0.5 * z  */
 z = x + y;
 if( e )
 	z = z + e * 0.693359375;

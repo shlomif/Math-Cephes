@@ -21,7 +21,7 @@
  *                 -
  *                | |
  *                |                   2
- * E(phi_\m)  =    |    sqrt( 1 - m sin t ) dt
+ * E(phi_\m)  =    |    sqrt( 1 - m md_sin t ) dt
  *                |
  *              | |    
  *               -
@@ -55,17 +55,17 @@ Copyright 1984, 1987, 1993, 2000 by Stephen L. Moshier
 extern double PI, PIO2, MACHEP;
 #ifdef ANSIPROT
 extern double sqrt ( double );
-extern double fabs ( double );
-extern double log ( double );
-extern double sin ( double x );
-extern double tan ( double x );
-extern double atan ( double );
-extern double floor ( double );
+extern double md_fabs ( double );
+extern double md_log ( double );
+extern double md_sin ( double x );
+extern double md_tan ( double x );
+extern double md_atan ( double );
+extern double md_floor ( double );
 extern double ellpe ( double );
 extern double ellpk ( double );
 double ellie ( double, double );
 #else
-double sqrt(), fabs(), log(), sin(), tan(), atan(), floor();
+double sqrt(), md_fabs(), md_log(), md_sin(), md_tan(), md_atan(), md_floor();
 double ellpe(), ellpk(), ellie();
 #endif
 
@@ -79,7 +79,7 @@ int d, mod, npio2, sign;
 if( m == 0.0 )
 	return( phi );
 lphi = phi;
-npio2 = floor( lphi/PIO2 );
+npio2 = md_floor( lphi/PIO2 );
 if( npio2 & 1 )
 	npio2 += 1;
 lphi = lphi - npio2 * PIO2;
@@ -96,22 +96,22 @@ a = 1.0 - m;
 E = ellpe( a );
 if( a == 0.0 )
 	{
-	temp = sin( lphi );
+	temp = md_sin( lphi );
 	goto done;
 	}
-t = tan( lphi );
+t = md_tan( lphi );
 b = sqrt(a);
 /* Thanks to Brian Fitzgerald <fitzgb@mml0.meche.rpi.edu>
    for pointing out an instability near odd multiples of pi/2.  */
-if( fabs(t) > 10.0 )
+if( md_fabs(t) > 10.0 )
 	{
 	/* Transform the amplitude */
 	e = 1.0/(b*t);
 	/* ... but avoid multiple recursions.  */
-	if( fabs(e) < 10.0 )
+	if( md_fabs(e) < 10.0 )
 		{
-		e = atan(e);
-		temp = E + m * sin( lphi ) * sin( e ) - ellie( e, m );
+		e = md_atan(e);
+		temp = E + m * md_sin( lphi ) * md_sin( e ) - ellie( e, m );
 		goto done;
 		}
 	}
@@ -121,10 +121,10 @@ d = 1;
 e = 0.0;
 mod = 0;
 
-while( fabs(c/a) > MACHEP )
+while( md_fabs(c/a) > MACHEP )
 	{
 	temp = b/a;
-	lphi = lphi + atan(t*temp) + mod * PI;
+	lphi = lphi + md_atan(t*temp) + mod * PI;
 	mod = (lphi + PIO2)/PI;
 	t = t * ( 1.0 + temp )/( 1.0 - temp * t * t );
 	c = ( a - b )/2.0;
@@ -132,11 +132,11 @@ while( fabs(c/a) > MACHEP )
 	a = ( a + b )/2.0;
 	b = temp;
 	d += d;
-	e += c * sin(lphi);
+	e += c * md_sin(lphi);
 	}
 
 temp = E / ellpk( 1.0 - m );
-temp *= (atan(t) + mod * PI)/(d * a);
+temp *= (md_atan(t) + mod * PI)/(d * a);
 temp += e;
 
 done:

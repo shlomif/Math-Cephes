@@ -17,14 +17,14 @@
  *
  *                          x
  *                          -
- *                         |  cos t - 1
+ *                         |  md_cos t - 1
  *   Ci(x) = eul + ln x +  |  --------- dt,
  *                         |      t
  *                        -
  *                         0
  *             x
  *             -
- *            |  sin t
+ *            |  md_sin t
  *   Si(x) =  |  ----- dt
  *            |    t
  *           -
@@ -35,8 +35,8 @@
  * For x > 8 auxiliary functions f(x) and g(x) are employed
  * such that
  *
- * Ci(x) = f(x) sin(x) - g(x) cos(x)
- * Si(x) = pi/2 - f(x) cos(x) - g(x) sin(x)
+ * Ci(x) = f(x) md_sin(x) - g(x) md_cos(x)
+ * Si(x) = pi/2 - f(x) md_cos(x) - g(x) md_sin(x)
  *
  *
  * ACCURACY:
@@ -576,13 +576,13 @@ static unsigned short GD8[] = {
 #endif
 
 #ifdef ANSIPROT
-extern double log ( double );
-extern double sin ( double );
-extern double cos ( double );
+extern double md_log ( double );
+extern double md_sin ( double );
+extern double md_cos ( double );
 extern double polevl ( double, void *, int );
 extern double p1evl ( double, void *, int );
 #else
-double log(), sin(), cos(), polevl(), p1evl();
+double md_log(), md_sin(), md_cos(), polevl(), p1evl();
 #endif
 #define EUL 0.57721566490153286061
 extern double MAXNUM, PIO2, MACHEP;
@@ -614,8 +614,8 @@ if( x == 0.0 )
 
 if( x > 1.0e9 )
 	{
-	*si = PIO2 - cos(x)/x;
-	*ci = sin(x)/x;
+	*si = PIO2 - md_cos(x)/x;
+	*ci = md_sin(x)/x;
 	return( 0 );
 	}
 
@@ -631,7 +631,7 @@ c = z * polevl( z, CN, 5 ) / polevl( z, CD, 5 );
 if( sign )
 	s = -s;
 *si = s;
-*ci = EUL + log(x) + c;	/* real part if x < 0 */
+*ci = EUL + md_log(x) + c;	/* real part if x < 0 */
 return(0);
 
 
@@ -640,8 +640,8 @@ return(0);
  *
  *
  * *si = *si - PIO2;
- * c = cos(x);
- * s = sin(x);
+ * c = md_cos(x);
+ * s = md_sin(x);
  *
  * t = *ci * s - *si * c;
  * a = *ci * c + *si * s;
@@ -653,8 +653,8 @@ return(0);
 
 asympt:
 
-s = sin(x);
-c = cos(x);
+s = md_sin(x);
+c = md_cos(x);
 z = 1.0/(x*x);
 if( x < 8.0 )
 	{

@@ -1,12 +1,13 @@
 ############# Class : cmplx ##############
 package Math::Cephes::Complex;
 use strict;
-use vars qw(%OWNER %BLESSEDMEMBERS %ITERATORS 
+use vars qw(%OWNER %ITERATORS @ISA 
 	    @EXPORT_OK %EXPORT_TAGS $VERSION);
 require Math::Cephes;
 
 require Exporter;
 *import = \&Exporter::import;
+@ISA = qw( Math::Cephes );
 #my @cmplx = qw(clog cexp csin ccos ctan ccot casin cmplx
 #	       cacos catan cadd csub cmul cdiv cmov cneg cabs csqrt
 #	       csinh ccosh ctanh cpow casinh cacosh catanh);
@@ -14,21 +15,43 @@ require Exporter;
 #%EXPORT_TAGS = ('cmplx' => [qw(cmplx)]);
 
 %OWNER = ();
-%BLESSEDMEMBERS = ();
 %ITERATORS = ();
-$VERSION = '0.36';
+$VERSION = '0.40';
+
+*swig_r_get = *Math::Cephesc::cmplx_r_get;
+*swig_r_set = *Math::Cephesc::cmplx_r_set;
+*swig_i_get = *Math::Cephesc::cmplx_i_get;
+*swig_i_set = *Math::Cephesc::cmplx_i_set;
 
 sub new {
-    my $self = shift;
-    my @args = @_;
-    $self = Math::Cephes::new_cmplx(@args);
-    return undef if (!defined($self));
-    bless $self, "Math::Cephes::Complex";
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "Math::Cephes::Complex", $self;
-    return bless \%retval,"Math::Cephes::Complex";
+    my $pkg = shift;
+    my $self = Math::Cephesc::new_cmplx(@_);
+    bless $self, $pkg if defined($self); 
 }
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        Math::Cephesc::delete_cmplx($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
 
 sub r {
     my ($self, $value) = @_;
@@ -48,11 +71,6 @@ sub cmplx {
   return Math::Cephes::Complex->new(@_);
 }
 
-sub TIEHASH {
-    my ($classname,$obj) = @_;
-    return bless $obj, $classname;
-}
-
 sub as_string {
   my $z = shift;
   my $string;
@@ -69,71 +87,6 @@ sub as_string {
   return $string;
 }
 
-sub DESTROY {
-  return undef if ref($_[0]) ne 'HASH';
-    my $self = tied(%{$_[0]});
-    delete $ITERATORS{$self};
-    if (exists $OWNER{$self}) {
-        Math::Cephes::delete_cmplx($self);
-        delete $OWNER{$self};
-    }
-}
-
-sub DISOWN {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    delete $OWNER{$ptr};
-    };
-
-sub ACQUIRE {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    $OWNER{$ptr} = 1;
-    };
-
-sub FETCH {
-    my ($self,$field) = @_;
-    no strict 'refs';
-    my $member_func = "Math::Cephes::cmplx_${field}_get";
-    my $val = &$member_func($self);
-    if (exists $BLESSEDMEMBERS{$field}) {
-        return undef if (!defined($val));
-        my %retval;
-        tie %retval,$BLESSEDMEMBERS{$field},$val;
-        return bless \%retval, $BLESSEDMEMBERS{$field};
-    }
-    return $val;
-}
-
-sub STORE {
-    my ($self,$field,$newval) = @_;
-    no strict 'refs';
-    my $member_func = "Math::Cephes::cmplx_${field}_set";
-    if (exists $BLESSEDMEMBERS{$field}) {
-        &$member_func($self,tied(%{$newval}));
-    } else {
-        &$member_func($self,$newval);
-    }
-}
-
-sub FIRSTKEY {
-    my $self = shift;
-    $ITERATORS{$self} = ['r', 'i', ];
-    my $first = shift @{$ITERATORS{$self}};
-    return $first;
-}
-
-sub NEXTKEY {
-    my $self = shift;
-    my $nelem = scalar @{$ITERATORS{$self}};
-    if ($nelem > 0) {
-        my $member = shift @{$ITERATORS{$self}};
-        return $member;
-    } else {
-        $ITERATORS{$self} = ['r', 'i', ];
-        return ();
-    }
-}
 
 sub cadd {
   my ($z1, $z2) = @_;

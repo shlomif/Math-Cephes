@@ -89,12 +89,12 @@ Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 extern double PI, MACHEP, MAXNUM;
 #ifdef ANSIPROT
 extern double sqrt ( double );
-extern double atan ( double );
+extern double md_atan ( double );
 extern double incbet ( double, double, double );
 extern double incbi ( double, double, double );
-extern double fabs ( double );
+extern double md_fabs ( double );
 #else
-double sqrt(), atan(), incbet(), incbi(), fabs();
+double sqrt(), md_atan(), incbet(), incbi(), md_fabs();
 #endif
 
 double stdtr( k, t )
@@ -138,7 +138,7 @@ if( (k & 1) != 0)
 	/*	computation for odd k	*/
 
 	xsqk = x/sqrt(rk);
-	p = atan( xsqk );
+	p = md_atan( xsqk );
 	if( k > 1 )
 		{
 		f = 1.0;
@@ -204,7 +204,7 @@ if( p > 0.25 && p < 0.75 )
 	if( p == 0.5 )
 		return( 0.0 );
 	z = 1.0 - 2.0 * p;
-	z = incbi( 0.5, 0.5*rk, fabs(z) );
+	z = incbi( 0.5, 0.5*rk, md_fabs(z) );
 	t = sqrt( rk*z/(1.0-z) );
 	if( p < 0.5 )
 		t = -t;

@@ -8,15 +8,15 @@
  *
  * SYNOPSIS:
  *
- * double ceil(), floor(), frexp(), ldexp();
+ * double md_ceil(), md_floor(), md_frexp(), md_ldexp();
  * int signbit(), isnan(), isfinite();
  * double x, y;
  * int expnt, n;
  *
- * y = floor(x);
- * y = ceil(x);
- * y = frexp( x, &expnt );
- * y = ldexp( x, n );
+ * y = md_floor(x);
+ * y = md_ceil(x);
+ * y = md_frexp( x, &expnt );
+ * y = md_ldexp( x, n );
  * n = signbit(x);
  * n = isnan(x);
  * n = isfinite(x);
@@ -28,17 +28,17 @@
  * All four routines return a double precision floating point
  * result.
  *
- * floor() returns the largest integer less than or equal to x.
+ * md_floor() returns the largest integer less than or equal to x.
  * It truncates toward minus infinity.
  *
- * ceil() returns the smallest integer greater than or equal
+ * md_ceil() returns the smallest integer greater than or equal
  * to x.  It truncates toward plus infinity.
  *
- * frexp() extracts the exponent from x.  It returns an integer
+ * md_frexp() extracts the exponent from x.  It returns an integer
  * power of two to expnt and the significand between 0.5 and 1
- * to y.  Thus  x = y * 2**expn.
+ * to y.  Thus  x = y * 2**md_expn.
  *
- * ldexp() multiplies x by 2**n.
+ * md_ldexp() multiplies x by 2**n.
  *
  * signbit(x) returns 1 if the sign bit of x is 1, else 0.
  *
@@ -63,7 +63,7 @@ Copyright 1984, 1995 by Stephen L. Moshier
 #include "mconf.h"
 
 #ifdef UNK
-/* ceil(), floor(), frexp(), ldexp() may need to be rewritten. */
+/* md_ceil(), md_floor(), md_frexp(), md_ldexp() may need to be rewritten. */
 #undef UNK
 #if BIGENDIAN
 #define MIEEE 1

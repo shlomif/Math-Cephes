@@ -17,7 +17,7 @@
  * Returns modified Bessel function of order zero of the
  * argument.
  *
- * The function is defined as i0(x) = j0( ix ).
+ * The function is defined as i0(x) = md_j0( ix ).
  *
  * The range is partitioned into the two intervals [0,8] and
  * (8, infinity).  Chebyshev polynomial expansions are employed
@@ -53,7 +53,7 @@
  * Returns exponentially scaled modified Bessel function
  * of order zero of the argument.
  *
- * The function is defined as i0e(x) = exp(-|x|) j0( ix ).
+ * The function is defined as i0e(x) = md_exp(-|x|) md_j0( ix ).
  *
  *
  *
@@ -76,10 +76,10 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 
-/* Chebyshev coefficients for exp(-x) I0(x)
+/* Chebyshev coefficients for md_exp(-x) I0(x)
  * in the interval [0,8].
  *
- * lim(x->0){ exp(-x) I0(x) } = 1.
+ * lim(x->0){ md_exp(-x) I0(x) } = 1.
  */
 
 #ifdef UNK
@@ -224,10 +224,10 @@ static unsigned short A[] = {
 #endif
 
 
-/* Chebyshev coefficients for exp(-x) sqrt(x) I0(x)
+/* Chebyshev coefficients for md_exp(-x) sqrt(x) I0(x)
  * in the inverted interval [8,infinity].
  *
- * lim(x->inf){ exp(-x) sqrt(x) I0(x) } = 1/sqrt(2pi).
+ * lim(x->inf){ md_exp(-x) sqrt(x) I0(x) } = 1/sqrt(2pi).
  */
 
 #ifdef UNK
@@ -353,10 +353,10 @@ static unsigned short B[] = {
 
 #ifdef ANSIPROT
 extern double chbevl ( double, void *, int );
-extern double exp ( double );
+extern double md_exp ( double );
 extern double sqrt ( double );
 #else
-double chbevl(), exp(), sqrt();
+double chbevl(), md_exp(), sqrt();
 #endif
 
 double i0(x)
@@ -369,10 +369,10 @@ if( x < 0 )
 if( x <= 8.0 )
 	{
 	y = (x/2.0) - 2.0;
-	return( exp(x) * chbevl( y, A, 30 ) );
+	return( md_exp(x) * chbevl( y, A, 30 ) );
 	}
 
-return(  exp(x) * chbevl( 32.0/x - 2.0, B, 25 ) / sqrt(x) );
+return(  md_exp(x) * chbevl( 32.0/x - 2.0, B, 25 ) / sqrt(x) );
 
 }
 

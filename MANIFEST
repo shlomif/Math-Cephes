@@ -11,7 +11,7 @@ lib/Math/Cephes/Complex.pm
 lib/Math/Cephes/Polynomial.pm
 lib/Math/Cephes/Matrix.pm
 lib/Math/Cephes.pod
-libmd/Cephes_wrap.c
+Cephes_wrap.c
 libmd/Makefile.PL
 libmd/acosh.c
 libmd/airy.c
@@ -73,8 +73,6 @@ libmd/log10.c
 libmd/log2.c
 libmd/lrand.c
 libmd/lsqrt.c
-libmd/mconf.h.gen
-libmd/mconf.h.sol
 libmd/mtherr.c
 libmd/nbdtr.c
 libmd/ndtr.c
@@ -102,7 +100,7 @@ libmd/spence.c
 libmd/sqrt.387
 libmd/sqrt.688
 libmd/sqrt.87
-libmd/sqrt.c
+libmd/sqrt.c.src
 libmd/sqrt.spa
 libmd/sqrtelf.387
 libmd/stdtr.c
@@ -114,8 +112,8 @@ libmd/unity.c
 libmd/yn.c
 libmd/zeta.c
 libmd/zetac.c
-libmd/arrays.c
-libmd/arrays.h
+arrays.c
+arrays.h
 libmd/bernum_wrap.c
 libmd/eigens.c
 libmd/minv.c
@@ -151,4 +149,4 @@ t/trig.t
 t/utils.t
 t/mat.t
 t/poly.t
-
+META.yml                                 Module meta-data (added by MakeMaker)
