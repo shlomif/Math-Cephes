@@ -312,7 +312,7 @@ sub mul {
 	  }
 	  last SWITCH;
       };
-      $nc = $na > $nb ? $na + 3 : $nb + 3;
+      $nc = $na + $nb + 1;
       $c = [split //, 0 x $nc];
     Math::Cephes::polmul($adata, $na, $bdata, $nb, $c);
   }

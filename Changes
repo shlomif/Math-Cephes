@@ -1,5 +1,9 @@
 Revision history for Math::Cephes
 
+0.42    March 21, 2004
+  - fix bug in Math::Cephes::Polynomial in the mult routine
+    to get the right size of the resulting polynomial
+
 0.41    Dec 30, 2003
   - use dummy setprec.c for Darwin
   - remove unneeded Math::cephes::fract
