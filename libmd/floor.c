@@ -59,8 +59,8 @@
 
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 
@@ -95,8 +95,15 @@ Copyright 1984, 1995 by Stephen L. Moshier
 #endif
 
 extern double MAXNUM, NEGZERO;
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+double floor ( double );
+int isnan ( double );
+int isfinite ( double );
+double ldexp ( double, int );
+#else
 double floor();
+int isnan(), isfinite();
+double ldexp();
 #endif
 
 double ceil(x)

@@ -42,12 +42,15 @@
  */
 
 /*							jn.c
-Cephes Math Library Release 2.0:  April, 1987
-Copyright 1984, 1987 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 2000 by Stephen L. Moshier
 */
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double fabs ( double );
+extern double j0 ( double );
+extern double j1 ( double );
+#else
 double fabs(), j0(), j1();
 #endif
 extern double MACHEP;

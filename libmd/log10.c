@@ -42,8 +42,8 @@
  */
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -141,7 +141,14 @@ static unsigned short Q[] = {
 #define L10EA 4.3359375E-1
 #define L10EB 7.00731903251827651129E-4
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double frexp ( double, int * );
+extern double ldexp ( double, int );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern int isnan ( double );
+extern int isfinite ( double );
+#else
 double frexp(), ldexp(), polevl(), p1evl();
 int isnan(), isfinite();
 #endif

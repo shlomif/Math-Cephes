@@ -50,8 +50,8 @@
 
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 
@@ -118,7 +118,14 @@ static unsigned short Q[] = {
 #define MINL2 -1022.0
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double floor ( double );
+extern double ldexp ( double, int );
+extern int isnan ( double );
+extern int isfinite ( double );
+#else
 double polevl(), p1evl(), floor(), ldexp();
 int isnan(), isfinite();
 #endif

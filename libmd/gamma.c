@@ -99,9 +99,8 @@
 /*	gamma function	*/
 
 /*
-Cephes Math Library Release 2.2:  July, 1992
-Copyright 1984, 1987, 1989, 1992 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1989, 1992, 2000 by Stephen L. Moshier
 */
 
 
@@ -270,9 +269,24 @@ static unsigned short SQT[4] = {
 int sgngam = 0;
 extern int sgngam;
 extern double MAXLOG, MAXNUM, PI;
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double pow ( double, double );
+extern double log ( double );
+extern double exp ( double );
+extern double sin ( double );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double floor ( double );
+extern double fabs ( double );
+extern int isnan ( double );
+extern int isfinite ( double );
+static double stirf ( double );
+double lgam ( double );
+#else
 double pow(), log(), exp(), sin(), polevl(), p1evl(), floor(), fabs();
 int isnan(), isfinite();
+static double stirf();
+double lgam();
 #endif
 #ifdef INFINITIES
 extern double INFINITY;

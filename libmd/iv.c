@@ -47,14 +47,20 @@
 
 
 /*
-Cephes Math Library Release 2.1:  November, 1988
-Copyright 1984, 1987, 1988 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1988, 2000 by Stephen L. Moshier
 */
 
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double hyperg ( double, double, double );
+extern double exp ( double );
+extern double gamma ( double );
+extern double log ( double );
+extern double fabs ( double );
+extern double floor ( double );
+#else
 double hyperg(), exp(), gamma(), log(), fabs(), floor();
 #endif
 extern double MACHEP, MAXNUM;

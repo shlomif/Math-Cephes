@@ -46,17 +46,27 @@
 
 
 /*
-Cephes Math Library Release 2.0:  April, 1987
-Copyright 1984, 1987, 1993 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1993, 2000 by Stephen L. Moshier
 */
 
 /*	Incomplete elliptic integral of second kind	*/
-
+#include "mconf.h"
 extern double PI, PIO2, MACHEP;
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double sqrt ( double );
+extern double fabs ( double );
+extern double log ( double );
+extern double sin ( double x );
+extern double tan ( double x );
+extern double atan ( double );
+extern double floor ( double );
+extern double ellpe ( double );
+extern double ellpk ( double );
+double ellie ( double, double );
+#else
 double sqrt(), fabs(), log(), sin(), tan(), atan(), floor();
-double ellpe(), ellpk();
+double ellpe(), ellpk(), ellie();
 #endif
 
 double ellie( phi, m )

@@ -29,15 +29,14 @@
  *             =  erfc(z) / 2
  *
  * where z = x/sqrt(2). Computation is via the functions
- * erf and erfc.
+ * erf and erfc with care to avoid error amplification in computing exp(-x^2).
  *
  *
  * ACCURACY:
  *
  *                      Relative error:
  * arithmetic   domain     # trials      peak         rms
- *    DEC      -13,0         8000       2.1e-15     4.8e-16
- *    IEEE     -13,0        30000       3.4e-14     6.7e-15
+ *    IEEE     -13,0        30000       1.3e-15     2.2e-16
  *
  *
  * ERROR MESSAGES:
@@ -119,14 +118,15 @@
  * For small x, erfc(x) = 1 - erf(x); otherwise rational
  * approximations are computed.
  *
+ * A special function expx2.c is used to suppress error amplification
+ * in computing exp(-x^2).
  *
  *
  * ACCURACY:
  *
  *                      Relative error:
  * arithmetic   domain     # trials      peak         rms
- *    DEC       0, 9.2319   12000       5.1e-16     1.2e-16
- *    IEEE      0,26.6417   30000       5.7e-14     1.5e-14
+ *    IEEE      0,26.6417   30000       1.3e-15     2.2e-16
  *
  *
  * ERROR MESSAGES:
@@ -139,9 +139,8 @@
 
 
 /*
-Cephes Math Library Release 2.2:  June, 1992
-Copyright 1984, 1987, 1988, 1992 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.9:  November, 2000
+Copyright 1984, 1987, 1988, 1992, 2000 by Stephen L. Moshier
 */
 
 
@@ -150,6 +149,10 @@ Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 extern double SQRTH;
 extern double MAXLOG;
 
+/* Define this macro to suppress error propagation in exp(x^2)
+   by using the expx2 function.  The tradeoff is that doing so
+   generates two calls to the exponential function instead of one.  */
+#define USE_EXPXSQ 1
 
 #ifdef UNK
 static double P[] = {
@@ -381,9 +384,21 @@ static unsigned short U[] = {
 #define UTHRESH 37.519379347
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double exp ( double );
+extern double log ( double );
+extern double fabs ( double );
+extern double sqrt ( double );
+extern double expx2 ( double, int );
+double erf ( double );
+double erfc ( double );
+static double erfce ( double );
+#else
 double polevl(), p1evl(), exp(), log(), fabs();
-double erf(), erfc();
+double erf(), erfc(), expx2(), sqrt();
+static double erfce();
 #endif
 
 double ndtr(a)
@@ -394,13 +409,21 @@ double x, y, z;
 x = a * SQRTH;
 z = fabs(x);
 
-if( z < SQRTH )
+/* if( z < SQRTH ) */
+if( z < 1.0 )
 	y = 0.5 + 0.5 * erf(x);
 
 else
 	{
+#ifdef USE_EXPXSQ
+	/* See below for erfce. */
+	y = 0.5 * erfce(z);
+	/* Multiply by exp(-x^2 / 2)  */
+	z = expx2(a, -1);
+	y = y * sqrt(z);
+#else
 	y = 0.5 * erfc(z);
-
+#endif
 	if( x > 0 )
 		y = 1.0 - y;
 	}
@@ -435,8 +458,12 @@ under:
 		return( 0.0 );
 	}
 
+#ifdef USE_EXPXSQ
+/* Compute z = exp(z).  */
+z = expx2(a, -1);
+#else
 z = exp(z);
-
+#endif
 if( x < 8.0 )
 	{
 	p = polevl( x, P, 8 );
@@ -456,6 +483,29 @@ if( y == 0.0 )
 	goto under;
 
 return(y);
+}
+
+
+/* Exponentially scaled erfc function
+   exp(x^2) erfc(x)
+   valid for x > 1.
+   Use with ndtr and expx2.  */
+static double erfce(x)
+double x;
+{
+double p,q;
+
+if( x < 8.0 )
+	{
+	p = polevl( x, P, 8 );
+	q = p1evl( x, Q, 8 );
+	}
+else
+	{
+	p = polevl( x, R, 5 );
+	q = p1evl( x, S, 6 );
+	}
+return (p/q);
 }
 
 

@@ -39,16 +39,19 @@
  */
 
 
-
-#include "mconf.h"
-
-
 /*  Three-generator random number algorithm
  * of Brian Wichmann and David Hill
  * BYTE magazine, March, 1987 pp 127-8
  *
  * The period, given by them, is (p-1)(q-1)(r-1)/4 = 6.95e12.
  */
+
+#include "mconf.h"
+#ifdef ANSIPROT
+static int ranwh ( void );
+#else
+static int ranwh();
+#endif
 
 static int sx = 1;
 static int sy = 10000;

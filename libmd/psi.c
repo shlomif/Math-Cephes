@@ -52,9 +52,8 @@
  */
 
 /*
-Cephes Math Library Release 2.2:  July, 1992
-Copyright 1984, 1987, 1992 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1992, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -109,7 +108,12 @@ static unsigned short A[] = {
 
 #define EUL 0.57721566490153286061
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double floor ( double );
+extern double log ( double );
+extern double tan ( double );
+extern double polevl ( double, void *, int );
+#else
 double floor(), log(), tan(), polevl();
 #endif
 extern double PI, MAXNUM;

@@ -55,9 +55,8 @@
 /* Elliptic integral of second kind */
 
 /*
-Cephes Math Library, Release 2.1:  February, 1989
-Copyright 1984, 1987, 1989 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library, Release 2.8: June, 2000
+Copyright 1984, 1987, 1989, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -174,7 +173,10 @@ static unsigned short Q[] = {
 };
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double log ( double );
+#else
 double polevl(), log();
 #endif
 

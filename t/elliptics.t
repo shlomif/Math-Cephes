@@ -14,23 +14,30 @@ print "ok 1\n";
 ######################### End of black magic.
 
 # util
-sub test {
+my $count = 1;
+my $eps = 1e-07;
+sub ok {
   local($^W) = 0;
-  my($num, $value, $true) = @_;
+  $count++;
+  my ($package, $file, $line) = caller;
+  my ($value, $true, $skip) = @_;
+  $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < 0.000001 ? "ok $num\n" : "not ok $num (expected $true: got $value)\n");
+  print($error < $eps ? "ok $count $skip\n" : 
+	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
+
 my $x = 0.3;
-test(2, ellpk(1-$x*$x), 1.608048620);
-test(3, ellik(asin(0.2), $x*$x), .2014795901);
-test(4, ellpe(1-$x*$x), 1.534833465);
-test(5, ellie(asin(0.2), $x*$x), .2012363833);
+ok( ellpk(1-$x*$x), 1.608048620);
+ok( ellik(asin(0.2), $x*$x), .2014795901);
+ok( ellpe(1-$x*$x), 1.534833465);
+ok( ellie(asin(0.2), $x*$x), .2012363833);
 my $phi = $PIO4;
 my $m = 0.3;
 my $u = ellik($phi, $m);
 my ($flag, $sn, $cn, $dn, $phi_out) = ellpj($u, $m);
-test(6, $flag, 0);
-test(7, $phi, $phi_out);
-test(8, $sn, sin($phi_out));
-test(9, $cn, cos($phi_out));
-test(10, $dn, sqrt(1-$m*sin($phi_out)*sin($phi_out)));
+ok( $flag, 0);
+ok( $phi, $phi_out);
+ok( $sn, sin($phi_out));
+ok( $cn, cos($phi_out));
+ok( $dn, sqrt(1-$m*sin($phi_out)*sin($phi_out)));

@@ -68,8 +68,8 @@
 
 
 /*
-Cephes Math Library Release 2.3:  April, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 
@@ -167,9 +167,16 @@ static unsigned short T3P8A[] = {
 #define T3P8 *(double *)T3P8A
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double atan ( double );
+extern double fabs ( double );
+extern int signbit ( double );
+extern int isnan ( double );
+#else
 double polevl(), p1evl(), atan(), fabs();
-int signbit();
+int signbit(), isnan();
 #endif
 extern double PI, PIO2, PIO4, INFINITY, NEGZERO, MAXNUM;
 

@@ -47,16 +47,25 @@
 
 
 /*
-Cephes Math Library Release 2.0:  April, 1987
-Copyright 1984, 1987 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 2000 by Stephen L. Moshier
 */
 
 /*	Incomplete elliptic integral of first kind	*/
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double sqrt ( double );
+extern double fabs ( double );
+extern double log ( double );
+extern double tan ( double );
+extern double atan ( double );
+extern double floor ( double );
+extern double ellpk ( double );
+double ellik ( double, double );
+#else
 double sqrt(), fabs(), log(), tan(), atan(), floor(), ellpk();
+double ellik();
 #endif
 extern double PI, PIO2, MACHEP, MAXNUM;
 

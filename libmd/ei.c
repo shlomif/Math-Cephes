@@ -40,7 +40,12 @@ Copyright 1999 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double log ( double );
+extern double exp ( double );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+#else
 extern double log(), exp(), polevl(), p1evl();
 #endif
 

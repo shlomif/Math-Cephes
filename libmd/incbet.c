@@ -55,8 +55,8 @@
 
 
 /*
-Cephes Math Library, Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library, Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -69,6 +69,12 @@ Copyright 1984, 1995 by Stephen L. Moshier
 
 extern double MACHEP, MINLOG, MAXLOG;
 #ifdef ANSIPROT
+extern double gamma ( double );
+extern double lgam ( double );
+extern double exp ( double );
+extern double log ( double );
+extern double pow ( double, double );
+extern double fabs ( double );
 static double incbcf(double, double, double);
 static double incbd(double, double, double);
 static double pseries(double, double, double);

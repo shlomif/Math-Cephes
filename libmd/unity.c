@@ -10,12 +10,21 @@
  */
 
 #include "mconf.h"
-#ifdef INFINITIES
-extern double INFINITY;
-#endif
-#ifndef ANSIPROT
+
+#ifdef ANSIPROT
+extern int isnan (double);
+extern int isfinite (double);
+extern double log ( double );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double exp ( double );
+extern double cos ( double );
+#else
+double log(), polevl(), p1evl(), exp(), cos();
 int isnan(), isfinite();
 #endif
+extern double INFINITY;
+
 /* log1p(x) = log(1 + x)  */
 
 /* Coefficients for log(1+x) = x - x**2/2 + x**3 P(x)/Q(x)
@@ -43,9 +52,6 @@ static double LQ[] = {
 
 #define SQRTH 0.70710678118654752440
 #define SQRT2 1.41421356237309504880
-#ifndef ANSIPROT
-double log(), polevl(), p1evl(), exp(), cos();
-#endif
 
 double log1p(x)
 double x;

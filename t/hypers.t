@@ -14,19 +14,26 @@ print "ok 1\n";
 ######################### End of black magic.
 
 # util
-sub test {
+my $count = 1;
+my $eps = 1e-07;
+sub ok {
   local($^W) = 0;
-  my($num, $value, $true) = @_;
+  $count++;
+  my ($package, $file, $line) = caller;
+  my ($value, $true, $skip) = @_;
+  $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < 0.000001 ? "ok $num\n" : "not ok $num (expected $true: got $value)\n");
+  print($error < $eps ? "ok $count $skip\n" : 
+	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
+
 my $x = 3;
 my $y = (exp($x)+exp(-$x))/2;
-test(2, cosh($x), $y);
-test(3, acosh($y), $x);
+ok(cosh($x), $y);
+ok( acosh($y), $x);
 $y = (exp($x)-exp(-$x))/2;
-test(4, sinh($x), $y);
-test(5, asinh($y), $x);
+ok( sinh($x), $y);
+ok( asinh($y), $x);
 $y = 1 - 2/(exp(2*$x)+1);
-test(6, tanh($x), $y);
-test(7, atanh($y), $x);
+ok( tanh($x), $y);
+ok( atanh($y), $x);

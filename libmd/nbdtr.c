@@ -42,7 +42,7 @@
  * See also incbet.c.
  *
  */
-/*							nbdtrc.c
+/*							nbdtr.c
  *
  *	Complemented negative binomial distribution
  *
@@ -82,43 +82,7 @@
  *    IEEE     0,100       100000      1.7e-13     8.8e-15
  * See also incbet.c.
  */
-
-/*							nbdtrc
- *
- *	Complemented negative binomial distribution
- *
- *
- *
- * SYNOPSIS:
- *
- * int k, n;
- * double p, y, nbdtrc();
- *
- * y = nbdtrc( k, n, p );
- *
- * DESCRIPTION:
- *
- * Returns the sum of the terms k+1 to infinity of the negative
- * binomial distribution:
- *
- *   inf
- *   --  ( n+j-1 )   n      j
- *   >   (       )  p  (1-p)
- *   --  (   j   )
- *  j=k+1
- *
- * The terms are not computed individually; instead the incomplete
- * beta integral is employed, according to the formula
- *
- * y = nbdtrc( k, n, p ) = incbet( k+1, n, 1-p ).
- *
- * The arguments must be positive, with p ranging from 0 to 1.
- *
- * ACCURACY:
- *
- * See incbet.c.
- */
-/*							nbdtri
+/*							nbdtr.c
  *
  *	Functional inverse of negative binomial distribution
  *
@@ -146,12 +110,15 @@
  */
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1987, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double incbet ( double, double, double );
+extern double incbi ( double, double, double );
+#else
 double incbet(), incbi();
 #endif
 

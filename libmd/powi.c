@@ -39,12 +39,16 @@
 /*							powi.c	*/
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double log ( double );
+extern double frexp ( double, int * );
+extern int signbit ( double );
+#else
 double log(), frexp();
 int signbit();
 #endif

@@ -47,8 +47,8 @@
  */
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 
@@ -334,13 +334,23 @@ static unsigned short R[] = {
 #define Ha Wb
 #define Hb Wb
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double floor ( double );
+extern double fabs ( double );
+extern double frexp ( double, int * );
+extern double ldexp ( double, int );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double powi ( double, int );
+extern int signbit ( double );
+extern int isnan ( double );
+extern int isfinite ( double );
+static double reduc ( double );
+#else
 double floor(), fabs(), frexp(), ldexp();
 double polevl(), p1evl(), powi();
 int signbit(), isnan(), isfinite();
 static double reduc();
-#else
-static double reduc(double);
 #endif
 extern double MAXNUM;
 #ifdef INFINITIES

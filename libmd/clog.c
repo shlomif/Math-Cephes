@@ -37,20 +37,38 @@
  * absolute error 1.0e-16.
  */
 
+/*
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
+*/
 #include "mconf.h"
 #ifdef ANSIPROT
 static void cchsh ( double x, double *c, double *s );
 static double redupi ( double x );
 static double ctans ( cmplx *z );
-/* These are supposed to be in some standard place.
-double atan2 (double, double);
+/* These are supposed to be in some standard place. */
+double fabs (double);
+double sqrt (double);
+double pow (double, double);
 double log (double);
+double exp (double);
+double atan2 (double, double);
+double cosh (double);
+double sinh (double);
+double asin (double);
 double sin (double);
 double cos (double);
-double sinh (double);
-double cosh (double);
-double asin (double);
-*/
+double cabs (cmplx *);
+void cadd ( cmplx *, cmplx *, cmplx * );
+void cmul ( cmplx *, cmplx *, cmplx * );
+void csqrt ( cmplx *, cmplx * );
+static void cchsh ( double, double *, double * );
+static double redupi ( double );
+static double ctans ( cmplx * );
+void clog ( cmplx *, cmplx * );
+void casin ( cmplx *, cmplx * );
+void cacos ( cmplx *, cmplx * );
+void catan ( cmplx *, cmplx * );
 #else
 static void cchsh();
 static double redupi();
@@ -58,9 +76,10 @@ static double ctans();
 double cabs(), fabs(), sqrt(), pow();
 double log(), exp(), atan2(), cosh(), sinh();
 double asin(), sin(), cos();
+void cadd(), cmul(), csqrt();
+void clog(), casin(), cacos(), catan();
 #endif
 
-void csqrt();
 
 extern double MAXNUM, MACHEP, PI, PIO2;
 

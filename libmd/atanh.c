@@ -36,8 +36,8 @@
 
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright (C) 1987, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright (C) 1987, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -112,7 +112,12 @@ static unsigned short Q[] = {
 };
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double fabs ( double );
+extern double log ( double x );
+extern double polevl ( double x, void *P, int N );
+extern double p1evl ( double x, void *P, int N );
+#else
 double fabs(), log(), polevl(), p1evl();
 #endif
 extern double INFINITY, NAN;

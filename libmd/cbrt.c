@@ -36,9 +36,8 @@
 /*							cbrt.c  */
 
 /*
-Cephes Math Library Release 2.2:  January, 1991
-Copyright 1984, 1991 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1991, 2000 by Stephen L. Moshier
 */
 
 
@@ -49,7 +48,12 @@ static double CBRT4  = 1.5874010519681994747517;
 static double CBRT2I = 0.79370052598409973737585;
 static double CBRT4I = 0.62996052494743658238361;
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double frexp ( double, int * );
+extern double ldexp ( double, int );
+extern int isnan ( double );
+extern int isfinite ( double );
+#else
 double frexp(), ldexp();
 int isnan(), isfinite();
 #endif

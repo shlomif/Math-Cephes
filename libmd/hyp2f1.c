@@ -60,9 +60,8 @@
 
 
 /*
-Cephes Math Library Release 2.2:  November, 1992
-Copyright 1984, 1987, 1992 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1992, 2000 by Stephen L. Moshier
 */
 
 
@@ -90,13 +89,22 @@ Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 
 #define ETHRESH 1.0e-12
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double fabs ( double );
+extern double pow ( double, double );
+extern double round ( double );
+extern double gamma ( double );
+extern double log ( double );
+extern double exp ( double );
+extern double psi ( double );
+static double hyt2f1(double, double, double, double, double *);
+static double hys2f1(double, double, double, double, double *);
+double hyp2f1(double, double, double, double);
+#else
 double fabs(), pow(), round(), gamma(), log(), exp(), psi();
 static double hyt2f1();
 static double hys2f1();
-#else
-static double hyt2f1(double, double, double, double, double *);
-static double hys2f1(double, double, double, double, double *);
+double hyp2f1();
 #endif
 extern double MAXNUM, MACHEP;
 

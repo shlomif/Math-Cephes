@@ -56,9 +56,8 @@
 
 
 /*
-Cephes Math Library, Release 2.0:  April, 1987
-Copyright 1984, 1987 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library, Release 2.8:  June, 2000
+Copyright 1984, 1987, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -197,7 +196,11 @@ static double Q[] =
 static double C1 = 1.3862943611198906188E0; /* log(4) */
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double log ( double );
+#else
 double polevl(), p1evl(), log();
 #endif
 extern double MACHEP, MAXNUM;

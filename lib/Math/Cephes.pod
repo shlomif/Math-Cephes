@@ -78,6 +78,7 @@ Math::Cephes - perl interface to the cephes math library
   imports 
 
  exp:  Exponential function
+ expxx: exp(x*x)
  exp10:  Base 10 exponential function (Common antilogarithm)
  exp2:  Base 2 exponential function
  log:  Natural logarithm
@@ -230,16 +231,21 @@ Math::Cephes - perl interface to the cephes math library
   imports 
 
  airy:  Airy function
+ bernum: Bernoulli numbers
  dawsn:  Dawson's Integral
  ei: Exponential integral
  erf:  Error function
  erfc:  Complementary error function 
  expn:  Exponential integral En
  fresnl:  Fresnel integral
+ plancki: Integral of Planck's black body radiation formula
+ polylog: Polylogarithm function
  shichi:  Hyperbolic sine and cosine integrals
  sici:  Sine and cosine integrals
+ simpson: Simpson's rule to find an integral
  spence:  Dilogarithm
  struve:  Struve function
+ vecang: angle between two vectors
  zeta:  Riemann zeta function of two arguments
  zetac:  Riemann zeta function
 
@@ -1822,6 +1828,30 @@ Math::Cephes - perl interface to the cephes math library
  exp underflow    x < MINLOG         0.0
  exp overflow     x > MAXLOG         INFINITY
 
+=item I<expxx>: exp(x*x)
+
+ #  double x, y, expxx();
+ # int sign;
+ 
+   $y = expxx( $x, $sign );
+
+ DESCRIPTION:
+ 
+  Computes y = exp(x*x) while suppressing error amplification
+  that would ordinarily arise from the inexactness of the
+  exponential argument x*x.
+
+  If sign < 0, exp(-x*x) is returned.
+  If sign > 0, or omitted, exp(x*x) is returned.
+ 
+ ACCURACY:
+ 
+                       Relative error:
+ arithmetic    domain     # trials      peak         rms
+    IEEE      -26.6, 26.6    10^7       3.9e-16     8.9e-17
+
+
+ 
 =item I<exp10>: Base 10 exponential function (Common antilogarithm)
 
  SYNOPSIS:
@@ -4216,6 +4246,179 @@ Math::Cephes - perl interface to the cephes math library
 
  Not accurately characterized, but spot checked against tables.
 
+=item I<plancki>: Integral of Planck's black body radiation formula
+
+ SYNOPSIS:
+
+ # double lambda, T, y, plancki()
+
+ $y = plancki( $lambda, $T );
+
+ DESCRIPTION:
+
+ Evaluates the definite integral, from wavelength 0 to lambda,
+ of Planck's radiation formula
+                       -5
+             c1  lambda
+      E =  ------------------
+             c2/(lambda T)
+            e             - 1
+ 
+ Physical constants c1 = 3.7417749e-16 and c2 = 0.01438769 are built in
+ to the function program.  They are scaled to provide a result
+ in watts per square meter.  Argument T represents temperature in degrees
+ Kelvin; lambda is wavelength in meters.
+
+ The integral is expressed in closed form, in terms of polylogarithms
+ (see polylog.c).
+
+ The total area under the curve is
+      (-1/8) (42 zeta(4) - 12 pi^2 zeta(2) + pi^4 ) c1 (T/c2)^4
+       = (pi^4 / 15)  c1 (T/c2)^4
+       =  5.6705032e-8 T^4
+ where sigma = 5.6705032e-8 W m^2 K^-4 is the Stefan-Boltzmann constant.
+
+
+ ACCURACY:
+
+ The left tail of the function experiences some relative error
+ amplification in computing the dominant term exp(-c2/(lambda T)).
+ For the right-hand tail see planckc, below.
+
+                      Relative error.
+   The domain refers to lambda T / c2.
+ arithmetic   domain     # trials      peak         rms
+    IEEE      0.1, 10      50000      7.1e-15     5.4e-16
+
+=item I<polylog>: polylogarithm function
+ SYNOPSIS:
+
+ # double x, y, polylog();
+ # int n;
+
+     $y = polylog( $n, $x );
+
+ The polylogarithm of order n is defined by the series
+
+               inf   k
+                -   x
+   Li (x)  =    >   ---  .
+     n          -     n
+               k=1   k
+ 
+   For x = 1,
+ 
+                inf
+                 -    1
+    Li (1)  =    >   ---   =  Riemann zeta function (n)  .
+      n          -     n
+                k=1   k
+ 
+  When n = 2, the function is the dilogarithm, related to Spence's integral:
+ 
+                  x                      1-x
+                  -                        -
+                 | |  -ln(1-t)            | |  ln t
+    Li (x)  =    |    -------- dt    =    |    ------ dt    =   spence(1-x) .
+      2        | |       t              | |    1 - t
+                -                        -
+                 0                        1
+ 
+  ACCURACY:
+ 
+                       Relative error:
+  arithmetic   domain   n   # trials      peak         rms
+     IEEE      0, 1     2     50000      6.2e-16     8.0e-17
+     IEEE      0, 1     3    100000      2.5e-16     6.6e-17
+     IEEE      0, 1     4     30000      1.7e-16     4.9e-17
+     IEEE      0, 1     5     30000      5.1e-16     7.8e-17
+
+=item I<bernum>: Bernoulli numbers
+
+ SYNOPSIS:
+
+    ($num, $den) = bernum( $n);
+    ($num_array, $den_array) = bernum();
+
+ DESCRIPTION:
+
+ This calculates the Bernoulli numbers, up to 30th order.
+ If called with an integer argument, the numerator and denominator
+ of that Bernoulli number is returned; if called with no argument,
+ two array references representing the numerator and denominators
+ of the first 30 Bernoulli numbers are returned.
+
+=item I<simpson>: Simpson's rule to find an integral
+
+ SYNOPSIS:
+
+    $result = simpson(\&fun, $a, $b, $abs_err, $rel_err, $nmax);
+    
+    sub fun {
+       my $x = shift;
+       return cos($x)*exp($x);
+    }
+
+ DESCRIPTION:
+
+ This evaluates the area under the graph of a function,
+ represented in a subroutine, from $a to $b, using an 8-point
+ Newton-Cotes formula. The routine divides up the interval into
+ equal segments, evaluates the integral, then compares that
+ to the result with double the number of segments. If the two
+ results agree, to within an absolute error $abs_err or a
+ relative error $rel_err, the result is returned; otherwise,
+ the number of segments is doubled again, and the results 
+ compared. This continues until the desired accuracy is attained,
+ or until the maximum number of iterations $nmax is reached.
+
+=item I<vecang>: angle between two vectors
+
+ SYNOPSIS:
+
+ # double p[3], q[3], vecang();
+
+    $y = vecang( $p, $q );
+
+ DESCRIPTION:
+
+ For two vectors p, q, the angle A between them is given by
+
+      p.q / (|p| |q|)  = cos A  .
+
+ where "." represents inner product, "|x|" the length of vector x.
+ If the angle is small, an expression in sin A is preferred.
+ Set r = q - p.  Then
+
+     p.q = p.p + p.r ,
+
+     |p|^2 = p.p ,
+
+     |q|^2 = p.p + 2 p.r + r.r ,
+
+                  p.p^2 + 2 p.p p.r + p.r^2
+     cos^2 A  =  ----------------------------
+                    p.p (p.p + 2 p.r + r.r)
+
+                  p.p + 2 p.r + p.r^2 / p.p
+              =  --------------------------- ,
+                     p.p + 2 p.r + r.r
+
+     sin^2 A  =  1 - cos^2 A
+
+                   r.r - p.r^2 / p.p
+              =  --------------------
+                  p.p + 2 p.r + r.r
+
+              =   (r.r - p.r^2 / p.p) / q.q  .
+
+ ACCURACY:
+
+                      Relative error:
+ arithmetic   domain     # trials      peak         rms
+    IEEE      -1, 1        10^6       1.7e-16     4.2e-17
+
+
 =item I<onef2>: Hypergeometric function 1F2
 
  SYNOPSIS:
@@ -4548,15 +4751,22 @@ For a command line interface to the routines of I<Math::Cephes>,
 see the included C<pmath> script. For a
 different interface to the fraction and complex number routines,
 see L<Math::Cephes::Fraction> and L<Math::Cephes::Complex>.
+For an interface to some polynomial routines, see
+L<Math::Cephes::Polynomial>, and for some matrix routines,
+see L<Math::Cephes::Matrix>.
 
 =head1 COPYRIGHT
 
 The C code for the Cephes Math Library is
-Copyright 1984, 1987, 1989 by Stephen L. Moshier, 
+Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
 and is available at http://www.netlib.org/cephes/.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 
-The perl interface is copyright 2000 by Randy Kobes.
+The file arrays.c included here to handle passing arrays
+into and out of C routines comes from the PGPLOT module
+of Karl Glazebrook <kgb@zzoepp.aao.gov.au>.
+
+The perl interface is copyright 2000, 2002 by Randy Kobes.
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

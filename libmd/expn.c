@@ -45,12 +45,17 @@
 
 /*							expn.c	*/
 
-/* Cephes Math Library Release 1.1:  March, 1985
- * Copyright 1985 by Stephen L. Moshier
- * Direct inquiries to 30 Frost Street, Cambridge, MA 02140 */
+/* Cephes Math Library Release 2.8:  June, 2000
+   Copyright 1985, 2000 by Stephen L. Moshier */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double pow ( double, double );
+extern double gamma ( double );
+extern double log ( double );
+extern double exp ( double );
+extern double fabs ( double );
+#else
 double pow(), gamma(), log(), exp(), fabs();
 #endif
 #define EUL 0.57721566490153286060

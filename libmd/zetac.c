@@ -45,9 +45,8 @@
  */
 
 /*
-Cephes Math Library Release 2.1:  January, 1989
-Copyright 1984, 1987, 1989 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1989, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -494,9 +493,18 @@ static unsigned short S[20] = {
 /*
  * Riemann zeta function, minus one
  */
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double sin ( double );
+extern double floor ( double );
+extern double gamma ( double );
+extern double pow ( double, double );
+extern double exp ( double );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+double zetac ( double );
+#else
 double sin(), floor(), gamma(), pow(), exp();
-double polevl(), p1evl();
+double polevl(), p1evl(), zetac();
 #endif
 extern double MACHEP;
 

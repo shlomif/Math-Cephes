@@ -14,21 +14,28 @@ print "ok 1\n";
 ######################### End of black magic.
 
 # util
-sub test {
+my $count = 1;
+my $eps = 1e-07;
+sub ok {
   local($^W) = 0;
-  my($num, $value, $true) = @_;
+  $count++;
+  my ($package, $file, $line) = caller;
+  my ($value, $true, $skip) = @_;
+  $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < 0.000001 ? "ok $num\n" : "not ok $num (expected $true: got $value)\n");
+  print($error < $eps ? "ok $count $skip\n" : 
+	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
+
 my $x = 0.5;
 my $euler = 0.57721566490153286061;
 my $e = exp(1);
-test(2, gamma($x), sqrt($PI));
-test(3, gamma(10), fac(9));
-test(4, fac(9), 362880);
-test(5, rgamma($x), 1/sqrt($PI));
-test(6, psi(1/2), -$euler - 2*$LOGE2);
-test(7, igam(4,4), 1-71/3*pow($e,-4));
+ok( gamma($x), sqrt($PI));
+ok( gamma(10), fac(9));
+ok( fac(9), 362880);
+ok( rgamma($x), 1/sqrt($PI));
+ok( psi(1/2), -$euler - 2*$LOGE2);
+ok( igam(4,4), 1-71/3*pow($e,-4));
 my $p = igamc(4,4);
-test(8, $p, 71/3*pow($e, -4));
-test(9, igami(4,$p), 4);
+ok( $p, 71/3*pow($e, -4));
+ok( igami(4,$p), 4);

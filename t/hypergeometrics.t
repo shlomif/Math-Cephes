@@ -14,17 +14,23 @@ print "ok 1\n";
 ######################### End of black magic.
 
 # util
-sub test {
+my $count = 1;
+my $eps = 1e-07;
+sub ok {
   local($^W) = 0;
-  my($num, $value, $true) = @_;
+  $count++;
+  my ($package, $file, $line) = caller;
+  my ($value, $true, $skip) = @_;
+  $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < 0.000001 ? "ok $num\n" : "not ok $num (expected $true: got $value)\n");
+  print($error < $eps ? "ok $count $skip\n" : 
+	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
 my $x = 0.1;
 my $y = 0.2;
 my $z = 0.3;
 my $u = 0.4;
-test(2, hyp2f1($x, $y, $z, $u), 1.03417940155);
-test(3, hyperg($x, $y, $z), 1.17274559901);
+ok(hyp2f1($x, $y, $z, $u), 1.03417940155);
+ok(hyperg($x, $y, $z), 1.17274559901);
 
 

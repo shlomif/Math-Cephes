@@ -1,5 +1,13 @@
 Revision history for Math::Cephes
 
+0.36    Sept 12, 2002
+
+  - added functions that require arrays into and out from
+    C (simpson's rule, polynomial and matrix routines).
+  - added Math::Cephes::Polynomial and Math::Cephes::Matrix
+  - added Solaris mconf.h that mostly works (thanks to
+    Jost Krieger).
+
 0.25	Oct 25, 2000
 
   - changed Cephes_wrap.c to compile when MULTIPLICITY

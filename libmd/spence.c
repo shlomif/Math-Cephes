@@ -44,9 +44,8 @@
 
 
 /*
-Cephes Math Library Release 2.1:  January, 1989
-Copyright 1985, 1987, 1989 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1985, 1987, 1989, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -140,7 +139,11 @@ static unsigned short B[32] = {
 };
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double fabs ( double );
+extern double log ( double );
+extern double polevl ( double, void *, int );
+#else
 double fabs(), log(), polevl();
 #endif
 extern double PI, MACHEP;

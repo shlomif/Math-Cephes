@@ -40,14 +40,16 @@
  */
 
 /*
-Cephes Math Library Release 2.1:  December, 1988
-Copyright 1984, 1987, 1988 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1988, 2000 by Stephen L. Moshier
 */
 
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double frexp ( double, int * );
+extern double ldexp ( double, int );
+#else
 double frexp(), ldexp();
 #endif
 extern double SQRT2;  /*  SQRT2 = 1.41421356237309504880 */

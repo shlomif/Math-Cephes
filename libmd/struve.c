@@ -31,15 +31,28 @@
 
 
 /*
-Cephes Math Library Release 2.1:  January, 1989
-Copyright 1984, 1987, 1989 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.81:  June, 2000
+Copyright 1984, 1987, 1989, 2000 by Stephen L. Moshier
 */
-
+#include "mconf.h"
 #define DEBUG 0
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double gamma ( double );
+extern double pow ( double, double );
+extern double sqrt ( double );
+extern double yn ( int, double );
+extern double jv ( double, double );
+extern double fabs ( double );
+extern double floor ( double );
+extern double sin ( double );
+extern double cos ( double );
+double yv ( double, double );
+double onef2 (double, double, double, double, double * );
+double threef0 (double, double, double, double, double * );
+#else
 double gamma(), pow(), sqrt(), yn(), yv(), jv(), fabs(), floor();
 double sin(), cos();
+double onef2(), threef0();
 #endif
 static double stop = 1.37e-17;
 extern double MACHEP;

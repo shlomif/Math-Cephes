@@ -194,7 +194,8 @@ typedef struct
 /* Get ANSI function prototypes, if you want them. */
 #ifdef __STDC__
 #define ANSIPROT
-#include "protos.h"
+/* #include "protos.h" */
+int mtherr();
 #else
 int mtherr();
 #endif

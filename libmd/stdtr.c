@@ -80,14 +80,20 @@
 
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1987, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
 
 extern double PI, MACHEP, MAXNUM;
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double sqrt ( double );
+extern double atan ( double );
+extern double incbet ( double, double, double );
+extern double incbi ( double, double, double );
+extern double fabs ( double );
+#else
 double sqrt(), atan(), incbet(), incbi(), fabs();
 #endif
 

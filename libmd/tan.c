@@ -75,8 +75,8 @@
  */
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+yright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -179,20 +179,22 @@ static unsigned short P3[] = {
 static double lossth = 1.073741824e9;
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double floor ( double );
+extern double ldexp ( double, int );
+extern int isnan ( double );
+extern int isfinite ( double );
+static double tancot(double, int);
+#else
 double polevl(), p1evl(), floor(), ldexp();
 static double tancot();
 int isnan(), isfinite();
-#else
-static double tancot(double, int);
 #endif
 extern double PIO4;
-#ifdef INFINITIES
 extern double INFINITY;
-#endif
-#ifdef NANS
 extern double NAN;
-#endif
 
 double tan(x)
 double x;

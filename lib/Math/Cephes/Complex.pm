@@ -16,7 +16,7 @@ require Exporter;
 %OWNER = ();
 %BLESSEDMEMBERS = ();
 %ITERATORS = ();
-$VERSION = '0.25';
+$VERSION = '0.36';
 
 sub new {
     my $self = shift;
@@ -28,6 +28,20 @@ sub new {
     my %retval;
     tie %retval, "Math::Cephes::Complex", $self;
     return bless \%retval,"Math::Cephes::Complex";
+}
+
+sub r {
+    my ($self, $value) = @_;
+    return $self->{r} unless $value;
+    $self->{r} = $value;
+    return $value;
+}
+
+sub i {
+    my ($self, $value) = @_;
+    return $self->{i} unless $value;
+    $self->{i} = $value;
+    return $value;
 }
 
 sub cmplx {
@@ -287,38 +301,45 @@ __END__
 
 =head1 DESCRIPTION
 
- This module is a layer on top of the basic routines in the
- cephes math library to handle complex numbers. A complex 
- number is created via any of the following syntaxes:
+This module is a layer on top of the basic routines in the
+cephes math library to handle complex numbers. A complex 
+number is created via any of the following syntaxes:
 
   my $f = Math::Cephes::Complex->new(3, 2);   # $f = 3 + 2 i
   my $g = new Math::Cephes::Complex(5, 3);    # $g = 5 + 3 i
   my $h = cmplx(7, 5);                        # $h = 7 + 5 i
 
- the last one being available by importing I<cmplx>. If no arguments
- are specified, as in
+the last one being available by importing I<cmplx>. If no arguments
+are specified, as in
 
  my $h = cmplx();
 
- then the defaults $z = 0 + 0 i are assumed. The real and imaginary 
- part of a complex number are represented respectively by
+then the defaults $z = 0 + 0 i are assumed. The real and imaginary 
+part of a complex number are represented respectively by
 
-   $f->{r}; $f->{i}
+   $f->{r}; $f->{i};
 
- and can be set according to
+or, as methods,
 
-  $f->{i} = 4; $f->{i} = 9;
+   $f->r;  $f->i;
 
- The complex number can be printed out as
+and can be set according to
+
+  $f->{r} = 4; $f->{i} = 9;
+
+or, again, as methods,
+
+  $f->r(4);   $f->i(9);
+ 
+The complex number can be printed out as
 
   print $f->as_string;
 
- A summary of the usage is as follows.
+A summary of the usage is as follows.
 
 =over 4
 
 =item I<csin>: Complex circular sine
-
 
  SYNOPSIS:
 
@@ -341,7 +362,6 @@ __END__
 
 =item I<ccos>: Complex circular cosine
 
-
  SYNOPSIS:
 
  # void ccos();
@@ -362,7 +382,6 @@ __END__
      w = cos x  cosh y  -  i sin x sinh y.
 
 =item I<ctan>: Complex circular tangent
-
 
  SYNOPSIS:
 
@@ -391,7 +410,6 @@ __END__
 
 =item I<ccot>: Complex circular cotangent
 
-
  SYNOPSIS:
 
  # void ccot();
@@ -419,7 +437,6 @@ __END__
 
 =item I<casin>: Complex circular arc sine
 
-
  SYNOPSIS:
 
  # void casin();
@@ -439,7 +456,6 @@ __END__
 
 =item I<cacos>: Complex circular arc cosine
 
-
  SYNOPSIS:
 
  # void cacos();
@@ -455,7 +471,6 @@ __END__
  w = arccos z  =  PI/2 - arcsin z.
 
 =item I<catan>: Complex circular arc tangent
-
 
  SYNOPSIS:
 
@@ -606,7 +621,6 @@ __END__
 
 =item I<cmplx>: Complex number arithmetic
 
-
  SYNOPSIS:
 
  # typedef struct {
@@ -650,7 +664,6 @@ __END__
     c.i  = (b.i * a.r  -  b.r * a.i)/d
 
 =item I<cabs>: Complex absolute value
-
 
  SYNOPSIS:
 
@@ -702,21 +715,11 @@ __END__
 
 =back
 
-=head1 TODO
-
-=over 4
-
-=item * Integrate the C routines with C<Math::Complex>.
-
-=back
-
 =head1 BUGS
 
  Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
 
-
 =head1 SEE ALSO
-
 
 For the basic interface to the cephes complex number routines, see
 L<Math::Cephes>. See also L<Math::Complex> 
@@ -725,11 +728,11 @@ for a more extensive interface to complex number routines.
 =head1 COPYRIGHT
 
 The C code for the Cephes Math Library is
-Copyright 1984, 1987, 1989 by Stephen L. Moshier, 
+Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
 and is available at http://www.netlib.org/cephes/.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 
-The perl interface is copyright 2000 by Randy Kobes.
+The perl interface is copyright 2000, 2002 by Randy Kobes.
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

@@ -40,12 +40,16 @@
 /*							cosh.c */
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1985, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1985, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double exp ( double );
+extern int isnan ( double );
+extern int isfinite ( double );
+#else
 double exp();
 int isnan(), isfinite();
 #endif

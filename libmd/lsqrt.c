@@ -44,7 +44,7 @@ Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 long lsqrt(x)
 long x;
 {
-long pq, num, sq;
+long num, sq;
 long temp;
 int i, j, k, n;
 

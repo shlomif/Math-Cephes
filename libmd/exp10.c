@@ -47,9 +47,8 @@
  */
 
 /*
-Cephes Math Library Release 2.2:  January, 1991
-Copyright 1984, 1991 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1991, 2000 by Stephen L. Moshier
 */
 
 
@@ -155,7 +154,14 @@ static unsigned short L102B[] = {0x3ed3,0x509f,0x79fe,0xf312,};
 static double MAXL10 = 308.2547155599167;
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double floor ( double );
+extern double ldexp ( double, int );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern int isnan ( double );
+extern int isfinite ( double );
+#else
 double floor(), ldexp(), polevl(), p1evl();
 int isnan(), isfinite();
 #endif
@@ -186,7 +192,9 @@ if( x > MAXL10 )
 
 if( x < -MAXL10 )	/* Would like to use MINLOG but can't */
 	{
+#ifndef INFINITIES
 	mtherr( "exp10", UNDERFLOW );
+#endif
 	return(0.0);
 	}
 

@@ -32,8 +32,10 @@ Cephes Math Library Release 2.1:  January, 1989
 Copyright 1984, 1987, 1989 by Stephen L. Moshier
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 */
-
-#ifndef ANSIPROT
+#include "mconf.h"
+#ifdef ANSIPROT
+double floor ( double );
+#else
 double floor();
 #endif
 

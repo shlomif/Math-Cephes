@@ -84,8 +84,8 @@
 /*							asin.c	*/
 
 /*
-Cephes Math Library Release 2.3:  April, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -241,8 +241,14 @@ static short S[16] = {
 #define MOREBITS 6.123233995736765886130E-17
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double sqrt ( double );
+double asin ( double );
+#else
 double sqrt(), polevl(), p1evl();
+double asin();
 #endif
 extern double PIO2, PIO4, NAN;
 
@@ -282,7 +288,7 @@ if( a > 0.625 )
 	}
 else
 	{
-	if( a < 1.0e-7 )
+	if( a < 1.0e-8 )
 		{
 		return(x);
 		}

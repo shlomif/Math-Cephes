@@ -142,12 +142,18 @@
 
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1987, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double incbet ( double, double, double );
+extern double incbi ( double, double, double );
+extern double pow ( double, double );
+extern double log1p ( double );
+extern double expm1 ( double );
+#else
 double incbet(), incbi(), pow(), log1p(), expm1();
 #endif
 

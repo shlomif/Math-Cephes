@@ -91,12 +91,15 @@
 
 
 /*
-Cephes Math Library Release 2.3:  March,1995
-Copyright 1984, 1987, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double igam ( double, double );
+extern double igamc ( double, double );
+#else
 double igam(), igamc();
 #endif
 

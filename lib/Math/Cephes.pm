@@ -14,7 +14,7 @@ my @constants = qw($PI $PIO2 $PIO4 $SQRT2 $MACHEP $MAXLOG $MINLOG $MAXNUM
 my @trigs = qw(asin acos atan atan2 sin cos tan cot hypot
 	       tandg cotdg sindg cosdg radian cosm1);
 my @hypers = qw(acosh asinh atanh sinh cosh tanh);
-my @explog = qw(log1p expm1 exp exp10 exp2 log log10 log2);
+my @explog = qw(log1p expm1 exp exp10 exp2 log log10 log2 expxx);
 my @cmplx = qw(clog cexp csin ccos ctan ccot casin 
 	       cacos catan cadd csub cmul cdiv cmov cneg cabs csqrt
 	       csinh ccosh ctanh cpow casinh cacosh catanh);
@@ -29,9 +29,8 @@ my @betas = qw(beta lbeta incbet incbi lbeta);
 my @elliptics = qw(ellie ellik ellpe ellpj ellpk);
 my @hypergeometrics = qw(onef2 threef0 hyp2f1 hyperg hyp2f0);
 my @misc = qw(zeta zetac airy dawsn fresnl sici shichi expn spence ei 
-              erfc erf struve );
+              erfc erf struve plancki simpson bernum polylog vecang);
 my @fract = qw(radd rsub rmul rdiv euclid);
-  
 
 %EXPORT_TAGS = ('constants' => [@constants],
 		'utils' => [@utils],
@@ -47,16 +46,70 @@ my @fract = qw(radd rsub rmul rdiv euclid);
 		'hypergeometrics' => [@hypergeometrics],
 		'fract' => [@fract],
                 'misc' => [@misc],
-		'all' => [@constants, @utils, @trigs, @hypers, @explog, @bessels, @gammas, @betas, @elliptics, @hypergeometrics, @misc, @dists],
+                'all' => [@constants, @utils, @trigs, @hypers, 
+			  @explog, @bessels, @gammas, @betas, @elliptics, 
+			  @hypergeometrics, @misc, @dists],
 	       );
   
 @EXPORT_OK = (@constants, @utils, @trigs, @hypers, 
 	      @explog, @bessels, @gammas, @betas, @elliptics, 
 	      @hypergeometrics, @misc, @dists, @fract, @cmplx);
 		
-$VERSION = '0.25';
+$VERSION = '0.36';
 Math::Cephes->bootstrap($VERSION);
-var_Math__Cephes_init();
+#var_Math__Cephes_init();
+
+sub simpson {
+  my ($r, $a, $b, $abs, $rel, $nmax) = @_;
+  die "Must supply a CODE reference" unless ref($r) eq 'CODE';
+  die "Must supply start and end points($a and $b)" 
+    unless (defined $a and defined $b);
+  $abs ||= 1e-06;
+  $rel ||= 1e-06;
+  $nmax ||= 256;
+  $nmax = 2 if $nmax < 2;
+  my $sumold = 0;
+  for (my $n=2; $n<=$nmax; $n++) {
+    my $count = 0;
+    my $x = $a;
+    my $sum = 0;
+    my $h = ($b - $a) / $n / 8;
+    my $f = [];
+    for($count=0; $count <= 8*$n; $count++, $x+=$h) {
+      $f->[$count] = &$r($x);
+    }
+    $sum = Math::Cephes::simpsn_wrap($f, $count-1, $h);
+    my $test = abs($sum - $sumold);
+    return $sum if ($test < $abs or abs($test/$sum) < $rel);
+    $sumold = $sum;
+  }
+  warn("Math::Cephes::simpson: Maximum number $nmax of iterations reached");
+  return undef;
+}
+
+sub bernum {
+  my $i = shift;
+  die "Cannot exceed i=30" if (defined $i and $i > 30);
+  my $num = [split //, 0 x 30 ];
+  my $den = [split //, 0 x 30 ];
+  Math::Cephes::bernum_wrap($num, $den);
+  return defined $i ? (int($num->[$i]), int($den->[$i])) : ($num, $den);
+}
+
+sub expxx {
+  my $x = shift;
+  my $n = shift || 1;
+  return Math::Cephes::expx2($x, $n);
+}
+
+sub vecang {
+  my ($a, $b) = @_;
+  die "Must supply array references" 
+    unless (ref($a) eq 'ARRAY' and ref($b) eq 'ARRAY');
+  die "Vectors must be of dimension 3"
+    unless (scalar @$a == 3 and scalar @$b == 3);
+  return Math::Cephes::arcdot($a, $b);
+}
 
 1;
 

@@ -87,7 +87,7 @@ union
 
 u.d = x;
 
-if(sizeof (int) == 4 )
+if( sizeof(int) == 4 )
 	{
 #ifdef IBMPC
 	return( u.i[1] < 0 );
@@ -129,7 +129,7 @@ union
 
 u.d = x;
 
-if( sizeof (int) == 4 )
+if( sizeof(int) == 4 )
 	{
 #ifdef IBMPC
 	if( ((u.i[1] & 0x7ff00000) == 0x7ff00000)
@@ -198,7 +198,7 @@ union
 
 u.d = x;
 
-if( sizeof (int) == 4 )
+if( sizeof(int) == 4 )
 	{
 #ifdef IBMPC
 	if( (u.i[1] & 0x7ff00000) != 0x7ff00000)

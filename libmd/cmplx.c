@@ -64,19 +64,32 @@
 
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 
 #include "mconf.h"
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double fabs ( double );
+extern double cabs ( cmplx * );
+extern double sqrt ( double );
+extern double atan2 ( double, double );
+extern double cos ( double );
+extern double sin ( double );
+extern double sqrt ( double );
+extern double frexp ( double, int * );
+extern double ldexp ( double, int );
+int isnan ( double );
+void cdiv ( cmplx *, cmplx *, cmplx * );
+void cadd ( cmplx *, cmplx *, cmplx * );
+#else
 double fabs(), cabs(), sqrt(), atan2(), cos(), sin();
 double sqrt(), frexp(), ldexp();
-#endif
-
 int isnan();
+void cdiv(), cadd();
+#endif
 
 extern double MAXNUM, MACHEP, PI, PIO2, INFINITY, NAN;
 /*

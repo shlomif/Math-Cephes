@@ -14,7 +14,7 @@ my @fract = qw(euclid fract mixed_fract);
 %OWNER = ();
 %BLESSEDMEMBERS = ();
 %ITERATORS = ();
-$VERSION = '0.25';
+$VERSION = '0.36';
 
 #use Math::Cephes qw(new_fract euclid);
 require Math::Cephes;
@@ -33,6 +33,20 @@ sub new {
 
 sub fract {
   return Math::Cephes::Fraction->new(@_);
+}
+
+sub n {
+    my ($self, $value) = @_;
+    return $self->{n} unless $value;
+    $self->{n} = $value;
+    return $value;
+}
+
+sub d {
+    my ($self, $value) = @_;
+    return $self->{d} unless $value;
+    $self->{d} = $value;
+    return $value;
 }
 
 sub euclid {
@@ -243,46 +257,54 @@ __END__
 
 =head1 DESCRIPTION
 
- This module is a layer on top of the basic routines in the
- cephes math library to handle fractions. A fraction object
- is created via any of the following syntaxes:
+This module is a layer on top of the basic routines in the
+cephes math library to handle fractions. A fraction object
+is created via any of the following syntaxes:
 
   my $f = Math::Cephes::Fraction->new(3, 2);  # $f = 3/2
   my $g = new Math::Cephes::Fraction(5, 3);   # $g = 5/3
   my $h = fract(7, 5);                        # $h = 7/5
 
- the last one being available by importing I<:fract>. If no arguments
- are specified, as in
+the last one being available by importing I<:fract>. If no arguments
+are specified, as in
 
- my $h = fract();
+  my $h = fract();
 
- then the defaults $z = 0/1 are assumed. The numerator and 
- denominator of a fraction are represented respectively by
+then the defaults $z = 0/1 are assumed. The numerator and 
+denominator of a fraction are represented respectively by
 
    $f->{n}; $f->{d}
 
- and can be set according to
+or, as methods,
+
+  $f->n;  $f->d;
+
+and can be set according to
 
   $f->{n} = 4; $f->{d} = 9;
 
- The fraction can be printed out as
+or, again, as methods,
+
+ $f->n(4)  ; $f->(d) = 9;
+
+The fraction can be printed out as
 
   print $f->as_string;
 
- or as a mixed fraction as
+or as a mixed fraction as
 
   print $f->as_mixed_string;
 
- These routines reduce the fraction to its basic form before printing. 
- This uses the I<euclid> routine which finds the greatest common
- divisor of two numbers, as follows:
+These routines reduce the fraction to its basic form before printing. 
+This uses the I<euclid> routine which finds the greatest common
+divisor of two numbers, as follows:
 
  ($gcd, $m_reduced, $n_reduced) = euclid($m, $n); 
 
- which returns the greatest common divisor of $m and $n, as well as
- the result of reducing $m and $n by $gcd
+which returns the greatest common divisor of $m and $n, as well as
+the result of reducing $m and $n by $gcd
 
- A summary of the basic routines is as follows.
+A summary of the basic routines is as follows.
 
  $x = fract(3, 4);	 #  x = 3 / 4
  $y = fract(2, 3);       #  y = 2 / 3
@@ -298,18 +320,9 @@ __END__
  $n = 144;
  ($gcd, $m_reduced, $n_reduced) = euclid($m, $n); 
 
-=head1 TODO
-
-=over 4
-
-=item * Integrate the C routines with the C<Math::Fraction> module.
-
-=back
-
 =head1 BUGS
 
- Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
-
+Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
 
 =head1 SEE ALSO
 
@@ -320,11 +333,11 @@ for a more extensive interface to fraction routines.
 =head1 COPYRIGHT
 
 The C code for the Cephes Math Library is
-Copyright 1984, 1987, 1989 by Stephen L. Moshier, 
+Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
 and is available at http://www.netlib.org/cephes/.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 
-The perl interface is copyright 2000 by Randy Kobes.
+The perl interface is copyright 2000, 2002 by Randy Kobes.
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

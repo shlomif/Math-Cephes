@@ -575,7 +575,13 @@ static unsigned short GD8[] = {
 };
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double log ( double );
+extern double sin ( double );
+extern double cos ( double );
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+#else
 double log(), sin(), cos(), polevl(), p1evl();
 #endif
 #define EUL 0.57721566490153286061

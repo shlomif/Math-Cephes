@@ -81,8 +81,8 @@
 /*							sin.c	*/
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1985, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1985, 1995, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
@@ -193,7 +193,14 @@ static unsigned short P3[] = {0x3ce8,0x4698,0x98cc,0x5170};
 #define DP3 *(double *)P3
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double floor ( double );
+extern double ldexp ( double, int );
+extern int isnan ( double );
+extern int isfinite ( double );
+#else
 double polevl(), floor(), ldexp();
 int isnan(), isfinite();
 #endif

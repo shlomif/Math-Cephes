@@ -36,8 +36,8 @@
 /*						asinh.c	*/
 
 /*
-Cephes Math Library Release 2.3:  March, 1995
-Copyright 1984, 1995 by Stephen L. Moshier
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
 */
 
 
@@ -110,7 +110,12 @@ static unsigned short Q[] = {
 };
 #endif
 
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double polevl ( double, void *, int );
+extern double p1evl ( double, void *, int );
+extern double sqrt ( double );
+extern double log ( double );
+#else
 double log(), sqrt(), polevl(), p1evl();
 #endif
 extern double LOGE2, INFINITY;

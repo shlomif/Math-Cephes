@@ -1,5 +1,4 @@
 %include typemaps.i
-%module Cephes
 
 %{
 typedef struct {
@@ -12,12 +11,31 @@ typedef struct {
     double i;
 } cmplx;
 
+typedef double * arr1d;
+typedef int * arr1i;
 %}
+
+
+%typemap(in) arr1d {
+  $1 = (double *) pack1D($input,'d');
+}
+
+%typemap(in) arr1i {
+  $1 = (int *) pack1D($input,'i');
+}
+
+%typemap(argout) arr1d {
+  unpack1D((SV*)$input, (void *)$1, 'd', 0);
+}
+
+%typemap(argout) arr1i {
+  unpack1D((SV*)$input, (void *)$1, 'i', 0);
+}
 
 typedef struct {
 	double r;
 	double i;
-	%addmethods {
+        %extend {
 	  cmplx(double r=0, double i=0) {
    	    cmplx *c;
   	    c = (cmplx *) malloc(sizeof(cmplx));
@@ -34,7 +52,7 @@ typedef struct {
 typedef struct {
 	double n;
 	double d;	
-	%addmethods {
+        %extend {
 	  fract(double n=0, double d=1) {
    	    fract *f;
   	    f = (fract *) malloc(sizeof(fract));
@@ -104,7 +122,7 @@ extern void radd ( fract *a, fract *b, fract *c );
 extern void rsub ( fract *a, fract *b, fract *c );
 extern void rmul ( fract *a, fract *b, fract *c );
 extern void rdiv ( fract *a, fract *b, fract *c );
-extern double euclid ( double *BOTH, double *BOTH);
+extern double euclid ( double *INOUT, double *INOUT);
 extern void cadd ( cmplx *a, cmplx *b, cmplx *c );
 extern void csub ( cmplx *a, cmplx *b, cmplx *c );
 extern void cmul ( cmplx *a, cmplx *b, cmplx *c );
@@ -223,4 +241,36 @@ extern double yv ( double n, double x );
 extern double zeta ( double x, double q );
 extern double zetac ( double x );
 extern int drand ( double *OUTPUT );
+extern double plancki(double w, double T);
 
+extern void polini( int maxdeg );
+extern void polmul ( arr1d A, int na, arr1d B, int nb, arr1d C );
+extern int poldiv ( arr1d A, int na, arr1d B, int nb, arr1d C);
+extern void poladd ( arr1d A, int na, arr1d B, int nb, arr1d C );
+extern void polsub ( arr1d A, int na, arr1d B, int nb, arr1d C );
+extern void polsbt ( arr1d A, int na, arr1d B, int nb, arr1d C );
+extern double poleva (arr1d A, int na, double x);
+extern void polatn(arr1d A, arr1d B, arr1d C, int n);
+extern void polsqt(arr1d A, arr1d B, int n);
+extern void polsin(arr1d A, arr1d B, int n);
+extern void polcos(arr1d A, arr1d B, int n);
+extern int polrt_wrap(arr1d xcof, arr1d cof, int m, arr1d r, arr1d i);
+extern int cpmul_wrap(arr1d ar, arr1d ai, int da, arr1d br, arr1d bi, int db, arr1d cr, arr1d ci, int *INOUT);
+
+extern void fpolini( int maxdeg );
+extern void fpolmul_wrap ( arr1d A, arr1d Ad, int na, arr1d Bn, arr1d Bd, int nb, arr1d Cn, arr1d Cd, int nc );
+extern int fpoldiv_wrap ( arr1d A, arr1d Ad, int na, arr1d Bn, arr1d Bd, int nb, arr1d Cn, arr1d Cd, int nc);
+extern void fpoladd_wrap ( arr1d A, arr1d Ad, int na, arr1d Bn, arr1d Bd, int nb, arr1d Cn, arr1d Cd, int nc );
+extern void fpolsub_wrap ( arr1d A, arr1d Ad, int na, arr1d Bn, arr1d Bd, int nb, arr1d Cn, arr1d Cd, int nc );
+extern void fpolsbt_wrap ( arr1d A, arr1d Ad, int na, arr1d Bn, arr1d Bd, int nb, arr1d Cn, arr1d Cd, int nc );
+extern void fpoleva_wrap( arr1d An, arr1d Ad, int na, fract *x, fract *s);
+
+extern void bernum_wrap(arr1d num, arr1d den);
+extern double simpsn_wrap(arr1d f, int n, double h);
+extern int minv(arr1d A, arr1d X, int n, arr1d B, arr1i IPS);
+extern void mtransp(int n, arr1d A, arr1d X);
+extern void eigens(arr1d A, arr1d EV, arr1d E, int n);
+extern int simq(arr1d A, arr1d B, arr1d X, int n, int flag, arr1i IPS);
+extern double polylog(int n, double x);
+extern double arcdot(arr1d p, arr1d q);
+extern double expx2(double x, int sign);

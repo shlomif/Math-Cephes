@@ -60,20 +60,27 @@
 
 
 /*
-Cephes Math Library Release 2.1:  November, 1988
-Copyright 1984, 1987, 1988 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1984, 1987, 1988, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
 
-#ifndef ANSIPROT
-double exp(), fabs();
-static double hy1f1p();
-static double hy1f1a();
-#else
+#ifdef ANSIPROT
+extern double exp ( double );
+extern double log ( double );
+extern double gamma ( double );
+extern double lgam ( double );
+extern double fabs ( double );
+double hyp2f0 ( double, double, double, int, double * );
 static double hy1f1p(double, double, double, double *);
 static double hy1f1a(double, double, double, double *);
+double hyperg (double, double, double);
+#else
+double exp(), log(), gamma(), lgam(), fabs(), hyp2f0();
+static double hy1f1p();
+static double hy1f1a();
+double hyperg();
 #endif
 extern double MAXNUM, MACHEP;
 
@@ -124,7 +131,6 @@ double a, b, x;
 double *err;
 {
 double n, a0, sum, t, u, temp;
-double fabs();
 double an, bn, maxt, pcanc;
 
 
@@ -214,7 +220,6 @@ double a, b, x;
 double *err;
 {
 double h1, h2, t, u, temp, acanc, asum, err1, err2;
-double exp(), log(), gamma(), lgam(), fabs(), hyp2f0();
 
 if( x == 0 )
 	{
@@ -285,7 +290,6 @@ double a, b, x;
 int type;	/* determines what converging factor to use */
 double *err;
 {
-double fabs();
 double a0, alast, t, tlast, maxt;
 double n, an, bn, u, sum, temp;
 

@@ -78,13 +78,19 @@
  */
 
 /*
-Cephes Math Library Release 2.0:  April, 1987
-Copyright 1985, 1987 by Stephen L. Moshier
-Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+Cephes Math Library Release 2.8:  June, 2000
+Copyright 1985, 1987, 2000 by Stephen L. Moshier
 */
 
 #include "mconf.h"
-#ifndef ANSIPROT
+#ifdef ANSIPROT
+extern double lgam ( double );
+extern double exp ( double );
+extern double log ( double );
+extern double fabs ( double );
+extern double igam ( double, double );
+extern double igamc ( double, double );
+#else
 double lgam(), exp(), log(), fabs(), igam(), igamc();
 #endif
 

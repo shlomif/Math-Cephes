@@ -1315,6 +1315,77 @@ DESCRIPTION:
  Negative x is rejected unless v is an integer.
 
  ',
+	  'plancki' => 'plancki: Integral of Planck black body radiation formula
+SYNOPSIS:
+
+ # double lambda, T, y, plancki()
+
+ $y = plancki( $lambda, $T );
+
+DESCRIPTION:
+
+ Evaluates the definite integral, from wavelength 0 to lambda,
+ of the Planck radiation formula
+                       -5
+             c1  lambda
+      E =  ------------------
+             c2/(lambda T)
+            e             - 1
+ 
+ Physical constants c1 = 3.7417749e-16 and c2 = 0.01438769 are built in
+ to the function program.  They are scaled to provide a result
+ in watts per square meter.  Argument T represents temperature in degrees
+ Kelvin; lambda is wavelength in meters.
+',
+	  'polylog' => 'polylog: polylogarithm function
+SYNOPSIS:
+
+ # double x, y, polylog();
+ # int n;
+
+     $y = polylog( $n, $x );
+
+ The polylogarithm of order n is defined by the series
+
+               inf   k
+                -   x
+   Li (x)  =    >   ---  .
+     n          -     n
+               k=1   k
+ 
+   For x = 1,
+ 
+                inf
+                 -    1
+    Li (1)  =    >   ---   =  Riemann zeta function (n)  .
+      n          -     n
+                k=1   k
+ 
+  When n = 2, the function is the dilogarithm, related to the Spence integral:
+ 
+                  x                      1-x
+                  -                        -
+                 | |  -ln(1-t)            | |  ln t
+    Li (x)  =    |    -------- dt    =    |    ------ dt    =   spence(1-x) .
+      2        | |       t              | |    1 - t
+                -                        -
+                 0                        1
+',
+	  'bernum' => 'bernum: Bernoulli numbers
+
+SYNOPSIS:
+
+    ($num, $den) = bernum( $n);
+    ($num_array, $den_array) = bernum();
+
+DESCRIPTION:
+
+ This calculates the Bernoulli numbers, up to 30th order.
+ If called with an integer argument, the numerator and denominator
+ of that Bernoulli number is returned; if called with no argument,
+ two array references representing the numerator and denominators
+ of the first 30 Bernoulli numbers are returned.
+',
           'csqrt' => 'csqrt:  Complex square root
 
 SYNOPSIS:
@@ -1528,6 +1599,23 @@ DESCRIPTION:
  approximates 2**x in the basic range [-0.5, 0.5].
 
  ',
+
+	  'expxx' => 'expxx: exp(x*x)
+
+ # double x, y, expxx();
+ # int sign;
+ 
+   $y = expxx( $x );
+
+ DESCRIPTION:
+ 
+  Computes y = exp(x*x) while suppressing error amplification
+  that would ordinarily arise from the inexactness of the
+  exponential argument x*x.
+
+  If sign < 0, exp(-x*x) is returned.
+  If sign > 0, or omitted, exp(x*x) is returned.
+',    
           'tan' => 'tan:  Circular tangent
 
 SYNOPSIS:
@@ -3450,7 +3538,7 @@ sub get_descs {
   }
 
   $topics{'explog'} = "Help is available on the following functions: \n\n";
-  foreach (sort qw(unity exp exp10 exp2 log log10 log2)) {
+  foreach (sort qw(unity exp exp10 exp2 log log10 log2 expxx)) {
     (my $desc = $topics{$_}) =~ s!^(.*?\n).*!$1!s;
     $topics{'explog'} .= $desc;  
   } 
@@ -3511,7 +3599,7 @@ sub get_descs {
 
   $topics{'misc'} = "Help is available on the following functions: \n\n";
   foreach (sort qw(zeta zetac airy dawsn fresnl sici shichi expn 
-	      spence ei erfc erf struve) ) {
+	      spence ei erfc erf struve plancki polylog bernum) ) {
     (my $desc = $topics{$_}) =~ s!^(.*?\n).*!$1!s;
     $topics{'misc'} .= $desc;
   }
@@ -3652,19 +3740,22 @@ these in a complex number routine:
             5+6 i
     pmath>
 
+See L<Math::Cephes::Polynomial> for an interface to some
+polynomial routines, and L<Math::Cephes::Matrix> for some
+matrix routines.
 
 =head1 BUGS
 
- Probably. Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
+Probably. Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
 
 =head1 SEE ALSO
 
-L<Math::Cephes>, L<Math::Cephes::Fraction>, and L<Math::Cephes::Complex>
-
+L<Math::Cephes>, L<Math::Cephes::Fraction>, L<Math::Cephes::Complex>,
+L<Math::Cephes::Polynomial> and L<Math::Cephes::Matrix>.
 
 =head1 COPYRIGHT
 
-This script is copyrighted, 2000, by Randy Kobes. It may be 
+This script is copyrighted, 2000, 2002, by Randy Kobes. It may be 
 distributed under the same terms as Perl itself.
 
 =cut

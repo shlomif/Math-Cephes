@@ -27,10 +27,12 @@
  
 
 #include "mconf.h"
-#ifndef ANSIPROT
-double fabs(), floor(), euclid();
-#else
+#ifdef ANSIPROT
+extern double fabs ( double );
+extern double floor ( double );
 double euclid( double *, double * );
+#else
+double fabs(), floor(), euclid();
 #endif
 
 extern double MACHEP;
