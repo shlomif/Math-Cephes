@@ -1,5 +1,10 @@
 Revision history for Math::Cephes
 
+0.41    Dec 30, 2003
+  - use dummy setprec.c for Darwin
+  - remove unneeded Math::cephes::fract
+  - create bogus libmd/libmd lib, to avoid MakeMaker warning
+
 0.40    Dec 20, 2003
 
   - move Cephes_wrap.c and arrays.c to top-level directory

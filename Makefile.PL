@@ -12,11 +12,19 @@ my $libmd = catdir $cwd, 'libmd';
 
 my $arch = $Config{archname};
 my $is_win32 = ($arch =~ /MSWin32/i);
-my $is_387 = ($arch =~ /^i\d+-linux/);
-my $is_sol = ($arch =~ /sun4-solaris|sparc/);
-my $is_dar = ($arch =~ /darwin/);
+my $is_387 = ($arch =~ /^i\d+-linux/i);
+my $is_sol = ($arch =~ /sun4-solaris|sparc/i);
+my $is_dar = ($arch =~ /darwin/i);
+my $is_cyg = ($arch =~ /cygwin/i);
+my $is_vms = ($arch =~ /vms/i);
 
 my @clean = qw(libmd/setprec.c libmd/mconf.h libmd/sqrt.c);
+
+# fool WriteMakefile into thinking there's a libmd lib
+my $lib = 'libmd' . $Config{lib_ext};
+my $dummy = catfile $libmd, $lib;
+open(DUMMY, ">$dummy") or die "Cannot create $dummy: $!";
+close DUMMY;
 
 my %opts = (
 	    NAME => 'Math::Cephes',
@@ -39,7 +47,7 @@ if ($ExtUtils::MakeMaker::VERSION >= 5.43) {
    $opts{CAPI} = 'TRUE' if $arch =~ /-object\b/i;
 }
 
-my $mconf = catfile $cwd, 'libmd', 'mconf.h';
+my $mconf = catfile $libmd, 'mconf.h';
 my %defs = (HAVE_LONG_DOUBLE => 'd_longdbl',
             SIZEOF_INT => 'intsize',
             RETSIGTYPE => 'd_voidsig',
@@ -51,7 +59,7 @@ my $vals = {RETSIGTYPE => {define => 'void', undef => 'int'},
             VOLATILE => {define => 'volatile', undef => ''},
            };
 
-if ($is_win32 or $is_387) {
+if ($is_win32 or $is_387 or $is_cyg) {
     $defs{IBMPC} = 1;
 }
 elsif ($is_sol) {
@@ -63,6 +71,9 @@ elsif ($is_dar) {
     $defs{WORDS_BIGENDIAN} = 1;
     $defs{FLOAT_WORDS_BIGENDIAN} = 1;
     $defs{MIEEE} = 1;
+}
+elsif ($is_vms) {
+    $defs{DEC} = 1;
 }
 else {
     $defs{UNK} = 1;

@@ -4731,11 +4731,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =over 4
 
-=item * Make the configuration of mconf.h automatic.
-
-=item * Include the rest of the routines in the cephes library, such as
- polynomial and matrix manipulation functions; this will involve
- writing typemaps for arrays.
+=item * Include more operating systems when generating mconf.h.
 
 =back
 

@@ -57,7 +57,7 @@ my @fract = qw(radd rsub rmul rdiv euclid);
 	      @explog, @bessels, @gammas, @betas, @elliptics, 
 	      @hypergeometrics, @misc, @dists, @fract, @cmplx);
 		
-$VERSION = '0.40';
+$VERSION = '0.41';
 #Math::Cephes->bootstrap($VERSION);
 #var_Math__Cephes_init();
 
@@ -332,13 +332,6 @@ package Math::Cephes;
 *expx2 = *Math::Cephesc::expx2;
 
 
-############# Class : Math::Cephes::fract ##############
-
-package Math::Cephes::fract;
-use vars qw(@ISA %OWNER %ITERATORS);
-@ISA = qw( Math::Cephes );
-%OWNER = ();
-%ITERATORS = ();
 # ------- VARIABLE STUBS --------
 
 package Math::Cephes;

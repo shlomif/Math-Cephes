@@ -8,11 +8,13 @@ use File::Copy;
 
 my $arch = $Config{archname};
 my $is_win32 = ($arch =~ /MSWin32/i);
-my $is_387 = ($arch =~ /^i\d+-linux/);
-my $is_sol = ($arch =~ /sun4-solaris|sparc/);
-my $is_dar = ($arch =~ /darwin/);
+my $is_387 = ($arch =~ /^i\d+-linux/i);
+my $is_sol = ($arch =~ /sun4-solaris|sparc/i);
+my $is_dar = ($arch =~ /darwin/i);
+my $is_cyg = ($arch =~ /cygwin/i);
+my $is_vms = ($arch =~ /vms/i);
 
-unless ($is_387 or $is_dar) {
+unless ($is_387) {
     my $from = $is_win32 ? 'setpmsvc.c.win32' : 'setprec.c.unix';
     my $to = 'setprec.c';
     unless (-e $to) {
@@ -20,7 +22,7 @@ unless ($is_387 or $is_dar) {
     }
 }
 
-unless ($is_387 or $is_sol or $is_dar) {
+unless ($is_387 or $is_sol) {
     my $from = 'sqrt.c.src';
     my $to = 'sqrt.c';
     unless (-e $to) {
@@ -71,17 +73,6 @@ END
 
 sqrt.o: sqrt.spa
 	$(AS) -o sqrt.o sqrt.spa
-
-END
-   }
-   elsif ($is_dar) {
-      $c_o .= << 'END';
-
-sqrt.o: sqrt.688
-	$(AS) -o sqrt.o sqrt.688
-
-setprec.o: setprec.688
-	$(AS) -o setprec.o setprec.688
 
 END
    }
