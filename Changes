@@ -1,4 +1,9 @@
-Revision history for Math::.Cephes
+Revision history for Math::Cephes
+
+0.25	Oct 25, 2000
+
+  - changed Cephes_wrap.c to compile when MULTIPLICITY
+    in perl 5.6.0 is defined (addition of pTHX_)
 
 0.20    Mar 12, 2000
 

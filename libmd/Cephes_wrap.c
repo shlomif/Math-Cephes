@@ -13,6 +13,12 @@
  * Do not make changes to this file--changes will be lost!
  *
  */
+#ifndef pTHX
+#define pTHX
+#endif
+#ifndef pTHX_
+#define pTHX_
+#endif
 
 
 #define SWIGCODE
@@ -24,7 +30,7 @@
 #ifdef __cplusplus
 /* Needed on some windows machines---since MS plays funny
    games with the header files under C++ */
-#include <math.h>
+/* #include <math.h> */
 #include <stdlib.h>
 extern "C" {
 #endif
@@ -404,10 +410,14 @@ _SWIG_GetPtr(CPerlObj *pPerl, SV *sv, void **ptr, char *_t)
 /* Magic variable code */
 #ifndef PERL_OBJECT
 #define swig_create_magic(s,a,b,c) _swig_create_magic(s,a,b,c)
-static void _swig_create_magic(SV *sv, char *name, int (*set)(SV *, MAGIC *), int (*get)(SV *,MAGIC *)) {
+static void _swig_create_magic(SV *sv, char *name, 
+			       int (*set)(pTHX_ SV *, MAGIC *), 
+			       int (*get)(pTHX_ SV *,MAGIC *)) {
 #else
 #define swig_create_magic(s,a,b,c) _swig_create_magic(pPerl,s,a,b,c)
-static void _swig_create_magic(CPerlObj *pPerl, SV *sv, char *name, int (CPerlObj::*set)(SV *, MAGIC *), int (CPerlObj::*get)(SV *, MAGIC *)) {
+static void _swig_create_magic(CPerlObj *pPerl, SV *sv, char *name, 
+			       int (CPerlObj::*set)(pTHX_ SV *, MAGIC *), 
+			       int (CPerlObj::*get)(pTHX_ SV *, MAGIC *)) {
 #endif
   MAGIC *mg;
   sv_magic(sv,sv,'U',name,strlen(name));
@@ -623,7 +633,7 @@ public:
 /*     croak("Value is read-only."); */
 /*     return 0; */
 /* } */
-SWIGCLASS_STATIC int _wrap_set_MACHEP(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_MACHEP(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -632,7 +642,7 @@ SWIGCLASS_STATIC int _wrap_set_MACHEP(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_MACHEP(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_MACHEP(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -641,7 +651,7 @@ SWIGCLASS_STATIC int _wrap_val_MACHEP(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_MAXLOG(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_MAXLOG(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -650,7 +660,7 @@ SWIGCLASS_STATIC int _wrap_set_MAXLOG(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_MAXLOG(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_MAXLOG(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -659,7 +669,7 @@ SWIGCLASS_STATIC int _wrap_val_MAXLOG(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_MINLOG(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_MINLOG(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -668,7 +678,7 @@ SWIGCLASS_STATIC int _wrap_set_MINLOG(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_MINLOG(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_MINLOG(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -677,7 +687,7 @@ SWIGCLASS_STATIC int _wrap_val_MINLOG(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_MAXNUM(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_MAXNUM(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -686,7 +696,7 @@ SWIGCLASS_STATIC int _wrap_set_MAXNUM(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_MAXNUM(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_MAXNUM(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -695,7 +705,7 @@ SWIGCLASS_STATIC int _wrap_val_MAXNUM(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_PI(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_PI(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -704,7 +714,7 @@ SWIGCLASS_STATIC int _wrap_set_PI(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_PI(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_PI(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -713,7 +723,7 @@ SWIGCLASS_STATIC int _wrap_val_PI(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_PIO2(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_PIO2(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -722,7 +732,7 @@ SWIGCLASS_STATIC int _wrap_set_PIO2(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_PIO2(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_PIO2(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -731,7 +741,7 @@ SWIGCLASS_STATIC int _wrap_val_PIO2(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_PIO4(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_PIO4(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -740,7 +750,7 @@ SWIGCLASS_STATIC int _wrap_set_PIO4(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_PIO4(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_PIO4(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -749,7 +759,7 @@ SWIGCLASS_STATIC int _wrap_val_PIO4(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_SQRT2(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_SQRT2(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -758,7 +768,7 @@ SWIGCLASS_STATIC int _wrap_set_SQRT2(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_SQRT2(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_SQRT2(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -767,7 +777,7 @@ SWIGCLASS_STATIC int _wrap_val_SQRT2(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_SQRTH(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_SQRTH(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -776,7 +786,7 @@ SWIGCLASS_STATIC int _wrap_set_SQRTH(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_SQRTH(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_SQRTH(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -785,7 +795,7 @@ SWIGCLASS_STATIC int _wrap_val_SQRTH(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_LOG2E(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_LOG2E(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -794,7 +804,7 @@ SWIGCLASS_STATIC int _wrap_set_LOG2E(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_LOG2E(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_LOG2E(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -803,7 +813,7 @@ SWIGCLASS_STATIC int _wrap_val_LOG2E(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_SQ2OPI(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_SQ2OPI(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -812,7 +822,7 @@ SWIGCLASS_STATIC int _wrap_set_SQ2OPI(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_SQ2OPI(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_SQ2OPI(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -821,7 +831,7 @@ SWIGCLASS_STATIC int _wrap_val_SQ2OPI(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_LOGE2(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_LOGE2(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -830,7 +840,7 @@ SWIGCLASS_STATIC int _wrap_set_LOGE2(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_LOGE2(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_LOGE2(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -839,7 +849,7 @@ SWIGCLASS_STATIC int _wrap_val_LOGE2(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_LOGSQ2(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_LOGSQ2(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -848,7 +858,7 @@ SWIGCLASS_STATIC int _wrap_set_LOGSQ2(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_LOGSQ2(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_LOGSQ2(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -857,7 +867,7 @@ SWIGCLASS_STATIC int _wrap_val_LOGSQ2(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_THPIO4(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_THPIO4(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -866,7 +876,7 @@ SWIGCLASS_STATIC int _wrap_set_THPIO4(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_THPIO4(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_THPIO4(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -875,7 +885,7 @@ SWIGCLASS_STATIC int _wrap_val_THPIO4(SV *sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_set_TWOOPI(SV* sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_set_TWOOPI(pTHX_ SV* sv, MAGIC *mg) {
 
 
     MAGIC_PPERL
@@ -884,7 +894,7 @@ SWIGCLASS_STATIC int _wrap_set_TWOOPI(SV* sv, MAGIC *mg) {
     return 1;
 }
 
-SWIGCLASS_STATIC int _wrap_val_TWOOPI(SV *sv, MAGIC *mg) {
+SWIGCLASS_STATIC int _wrap_val_TWOOPI(pTHX_ SV *sv, MAGIC *mg) {
 
 
     MAGIC_PPERL

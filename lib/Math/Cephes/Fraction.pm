@@ -14,7 +14,7 @@ my @fract = qw(euclid fract mixed_fract);
 %OWNER = ();
 %BLESSEDMEMBERS = ();
 %ITERATORS = ();
-$VERSION = '0.20';
+$VERSION = '0.25';
 
 #use Math::Cephes qw(new_fract euclid);
 require Math::Cephes;

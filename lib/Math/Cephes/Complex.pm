@@ -16,7 +16,7 @@ require Exporter;
 %OWNER = ();
 %BLESSEDMEMBERS = ();
 %ITERATORS = ();
-$VERSION = '0.20';
+$VERSION = '0.25';
 
 sub new {
     my $self = shift;

@@ -61,12 +61,17 @@ Missing from this perl interface are some functions in the
 cephes library which manipulate polynomials and matrices;
 their inclusion will hopefully come later. The module has
 been built and tested on a Linux and on a Win98 machine 
-(non-ActiveState Perl); to build on different systems will
+(including ActiveState's Perl); to build on different systems will
 probably require editing of the file libmd/mconf.h, which
 among other things defines the type of computer arithmetic
 used. If you need to edit this file for your system, please
 let me know of the changes needed, so they can be automatically
 set in a future release.
+
+If you are running ActiveState's Win32 perl (build version 6xx), a
+ppm package of this distribtion may be installed via
+
+ppm install http://theoryx5.uwinnipeg.ca/ppmpackages/Math-Cephes.ppd
 
 The C code for the Cephes Math Library is Copyright 1984, 1987, 
 1989 by Stephen L. Moshier, and is available at 

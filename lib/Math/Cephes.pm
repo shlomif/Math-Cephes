@@ -54,7 +54,7 @@ my @fract = qw(radd rsub rmul rdiv euclid);
 	      @explog, @bessels, @gammas, @betas, @elliptics, 
 	      @hypergeometrics, @misc, @dists, @fract, @cmplx);
 		
-$VERSION = '0.20';
+$VERSION = '0.25';
 Math::Cephes->bootstrap($VERSION);
 var_Math__Cephes_init();
 
