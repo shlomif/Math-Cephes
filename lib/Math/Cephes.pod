@@ -2687,6 +2687,7 @@ Math::Cephes - perl interface to the cephes math library
 
   igamc( a, x ) = p.
 
+ It is valid in the right-hand tail of the distribution, p < 0.5.
  Starting with the approximate value
 
          3

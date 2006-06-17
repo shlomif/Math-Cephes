@@ -4,7 +4,7 @@ use lib '../blib/lib','../blib/arch';
 use strict;
 use vars qw($loaded);
 
-BEGIN {$| = 1; print "1..70\n";}
+BEGIN {$| = 1; print "1..74\n";}
 END {print "not ok 1\n" unless $loaded;}
 use Math::Cephes::Matrix qw(mat);
 $loaded = 1;
@@ -89,6 +89,13 @@ ok( $R->[2]->[2], 0);
 ok( $R->[1]->[0], 0);
 ok( $R->[2]->[0], 0);
 
+$C->clr(3);
+$R = $C->coef;
+ok( $R->[0]->[0], 3);
+ok( $R->[2]->[2], 3);
+ok( $R->[1]->[0], 3);
+ok( $R->[2]->[0], 3);
+
 my $S = Math::Cephes::Matrix->new([ [1, 2, 3], [2, 2, 3], [3, 3, 4]]);
 my ($E, $EV1) = $S->eigens();
 my $EV = $EV1->coef;
@@ -112,3 +119,4 @@ for (my $i=0; $i<3; $i++) {
 $Z->[0]->[0] = 5;
 ok($Mc->[0]->[0], 1);
 ok($Z->[0]->[0], 5);
+

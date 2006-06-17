@@ -1,10 +1,28 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         Math-Cephes
-version:      0.42
+version:      0.43
 version_from: lib/Math/Cephes.pm
 installdirs:  site
-requires:
-
 distribution_type: module
+licence:      perl
+abstract:     perl interface to the cephes math library
+authored_by:
+    - Randy Kobes <r.kobes@uwinnipeg.ca>
+provides:
+    Math::Cephes:
+        file: lib/Math/Cephes.pm
+        version: 0.43
+    Math::Cephes::Complex:
+        file: lib/Math/Cephes/Complex.pm
+        version: 0.43
+    Math::Cephes::Polynomial:
+        file: lib/Math/Cephes/Polynomial.pm
+        version: 0.43
+    Math::Cephes::Matrix:
+        file: lib/Math/Cephes/Matrix.pm
+        version: 0.43
+    Math::Cephes::Fraction:
+        file: lib/Math/Cephes/Fraction.pm
+        version: 0.43
 generated_by: ExtUtils::MakeMaker version 6.17

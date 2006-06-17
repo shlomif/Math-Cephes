@@ -6,7 +6,7 @@ require Exporter;
 *import = \&Exporter::import;
 @EXPORT_OK = qw(mat);
 
-$VERSION = '0.36';
+$VERSION = '0.43';
 
 require Math::Cephes;
 
@@ -107,11 +107,12 @@ sub coef {
 
 sub clr {
   my $self = shift;
+  my $what = shift || 0;
   my $n = $self->{n};
   my $B = [];
   for (my $i=0; $i<$n; $i++) {
     for (my $j=0; $j<$n; $j++) {
-      $B->[$i]->[$j] = 0;
+      $B->[$i]->[$j] = $what;
     }
   }
   $self->{coef} = $B;
@@ -293,15 +294,16 @@ A copy of a I<Math::Cephes::Matrix> object may be done as
 This returns an reference to an array of arrays
 containing the coefficients of the matrix. 
 
-=item I<clr>: set all coefficients equal to zero
+=item I<clr>: set all coefficients equal to a value.
 
  SYNOPSIS:
 
- $M->clr();
+ $M->clr($n);
 
  DESCRIPTION:
 
-This sets all the coefficients of the matrixidentically to 0.
+This sets all the coefficients of the matrix identically to I<$n>.
+If I<$n> is not given, a default of 0 is used.
 
 =item I<add>: add two matrices
 

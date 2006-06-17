@@ -1,5 +1,13 @@
 Revision history for Math::Cephes
 
+0.43    June 17, 2006
+  - add lgam to list of functions in "gammas" tag
+    (spotted by Philip Lijnzaad)
+  - allow clr() method of Math::Cephes::Matrix to accept
+    a value to set all matrix elements equal to
+  - incorporate a couple of small changes in igam.c, igami.c,
+    polylog.c, and hyperg.c to bring them in synch to cephes 0.28.
+
 0.42    March 21, 2004
   - fix bug in Math::Cephes::Polynomial in the mult routine
     to get the right size of the resulting polynomial

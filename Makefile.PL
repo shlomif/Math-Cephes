@@ -41,10 +41,14 @@ my %opts = (
 	    clean => { FILES => "@clean"},
 	   );
 
-if ($ExtUtils::MakeMaker::VERSION >= 5.43) {
+my $eu_version = $ExtUtils::MakeMaker::VERSION;
+if ($eu_version >= 5.43) {
    $opts{ABSTRACT} = 'Perl interface to the math cephes library';
    $opts{AUTHOR} = 'Randy Kobes <r.kobes@uwinnipeg.ca>';
    $opts{CAPI} = 'TRUE' if $arch =~ /-object\b/i;
+}
+if ($eu_version > 6.11) {
+   $opts{NO_META} = 1;
 }
 
 my $mconf = catfile $libmd, 'mconf.h';

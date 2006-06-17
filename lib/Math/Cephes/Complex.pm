@@ -16,7 +16,7 @@ require Exporter;
 
 %OWNER = ();
 %ITERATORS = ();
-$VERSION = '0.41';
+$VERSION = '0.43';
 
 *swig_r_get = *Math::Cephesc::cmplx_r_get;
 *swig_r_set = *Math::Cephesc::cmplx_r_set;

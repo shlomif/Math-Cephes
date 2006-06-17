@@ -350,7 +350,7 @@ polylog (n, x)
       if (x > 0.8)
 	{
 	  u = md_log(x);
-	  s = p / 6.0;
+	  s = u * u * u / 6.0;
 	  xc = 1.0 - x;
 	  s = s - 0.5 * u * u * md_log(xc);
           s = s + PI * PI * u / 6.0;

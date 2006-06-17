@@ -14,6 +14,7 @@
  *
  * Given p, the function finds x such that
  *
+ * It is valid in the right-hand-tail of the distribution, p < 0.5.
  *  igamc( a, x ) = p.
  *
  * Starting with the approximate value
@@ -68,6 +69,9 @@ double a, md_y0;
 {
 double x0, x1, x, yl, yh, y, d, lgm, dithresh;
 int i, dir;
+
+if( md_y0 > 0.5)
+    mtherr( "igami", PLOSS);
 
 /* bound the solution */
 x0 = MAXNUM;

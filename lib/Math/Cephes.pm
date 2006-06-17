@@ -26,7 +26,7 @@ my @bessels = qw(i0 i0e i1 i1e iv j0 j1 jn jv k0 k1 kn yn yv k0e k1e y0 y1);
 my @dists = qw(bdtr bdtrc bdtri btdtr chdtr chdtrc chdtri 
 	       fdtr fdtrc fdtri gdtr gdtrc nbdtr nbdtrc nbdtri 
 	       ndtr ndtri pdtr pdtrc pdtri stdtr stdtri);
-my @gammas = qw(gamma igam igamc igami psi fac rgamma);
+my @gammas = qw(gamma igam igamc igami psi fac rgamma lgam);
 my @betas = qw(beta lbeta incbet incbi lbeta);
 my @elliptics = qw(ellie ellik ellpe ellpj ellpk);
 my @hypergeometrics = qw(onef2 threef0 hyp2f1 hyperg hyp2f0);
@@ -57,7 +57,7 @@ my @fract = qw(radd rsub rmul rdiv euclid);
 	      @explog, @bessels, @gammas, @betas, @elliptics, 
 	      @hypergeometrics, @misc, @dists, @fract, @cmplx);
 		
-$VERSION = '0.42';
+$VERSION = '0.43';
 #Math::Cephes->bootstrap($VERSION);
 #var_Math__Cephes_init();
 

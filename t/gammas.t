@@ -5,7 +5,7 @@ use lib '../blib/lib','../blib/arch';
 use strict;
 use vars qw($loaded);
 
-BEGIN {$| = 1; print "1..9\n"; }
+BEGIN {$| = 1; print "1..10\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use Math::Cephes qw(:gammas :constants :utils);
 $loaded = 1;
@@ -31,6 +31,7 @@ my $x = 0.5;
 my $euler = 0.57721566490153286061;
 my $e = exp(1);
 ok( gamma($x), sqrt($PI));
+ok( lgam($x), log(sqrt($PI)));
 ok( gamma(10), fac(9));
 ok( fac(9), 362880);
 ok( rgamma($x), 1/sqrt($PI));

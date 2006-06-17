@@ -142,7 +142,7 @@ sum = 1.0;
 n = 1.0;
 t = 1.0;
 maxt = 0.0;
-
+pcanc = 0.0;
 
 while( t > MACHEP )
 	{
@@ -185,8 +185,12 @@ while( t > MACHEP )
 pdone:
 
 /* estimate error due to roundoff and cancellation */
-if( sum != 0.0 )
-	maxt /= md_fabs(sum);
+t = md_fabs(sum);
+/* If the largest term is large and bigger than the sum, don't believe it */
+if( (t > 1.0) && (maxt > t) )
+        goto blowup;
+if( t != 0.0)
+        maxt /= t;
 maxt *= MACHEP; 	/* this way avoids multiply overflow */
 pcanc = md_fabs( MACHEP * n  +  maxt );
 
