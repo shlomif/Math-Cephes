@@ -71,11 +71,11 @@ elsif ($is_sol) {
     $defs{FLOAT_WORDS_BIGENDIAN} = 1;
     $defs{UNK} = 1;
 }
-elsif ($is_dar) {
-    $defs{WORDS_BIGENDIAN} = 1;
-    $defs{FLOAT_WORDS_BIGENDIAN} = 1;
-    $defs{MIEEE} = 1;
-}
+#elsif ($is_dar) {
+#    $defs{WORDS_BIGENDIAN} = 1;
+#    $defs{FLOAT_WORDS_BIGENDIAN} = 1;
+#    $defs{MIEEE} = 1;
+#}
 elsif ($is_vms) {
     $defs{DEC} = 1;
 }

@@ -1,5 +1,8 @@
 Revision history for Math::Cephes
 
+0.44    Apr 7, 2007
+  - allow Darwin to use default config for Mac OSX 10 (Chip Stewart)
+
 0.43    June 17, 2006
   - add lgam to list of functions in "gammas" tag
     (spotted by Philip Lijnzaad)
