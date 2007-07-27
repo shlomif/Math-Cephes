@@ -149,4 +149,5 @@ t/trig.t
 t/utils.t
 t/mat.t
 t/poly.t
+t/99pod.t
 META.yml                                 Module meta-data (added by MakeMaker)

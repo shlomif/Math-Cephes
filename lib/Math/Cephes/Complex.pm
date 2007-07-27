@@ -16,7 +16,7 @@ require Exporter;
 
 %OWNER = ();
 %ITERATORS = ();
-$VERSION = '0.44';
+$VERSION = '0.45';
 
 *swig_r_get = *Math::Cephesc::cmplx_r_get;
 *swig_r_set = *Math::Cephesc::cmplx_r_set;
@@ -55,14 +55,14 @@ sub ACQUIRE {
 
 sub r {
     my ($self, $value) = @_;
-    return $self->{r} unless $value;
+    return $self->{r} unless (defined $value);
     $self->{r} = $value;
     return $value;
 }
 
 sub i {
     my ($self, $value) = @_;
-    return $self->{i} unless $value;
+    return $self->{i} unless (defined $value);
     $self->{i} = $value;
     return $value;
 }
@@ -76,7 +76,7 @@ sub as_string {
   my $string;
   my $re = $z->{r};
   my $im = $z->{i};
-  if (int($im) == 0) {
+  if ($im == 0) {
     $string = "$re";
   }
   else {

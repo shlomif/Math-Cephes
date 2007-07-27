@@ -1,5 +1,9 @@
 Revision history for Math::Cephes
 
+0.45    July 26, 2007
+  - fix bug in Math::Cephes::Complex to allow 0 as a value
+    (thanks to Dan Connelly)
+
 0.44    Apr 7, 2007
   - allow Darwin to use default config for Mac OSX 10 (Chip Stewart)
 
