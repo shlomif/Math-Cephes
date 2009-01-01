@@ -11,25 +11,18 @@ my $cwd = getcwd;
 my $libmd = catdir $cwd, 'libmd';
 
 my $arch = $Config{archname};
-my $is_win32 = ($arch =~ /MSWin32/i);
+my $is_win32 = ($arch =~ /MSWin32/i && $Config{cc} eq 'cl');
 my $is_387 = ($arch =~ /^i\d+-linux/i);
 my $is_sol = ($arch =~ /sun4-solaris|sparc/i);
 my $is_dar = ($arch =~ /darwin/i);
-my $is_cyg = ($arch =~ /cygwin/i);
+my $is_cyg = ($arch =~ /cygwin/i || ($arch =~ /MSWin32/i && !$is_win32));
 my $is_vms = ($arch =~ /vms/i);
 
 my @clean = qw(libmd/setprec.c libmd/mconf.h libmd/sqrt.c);
 
-# fool WriteMakefile into thinking there's a libmd lib
-my $lib = 'libmd' . $Config{lib_ext};
-my $dummy = catfile $libmd, $lib;
-open(DUMMY, ">$dummy") or die "Cannot create $dummy: $!";
-close DUMMY;
-
 my %opts = (
 	    NAME => 'Math::Cephes',
             MYEXTLIB => "$libmd/libmd\$(LIB_EXT)",
-            LIBS => [ "-L$libmd -lmd" ],
 	    VERSION_FROM => 'lib/Math/Cephes.pm',
             OBJECT => 'Cephes_wrap.o arrays.o',
             INC => "-I$libmd",
@@ -71,11 +64,18 @@ elsif ($is_sol) {
     $defs{FLOAT_WORDS_BIGENDIAN} = 1;
     $defs{UNK} = 1;
 }
-#elsif ($is_dar) {
-#    $defs{WORDS_BIGENDIAN} = 1;
-#    $defs{FLOAT_WORDS_BIGENDIAN} = 1;
-#    $defs{MIEEE} = 1;
-#}
+elsif ($is_dar) {
+    require POSIX;
+    my $machine = (POSIX::uname())[4];
+    if ($machine eq 'i386') {
+        $defs{IBMPC} = 1;
+    }
+    else {
+      $defs{WORDS_BIGENDIAN} = 1;
+      $defs{FLOAT_WORDS_BIGENDIAN} = 1;
+      $defs{MIEEE} = 1;
+    }
+}
 elsif ($is_vms) {
     $defs{DEC} = 1;
 }

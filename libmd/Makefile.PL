@@ -7,11 +7,11 @@ use Config;
 use File::Copy;
 
 my $arch = $Config{archname};
-my $is_win32 = ($arch =~ /MSWin32/i);
+my $is_win32 = ($arch =~ /MSWin32/i && $Config{cc} eq 'cl');
 my $is_387 = ($arch =~ /^i\d+-linux/i);
 my $is_sol = ($arch =~ /sun4-solaris|sparc/i);
 my $is_dar = ($arch =~ /darwin/i);
-my $is_cyg = ($arch =~ /cygwin/i);
+my $is_cyg = ($arch =~ /cygwin/i || ($arch =~ /MSWin32/i && !$is_win32));
 my $is_vms = ($arch =~ /vms/i);
 
 unless ($is_387) {

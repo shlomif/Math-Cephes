@@ -1,5 +1,16 @@
 Revision history for Math::Cephes
 
+0.46    Jan 2, 2009
+  - Intel Mac support (dsteinbrunner):
+      http://rt.cpan.org/Public/Bug/Display.html?id=25842
+  - support for building on cygwin (patch supplied by Sisyphus)
+  - remove LIBS from Makefile.PL, so as not to require creation of dummy
+    libmd library, which causes problems on some platforms:
+      https://rt.cpan.org/Ticket/Display.html?id=19716
+  - don't run test 36 of t/poly.t, which seems to fail consistently
+    on some platforms:
+      http://cpantesters.perl.org/show/Math-Cephes.html
+
 0.45    July 26, 2007
   - fix bug in Math::Cephes::Complex to allow 0 as a value
     (thanks to Dan Connelly)
