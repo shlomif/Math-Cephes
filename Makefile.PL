@@ -17,6 +17,17 @@ my $is_sol = ($arch =~ /sun4-solaris|sparc/i);
 my $is_dar = ($arch =~ /darwin/i);
 my $is_cyg = ($arch =~ /cygwin/i || ($arch =~ /MSWin32/i && !$is_win32));
 my $is_vms = ($arch =~ /vms/i);
+my $dmake  = ($Config{make} eq 'dmake');
+
+######################################
+# for dmake, fool WriteMakefile into thinking there's a libmd lib
+if ($dmake) {
+    my $lib = 'libmd' . $Config{lib_ext};
+    my $dummy = catfile $libmd, $lib;
+    open(DUMMY, ">$dummy") or die "Cannot create $dummy: $!";
+    close DUMMY;
+}
+######################################
 
 my @clean = qw(libmd/setprec.c libmd/mconf.h libmd/sqrt.c);
 

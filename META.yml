@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:         Math-Cephes
-version:      0.46
+version:      0.47
 version_from: lib/Math/Cephes.pm
 installdirs:  site
 distribution_type: module
@@ -11,19 +11,19 @@ authored_by:
 provides:
     Math::Cephes:
         file: lib/Math/Cephes.pm
-        version: 0.46
+        version: 0.47
     Math::Cephes::Complex:
         file: lib/Math/Cephes/Complex.pm
-        version: 0.46
+        version: 0.47
     Math::Cephes::Polynomial:
         file: lib/Math/Cephes/Polynomial.pm
-        version: 0.46
+        version: 0.47
     Math::Cephes::Matrix:
         file: lib/Math/Cephes/Matrix.pm
-        version: 0.46
+        version: 0.47
     Math::Cephes::Fraction:
         file: lib/Math/Cephes/Fraction.pm
-        version: 0.46
+        version: 0.47
 generated_by: Randy Kobes
 urls:
    license: http://dev.perl.org/licenses/

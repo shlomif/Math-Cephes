@@ -1,5 +1,8 @@
 Revision history for Math::Cephes
 
+0.47    Jan 6, 2009
+  - dmake requires creation of dummy libmd file (reported by Sisyphus)
+
 0.46    Jan 2, 2009
   - Intel Mac support (dsteinbrunner):
       http://rt.cpan.org/Public/Bug/Display.html?id=25842
