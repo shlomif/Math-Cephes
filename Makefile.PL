@@ -78,7 +78,7 @@ elsif ($is_sol) {
 elsif ($is_dar) {
     require POSIX;
     my $machine = (POSIX::uname())[4];
-    if ($machine eq 'i386') {
+    if ($machine eq 'i386' or $machine eq 'x86_64') {
         $defs{IBMPC} = 1;
     }
     else {
