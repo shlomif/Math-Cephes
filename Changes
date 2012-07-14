@@ -1,8 +1,10 @@
 Revision history for Math::Cephes
 
+0.48    Jul 14, 2012
   - Apply patch to Makefile.PL to fix builds on x86-64 Macintosh:
     - https://rt.cpan.org/Ticket/Display.html?id=75730
     - Thanks to Ian Barton for the report and the patch.
+  - Update lib/Math/Cephes.pod with up-to-date information.
 
 0.47    Jan 6, 2009
   - dmake requires creation of dummy libmd file (reported by Sisyphus)
