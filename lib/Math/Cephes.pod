@@ -4736,9 +4736,21 @@ Math::Cephes - perl interface to the cephes math library
 
 =back
 
+=head1 MAINTAINER
+
+Shlomi Fish, L<http://www.shlomifish.org/>,
+L<https://metacpan.org/author/SHLOMIF> .
+
 =head1 BUGS
 
- Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
+Please report any on the rt.cpan.org interface:
+L<https://rt.cpan.org/Dist/Display.html?Queue=Math-Cephes>
+
+=head1 VERSION CONTROL
+
+This distribution is maintained in this GitHub repository:
+
+L<https://github.com/shlomif/Math-Cephes>.
 
 =head1 SEE ALSO
 
@@ -4766,6 +4778,9 @@ of Karl Glazebrook <kgb@zzoepp.aao.gov.au>.
 The perl interface is copyright 2000, 2002 by Randy Kobes.
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
+
+Perl interface maintained by Shlomi Fish starting from 2012. All
+explicit or implicit copyrights on the changes are disclaimed by him.
 
 =cut
 
