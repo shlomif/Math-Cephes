@@ -1,5 +1,10 @@
 Revision history for Math::Cephes
 
+0.51    Oct 23, 2012
+  - Fix the auto-generation of META.yml/META.json.
+    - There was a NO_META in the Makefile.PL (WTF?), which preserved
+    the existing META.
+
 0.50    Oct 23, 2012
  - New version to get over a CPAN/PAUSE's SNAFU.
     - The CPAN clients don't install the right version.

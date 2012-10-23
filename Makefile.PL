@@ -51,9 +51,6 @@ if ($eu_version >= 5.43) {
    $opts{AUTHOR} = 'Randy Kobes <r.kobes@uwinnipeg.ca>';
    $opts{CAPI} = 'TRUE' if $arch =~ /-object\b/i;
 }
-if ($eu_version > 6.11) {
-   $opts{NO_META} = 1;
-}
 
 my $mconf = catfile $libmd, 'mconf.h';
 my %defs = (HAVE_LONG_DOUBLE => 'd_longdbl',
