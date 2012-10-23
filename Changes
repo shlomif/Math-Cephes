@@ -1,5 +1,11 @@
 Revision history for Math::Cephes
 
+0.50    Oct 23, 2012
+ - New version to get over a CPAN/PAUSE's SNAFU.
+    - The CPAN clients don't install the right version.
+    - Thanks to aero for the report, and John M. Gamble and Steffen
+    Mueller for some insights.
+
 0.48    Jul 14, 2012
   - Apply patch to Makefile.PL to fix builds on x86-64 Macintosh:
     - https://rt.cpan.org/Ticket/Display.html?id=75730
