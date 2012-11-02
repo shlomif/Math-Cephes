@@ -32,23 +32,24 @@ if ($dmake) {
 my @clean = qw(libmd/setprec.c libmd/mconf.h libmd/sqrt.c);
 
 my %opts = (
-	    NAME => 'Math::Cephes',
-            MYEXTLIB => "$libmd/libmd\$(LIB_EXT)",
-	    VERSION_FROM => 'lib/Math/Cephes.pm',
-            OBJECT => 'Cephes_wrap.o arrays.o',
-            INC => "-I$libmd",
-	    EXE_FILES => [ 'pmath' ],
-	    dist   => {
-			 SUFFIX   => 'gz',
-			 COMPRESS => 'gzip -9f',
-			},
-	    clean => { FILES => "@clean"},
-	   );
+    NAME => 'Math::Cephes',
+    MYEXTLIB => "$libmd/libmd\$(LIB_EXT)",
+    VERSION_FROM => 'lib/Math/Cephes.pm',
+    OBJECT => 'Cephes_wrap.o arrays.o',
+    INC => "-I$libmd",
+    EXE_FILES => [ 'pmath' ],
+    dist   => {
+        SUFFIX   => 'gz',
+        COMPRESS => 'gzip -9f',
+    },
+    clean => { FILES => "@clean"},
+);
 
 my $eu_version = $ExtUtils::MakeMaker::VERSION;
 if ($eu_version >= 5.43) {
    $opts{ABSTRACT} = 'Perl interface to the math cephes library';
-   $opts{AUTHOR} = 'Randy Kobes <r.kobes@uwinnipeg.ca>';
+   # $opts{AUTHOR} = 'Randy Kobes <r.kobes@uwinnipeg.ca>';
+   $opts{AUTHOR} = 'Shlomi Fish <shlomif@cpan.org>';
    $opts{CAPI} = 'TRUE' if $arch =~ /-object\b/i;
 }
 
