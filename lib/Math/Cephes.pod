@@ -4768,7 +4768,7 @@ see L<Math::Cephes::Matrix>.
 
 The C code for the Cephes Math Library is
 Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
-and is available at http://www.netlib.org/cephes/.
+and is available at L<http://www.netlib.org/cephes/>.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 
 The file arrays.c included here to handle passing arrays
