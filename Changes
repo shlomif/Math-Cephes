@@ -1,5 +1,9 @@
 Revision history for Math::Cephes
 
+0.53    Nov 10, 2012
+  - Fix the exporting of new_cmplx:
+    - https://rt.cpan.org/Ticket/Display.html?id=80624
+
 0.52    Nov 02, 2012
   - Change the author to a different account.
     - Done to try and avoid getting over report that the module "has no

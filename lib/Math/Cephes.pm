@@ -19,7 +19,7 @@ my @hypers = qw(acosh asinh atanh sinh cosh tanh);
 my @explog = qw(log1p expm1 exp exp10 exp2 log log10 log2 expxx);
 my @cmplx = qw(clog cexp csin ccos ctan ccot casin
 	       cacos catan cadd csub cmul cdiv cmov cneg cabs csqrt
-	       csinh ccosh ctanh cpow casinh cacosh catanh);
+	       csinh ccosh ctanh cpow casinh cacosh catanh new_cmplx);
 my @utils = qw(ceil floor frexp ldexp fabs
 	       round sqrt lrand pow powi drand lsqrt fac cbrt);
 my @bessels = qw(i0 i0e i1 i1e iv j0 j1 jn jv k0 k1 kn yn yv k0e k1e y0 y1);
@@ -255,6 +255,7 @@ package Math::Cephes;
 *lrand = *Math::Cephesc::lrand;
 *lsqrt = *Math::Cephesc::lsqrt;
 *mtherr = *Math::Cephesc::mtherr;
+*new_cmplx = \&Math::Cephesc::new_cmplx;
 *polevl = *Math::Cephesc::polevl;
 *p1evl = *Math::Cephesc::p1evl;
 *nbdtrc = *Math::Cephesc::nbdtrc;
