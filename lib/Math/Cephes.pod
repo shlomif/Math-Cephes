@@ -8,8 +8,8 @@ Math::Cephes - perl interface to the cephes math library
 
 =head1 DESCRIPTION
 
-  This module provides an interface to over 150 functions of the 
-  cephes math library of Stephen Moshier. No functions are exported 
+  This module provides an interface to over 150 functions of the
+  cephes math library of Stephen Moshier. No functions are exported
   by default, but rather must be imported explicitly, as in
 
      use Math::Cephes qw(sin cos);
@@ -44,7 +44,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:trigs);
 
-  imports 
+  imports
 
  acos:  Inverse circular cosine
  asin:  Inverse circular sine
@@ -64,7 +64,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:hypers);
 
-  imports 
+  imports
 
  acosh:  Inverse hyperbolic cosine
  asinh:  Inverse hyperbolic sine
@@ -75,7 +75,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:explog);
 
-  imports 
+  imports
 
  exp:  Exponential function
  expxx: exp(x*x)
@@ -88,7 +88,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:cmplx);
 
-  imports 
+  imports
 
  new_cmplx: create a new complex number object
  cabs:  Complex absolute value
@@ -109,7 +109,7 @@ Math::Cephes - perl interface to the cephes math library
  cdiv: divide two complex numbers
  cmov: copy one complex number to another
  cneg: negate a complex number
- cpow: Complex power function 
+ cpow: Complex power function
  csin:  Complex circular sine
  csinh: Complex hyperbolic sine
  csqrt:  Complex square root
@@ -118,7 +118,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:utils);
 
-  imports 
+  imports
 
  cbrt:  Cube root
  ceil:  ceil
@@ -137,7 +137,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:bessels);
 
-  imports 
+  imports
 
  i0:  Modified Bessel function of order zero
  i0e:  Modified Bessel function of order zero, exponentially scaled
@@ -160,7 +160,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:dists);
 
-  imports 
+  imports
 
  bdtr:  Binomial distribution
  bdtrc:  Complemented binomial distribution
@@ -187,7 +187,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:gammas);
 
-  imports 
+  imports
 
  fac:  Factorial function
  gamma:  Gamma function
@@ -199,7 +199,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:betas);
 
-  imports 
+  imports
 
  beta:  Beta function
  incbet:  Incomplete beta integral
@@ -208,7 +208,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:elliptics);
 
-  imports 
+  imports
 
  ellie:  Incomplete elliptic integral of the second kind
  ellik:  Incomplete elliptic integral of the first kind
@@ -218,7 +218,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:hypergeometrics);
 
-  imports 
+  imports
 
  hyp2f0:  Gauss hypergeometric function   F
  hyp2f1:  Gauss hypergeometric function   F
@@ -228,14 +228,14 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:misc);
 
-  imports 
+  imports
 
  airy:  Airy function
  bernum: Bernoulli numbers
  dawsn:  Dawson's Integral
  ei: Exponential integral
  erf:  Error function
- erfc:  Complementary error function 
+ erfc:  Complementary error function
  expn:  Exponential integral En
  fresnl:  Fresnel integral
  plancki: Integral of Planck's black body radiation formula
@@ -251,7 +251,7 @@ Math::Cephes - perl interface to the cephes math library
 
 =item  use Math::Cephes qw(:fract);
 
-  imports 
+  imports
 
  new_fract: create a new fraction object
  radd: add two fractions
@@ -266,7 +266,7 @@ Math::Cephes - perl interface to the cephes math library
 
   A description of the various functions available follows.
 
-=over 4 
+=over 4
 
 =item I<acosh>: Inverse hyperbolic cosine
 
@@ -362,7 +362,7 @@ Math::Cephes - perl interface to the cephes math library
 
  DESCRIPTION:
 
- Calculates the hypotenuse associated with the sides of a 
+ Calculates the hypotenuse associated with the sides of a
  right triangle, according to
 
 	c = sqrt( a**2 + b**2)
@@ -883,7 +883,7 @@ Math::Cephes - perl interface to the cephes math library
  If z = x + iy, r = sqrt( x**2 + y**2 ),
  then
        w = log(r) + i arctan(y/x).
- 
+
  The arctangent ranges from -PI to +PI.
 
  ACCURACY:
@@ -1151,22 +1151,22 @@ Math::Cephes - perl interface to the cephes math library
 =item I<csinh>: Complex hyperbolic sine
 
   SYNOPSIS:
- 
+
   # void csinh();
   # cmplx z, w;
- 
+
  $z = new_cmplx(2, 3);    # $z = 2 + 3 i
  $w = new_cmplx();
  csinh($z, $w );
  print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
- 
+
   DESCRIPTION:
- 
+
   csinh z = (cexp(z) - cexp(-z))/2
           = sinh x * cos y  +  i cosh x * sin y .
- 
+
   ACCURACY:
- 
+
                        Relative error:
   arithmetic   domain     # trials      peak         rms
      IEEE      -10,+10     30000       3.1e-16     8.2e-17
@@ -1174,22 +1174,22 @@ Math::Cephes - perl interface to the cephes math library
 =item I<casinh>: Complex inverse hyperbolic sine
 
   SYNOPSIS:
- 
+
   # void casinh();
   # cmplx z, w;
- 
+
  $z = new_cmplx(2, 3);    # $z = 2 + 3 i
  $w = new_cmplx();
  casinh($z, $w );
  print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
- print_new_cmplx($w);                 # prints $w as Re($w) + i Im($w) 
- 
+ print_new_cmplx($w);                 # prints $w as Re($w) + i Im($w)
+
   DESCRIPTION:
- 
+
   casinh z = -i casin iz .
- 
+
   ACCURACY:
- 
+
                        Relative error:
   arithmetic   domain     # trials      peak         rms
      IEEE      -10,+10     30000       1.8e-14     2.6e-15
@@ -1197,21 +1197,21 @@ Math::Cephes - perl interface to the cephes math library
 =item I<ccosh>: Complex hyperbolic cosine
 
   SYNOPSIS:
- 
+
   # void ccosh();
   # cmplx z, w;
-  
+
  $z = new_cmplx(2, 3);    # $z = 2 + 3 i
  $w = new_cmplx();
  ccosh($z, $w );
  print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
- 
+
   DESCRIPTION:
- 
+
   ccosh(z) = cosh x  cos y + i sinh x sin y .
- 
+
   ACCURACY:
- 
+
                        Relative error:
   arithmetic   domain     # trials      peak         rms
      IEEE      -10,+10     30000       2.9e-16     8.1e-17
@@ -1219,21 +1219,21 @@ Math::Cephes - perl interface to the cephes math library
 =item I<cacosh>: Complex inverse hyperbolic cosine
 
   SYNOPSIS:
- 
+
   # void cacosh();
   # cmplx z, w;
- 
+
  $z = new_cmplx(2, 3);    # $z = 2 + 3 i
  $w = new_cmplx();
  cacosh($z, $w );
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w 
- 
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
+
   DESCRIPTION:
- 
+
   acosh z = i acos z .
- 
+
   ACCURACY:
- 
+
                        Relative error:
   arithmetic   domain     # trials      peak         rms
      IEEE      -10,+10     30000       1.6e-14     2.1e-15
@@ -1248,7 +1248,7 @@ Math::Cephes - perl interface to the cephes math library
  $z = new_cmplx(2, 3);    # $z = 2 + 3 i
  $w = new_cmplx();
  ctanh($z, $w );
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w  
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
 
  DESCRIPTION:
 
@@ -1261,48 +1261,48 @@ Math::Cephes - perl interface to the cephes math library
     IEEE      -10,+10     30000       1.7e-14     2.4e-16
 
 =item I<catanh>: Complex inverse hyperbolic tangent
- 
+
   SYNOPSIS:
- 
+
   # void catanh();
   # cmplx z, w;
- 
+
  $z = new_cmplx(2, 3);    # $z = 2 + 3 i
  $w = new_cmplx();
  catanh($z, $w );
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w  
- 
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
+
   DESCRIPTION:
- 
+
   Inverse tanh, equal to  -i catan (iz);
- 
+
   ACCURACY:
- 
+
                        Relative error:
   arithmetic   domain     # trials      peak         rms
      IEEE      -10,+10     30000       2.3e-16     6.2e-17
 
-=item I<cpow>: Complex power function 
+=item I<cpow>: Complex power function
 
   SYNOPSIS:
- 
+
   # void cpow();
   # cmplx a, z, w;
- 
+
  $a = new_cmplx(5, 6);    # $z = 5 + 6 i
  $z = new_cmplx(2, 3);    # $z = 2 + 3 i
  $w = new_cmplx();
  cpow($a, $z, $w );
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w  
- 
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
+
   DESCRIPTION:
- 
+
   Raises complex A to the complex Zth power.
   Definition is per AMS55 # 4.2.8,
   analytically equivalent to cpow(a,z) = cexp(z clog(a)).
- 
+
   ACCURACY:
- 
+
                        Relative error:
   arithmetic   domain     # trials      peak         rms
      IEEE      -10,+10     30000       9.4e-15     1.5e-15
@@ -1384,7 +1384,7 @@ Math::Cephes - perl interface to the cephes math library
  then
 
        a = sqrt( x**2 + y**2 ).
- 
+
  Overflow and underflow are avoided by testing the magnitudes
  of x and y before squaring.  If either is outside half of
  the floating point full scale range, both are rescaled.
@@ -1575,7 +1575,7 @@ Math::Cephes - perl interface to the cephes math library
                 |                   2
  E(phi_\m)  =    |    sqrt( 1 - m sin t ) dt
                 |
-              | |    
+              | |
                -
                 0
 
@@ -1640,7 +1640,7 @@ Math::Cephes - perl interface to the cephes math library
              -
             | |                 2
  E(m)  =    |    sqrt( 1 - m sin t ) dt
-          | |    
+          | |
            -
             0
 
@@ -1759,7 +1759,7 @@ Math::Cephes - perl interface to the cephes math library
 
  SYNOPSIS:
 
- 
+
  # typedef struct
  #     {
  #     double n;  numerator
@@ -1770,12 +1770,12 @@ Math::Cephes - perl interface to the cephes math library
  $b = new_fract(2, 3);  # b = 2 / 3
  $c = new_fract();
  radd( $a, $b, $c ); #     c = b + a
- rsub( $a, $b, $c ); #     c = b - a 
+ rsub( $a, $b, $c ); #     c = b - a
  rmul( $a, $b, $c ); #     c = b * a
  rdiv( $a, $b, $c ); #     c = b / a
  print $c->{n}, ' ', $c->{d};  # prints numerator and denominator of $c
 
- ($gcd, $m_reduced, $n_reduced) = euclid($m, $n); 
+ ($gcd, $m_reduced, $n_reduced) = euclid($m, $n);
  # returns the greatest common divisor of $m and $n, as well as
  # the result of reducing $m and $n by $gcd
 
@@ -1832,26 +1832,26 @@ Math::Cephes - perl interface to the cephes math library
 
  #  double x, y, expxx();
  # int sign;
- 
+
    $y = expxx( $x, $sign );
 
  DESCRIPTION:
- 
+
   Computes y = exp(x*x) while suppressing error amplification
   that would ordinarily arise from the inexactness of the
   exponential argument x*x.
 
   If sign < 0, exp(-x*x) is returned.
   If sign > 0, or omitted, exp(x*x) is returned.
- 
+
  ACCURACY:
- 
+
                        Relative error:
  arithmetic    domain     # trials      peak         rms
     IEEE      -26.6, 26.6    10^7       3.9e-16     8.9e-17
 
 
- 
+
 =item I<exp10>: Base 10 exponential function (Common antilogarithm)
 
  SYNOPSIS:
@@ -1947,7 +1947,7 @@ Math::Cephes - perl interface to the cephes math library
              | |     t
               -
              -inf
- 
+
  Not defined for x <= 0.
  See also expn.c.
 
@@ -2002,7 +2002,7 @@ Math::Cephes - perl interface to the cephes math library
  $y = fabs( $x );
 
  DESCRIPTION:
- 
+
  Returns the absolute value of the argument.
 
 =item I<fac>: Factorial function
@@ -2280,7 +2280,7 @@ Math::Cephes - perl interface to the cephes math library
  approximated by a rational function of degree 6/7 in the
  interval (2,3).  Large arguments are handled by Stirling's
  formula. Large negative arguments are made positive using
- a reflection formula.  
+ a reflection formula.
 
  ACCURACY:
 
@@ -2696,7 +2696,7 @@ Math::Cephes - perl interface to the cephes math library
   where
 
   t = 1 - d - ndtri(p) sqrt(d)
- 
+
  and
 
   d = 1/9a,
@@ -3165,7 +3165,7 @@ Math::Cephes - perl interface to the cephes math library
      log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
 
  Otherwise, setting  z = 2(x-1)/x+1),
- 
+
      log(x) = z + z**3 P(z)/Q(z).
 
  ACCURACY:
@@ -3238,7 +3238,7 @@ Math::Cephes - perl interface to the cephes math library
      log(1+x) = x - 0.5 x**2 + x**3 P(x)/Q(x).
 
  Otherwise, setting  z = 2(x-1)/x+1),
- 
+
      log(x) = z + z**3 P(z)/Q(z).
 
  ACCURACY:
@@ -3313,7 +3313,7 @@ Math::Cephes - perl interface to the cephes math library
 
  This routine may be called to report one of the following
  error conditions (in the include file mconf.h).
-  
+
    Mnemonic        Value          Significance
 
     DOMAIN            1       argument domain error
@@ -3517,7 +3517,7 @@ Math::Cephes - perl interface to the cephes math library
 
  The integral is
 
-                           x 
+                           x
                             -
                  2         | |          2
    erf(x)  =  --------     |    exp( - t  ) dt.
@@ -3550,7 +3550,7 @@ Math::Cephes - perl interface to the cephes math library
 
   1 - erf(x) =
 
-                           inf. 
+                           inf.
                              -
                   2         | |          2
    erfc(x)  =  --------     |    exp( - t  ) dt
@@ -3982,7 +3982,7 @@ Math::Cephes - perl interface to the cephes math library
  arithmetic   domain      # trials      peak         rms
     DEC       0, 10       150000       3.0e-17     7.8e-18
     IEEE -1.07e9,+1.07e9  130000       2.1e-16     5.4e-17
- 
+
  ERROR MESSAGES:
 
    message           condition        value returned
@@ -4045,7 +4045,7 @@ Math::Cephes - perl interface to the cephes math library
  arithmetic   domain      # trials      peak         rms
     DEC       +-1000        3100      3.3e-17      9.0e-18
     IEEE      +-1000       30000      2.3e-16      5.6e-17
- 
+
  ERROR MESSAGES:
 
    message           condition        value returned
@@ -4187,7 +4187,7 @@ Math::Cephes - perl interface to the cephes math library
                                    | |
                                     -
                                    -inf.
- 
+
  Relation to incomplete beta integral:
 
         1 - stdtr(k,t) = 0.5 * incbet( k/2, 1/2, z )
@@ -4199,7 +4199,7 @@ Math::Cephes - perl interface to the cephes math library
  Since the function is symmetric about t=0, the area under the
  right tail of the density is found by calling the function
  with -t instead of t.
- 
+
  ACCURACY:
 
  Tested at random 1 <= k <= 25.  The "domain" refers to t.
@@ -4221,7 +4221,7 @@ Math::Cephes - perl interface to the cephes math library
 
  Given probability p, finds the argument t such that stdtr(k,t)
  is equal to p.
- 
+
  ACCURACY:
 
  Tested at random 1 <= k <= 100.  The "domain" refers to p:
@@ -4264,7 +4264,7 @@ Math::Cephes - perl interface to the cephes math library
       E =  ------------------
              c2/(lambda T)
             e             - 1
- 
+
  Physical constants c1 = 3.7417749e-16 and c2 = 0.01438769 are built in
  to the function program.  They are scaled to provide a result
  in watts per square meter.  Argument T represents temperature in degrees
@@ -4306,17 +4306,17 @@ Math::Cephes - perl interface to the cephes math library
    Li (x)  =    >   ---  .
      n          -     n
                k=1   k
- 
+
    For x = 1,
- 
+
                 inf
                  -    1
     Li (1)  =    >   ---   =  Riemann zeta function (n)  .
       n          -     n
                 k=1   k
- 
+
   When n = 2, the function is the dilogarithm, related to Spence's integral:
- 
+
                   x                      1-x
                   -                        -
                  | |  -ln(1-t)            | |  ln t
@@ -4324,9 +4324,9 @@ Math::Cephes - perl interface to the cephes math library
       2        | |       t              | |    1 - t
                 -                        -
                  0                        1
- 
+
   ACCURACY:
- 
+
                        Relative error:
   arithmetic   domain   n   # trials      peak         rms
      IEEE      0, 1     2     50000      6.2e-16     8.0e-17
@@ -4354,7 +4354,7 @@ Math::Cephes - perl interface to the cephes math library
  SYNOPSIS:
 
     $result = simpson(\&fun, $a, $b, $abs_err, $rel_err, $nmax);
-    
+
     sub fun {
        my $x = shift;
        return cos($x)*exp($x);
@@ -4369,7 +4369,7 @@ Math::Cephes - perl interface to the cephes math library
  to the result with double the number of segments. If the two
  results agree, to within an absolute error $abs_err or a
  relative error $rel_err, the result is returned; otherwise,
- the number of segments is doubled again, and the results 
+ the number of segments is doubled again, and the results
  compared. This continues until the desired accuracy is attained,
  or until the maximum number of iterations $nmax is reached.
 
@@ -4601,7 +4601,7 @@ Math::Cephes - perl interface to the cephes math library
  SYNOPSIS:
 
 #    log1p(x) = log(1+x)
-	
+
  $y = log1p( $x );
 
 #    expm1(x) = exp(x) - 1
@@ -4661,7 +4661,7 @@ Math::Cephes - perl interface to the cephes math library
 
                  inf.
                   -        -x
-   zeta(x,q)  =   >   (k+q)  
+   zeta(x,q)  =   >   (k+q)
                   -
                  k=0
 
@@ -4669,11 +4669,11 @@ Math::Cephes - perl interface to the cephes math library
  The Euler-Maclaurin summation formula is used to obtain
  the expansion
 
-                n         
+                n
                 -       -x
- zeta(x,q)  =   >  (k+q)  
-                -         
-               k=1        
+ zeta(x,q)  =   >  (k+q)
+                -
+               k=1
 
            1-x                 inf.  B   x(x+1)...(x+2j)
       (n+q)           1         -     2j
@@ -4767,7 +4767,7 @@ see L<Math::Cephes::Matrix>.
 =head1 COPYRIGHT
 
 The C code for the Cephes Math Library is
-Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
+Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier,
 and is available at L<http://www.netlib.org/cephes/>.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 
