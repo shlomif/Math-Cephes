@@ -17,20 +17,20 @@ my @trigs = qw(asin acos atan atan2 sin cos tan cot hypot
 	       tandg cotdg sindg cosdg radian cosm1);
 my @hypers = qw(acosh asinh atanh sinh cosh tanh);
 my @explog = qw(log1p expm1 exp exp10 exp2 log log10 log2 expxx);
-my @cmplx = qw(clog cexp csin ccos ctan ccot casin 
+my @cmplx = qw(clog cexp csin ccos ctan ccot casin
 	       cacos catan cadd csub cmul cdiv cmov cneg cabs csqrt
 	       csinh ccosh ctanh cpow casinh cacosh catanh);
 my @utils = qw(ceil floor frexp ldexp fabs
 	       round sqrt lrand pow powi drand lsqrt fac cbrt);
 my @bessels = qw(i0 i0e i1 i1e iv j0 j1 jn jv k0 k1 kn yn yv k0e k1e y0 y1);
-my @dists = qw(bdtr bdtrc bdtri btdtr chdtr chdtrc chdtri 
-	       fdtr fdtrc fdtri gdtr gdtrc nbdtr nbdtrc nbdtri 
+my @dists = qw(bdtr bdtrc bdtri btdtr chdtr chdtrc chdtri
+	       fdtr fdtrc fdtri gdtr gdtrc nbdtr nbdtrc nbdtri
 	       ndtr ndtri pdtr pdtrc pdtri stdtr stdtri);
 my @gammas = qw(gamma igam igamc igami psi fac rgamma lgam);
 my @betas = qw(beta lbeta incbet incbi lbeta);
 my @elliptics = qw(ellie ellik ellpe ellpj ellpk);
 my @hypergeometrics = qw(onef2 threef0 hyp2f1 hyperg hyp2f0);
-my @misc = qw(zeta zetac airy dawsn fresnl sici shichi expn spence ei 
+my @misc = qw(zeta zetac airy dawsn fresnl sici shichi expn spence ei
               erfc erf struve plancki simpson bernum polylog vecang);
 my @fract = qw(radd rsub rmul rdiv euclid);
 
@@ -48,15 +48,15 @@ my @fract = qw(radd rsub rmul rdiv euclid);
 		'hypergeometrics' => [@hypergeometrics],
 		'fract' => [@fract],
                 'misc' => [@misc],
-                'all' => [@constants, @utils, @trigs, @hypers, 
-			  @explog, @bessels, @gammas, @betas, @elliptics, 
+                'all' => [@constants, @utils, @trigs, @hypers,
+			  @explog, @bessels, @gammas, @betas, @elliptics,
 			  @hypergeometrics, @misc, @dists],
 	       );
-  
-@EXPORT_OK = (@constants, @utils, @trigs, @hypers, 
-	      @explog, @bessels, @gammas, @betas, @elliptics, 
+
+@EXPORT_OK = (@constants, @utils, @trigs, @hypers,
+	      @explog, @bessels, @gammas, @betas, @elliptics,
 	      @hypergeometrics, @misc, @dists, @fract, @cmplx);
-		
+
 $VERSION = '0.52';
 #Math::Cephes->bootstrap($VERSION);
 #var_Math__Cephes_init();
@@ -64,7 +64,7 @@ $VERSION = '0.52';
 sub simpson {
   my ($r, $a, $b, $abs, $rel, $nmax) = @_;
   die "Must supply a CODE reference" unless ref($r) eq 'CODE';
-  die "Must supply start and end points($a and $b)" 
+  die "Must supply start and end points($a and $b)"
     unless (defined $a and defined $b);
   $abs ||= 1e-06;
   $rel ||= 1e-06;
@@ -106,7 +106,7 @@ sub expxx {
 
 sub vecang {
   my ($a, $b) = @_;
-  die "Must supply array references" 
+  die "Must supply array references"
     unless (ref($a) eq 'ARRAY' and ref($b) eq 'ARRAY');
   die "Vectors must be of dimension 3"
     unless (scalar @$a == 3 and scalar @$b == 3);
