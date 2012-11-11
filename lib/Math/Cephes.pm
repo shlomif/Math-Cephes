@@ -353,6 +353,8 @@ package Math::Cephes;
 *THPIO4 = *Math::Cephesc::THPIO4;
 *TWOOPI = *Math::Cephesc::TWOOPI;
 
+require Math::Cephes::Complex;
+
 1;
 
 __END__

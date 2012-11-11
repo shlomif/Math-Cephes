@@ -1,5 +1,8 @@
 Revision history for Math::Cephes
 
+  - Fix the second test case (without explicit use Math::Cephes::Complex)
+  in https://rt.cpan.org/Ticket/Display.html?id=80624 .
+
 0.53    Nov 10, 2012
   - Fix the exporting of new_cmplx:
     - https://rt.cpan.org/Ticket/Display.html?id=80624
