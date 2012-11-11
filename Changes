@@ -1,8 +1,10 @@
 Revision history for Math::Cephes
 
+0.5302  Nov 11, 2012
   - Fix https://rt.cpan.org/Ticket/Display.html?id=81105 .
     - Fails on perls with nvsize != 8.
     - Due to using Test::More::is() for floating-point comparisons.
+    - Thanks to ANDK for the report.
 
 0.5301  Nov 11, 2012
   - Fix the second test case (without explicit use Math::Cephes::Complex)
