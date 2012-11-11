@@ -144,6 +144,7 @@ t/fract.t
 t/gammas.t
 t/hypergeometrics.t
 t/hypers.t
+t/lib/Utils.pm
 t/new_cmplx.t
 t/new_cmplx-2.t
 t/misc.t

@@ -3,6 +3,9 @@
 use strict;
 use warnings;
 
+use lib './t/lib';
+use Utils qw(is_between);
+
 use Test::More tests => 1;
 use Math::Cephes qw(:cmplx);
 use Math::Cephes::Complex;
@@ -16,6 +19,7 @@ use Math::Cephes::Complex;
 
     cexp($z, $w);
 
+    my $want = exp(2);
     # TEST
-    is ($w->{r}, exp(2), "Testing new_complx");
+    is_between ($w->{r}, $want - 1e-5, $want + 1e-5, "Testing new_complx");
 }
