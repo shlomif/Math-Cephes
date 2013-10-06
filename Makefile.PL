@@ -38,6 +38,11 @@ my %opts = (
     OBJECT => 'Cephes_wrap.o arrays.o',
     INC => "-I$libmd",
     EXE_FILES => [ 'pmath' ],
+    META_MERGE => {
+        resources => {
+            repository => 'https://github.com/shlomif/Math-Cephes',
+        },
+    },
     dist   => {
         SUFFIX   => 'gz',
         COMPRESS => 'gzip -9f',
