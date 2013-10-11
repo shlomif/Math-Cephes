@@ -1,5 +1,9 @@
 Revision history for Math::Cephes
 
+0.5303  Oct 11, 2013
+  - Add Repository CPAN Metadata.
+    - thanks to David Steinbrunner
+
 0.5302  Nov 11, 2012
   - Fix https://rt.cpan.org/Ticket/Display.html?id=81105 .
     - Fails on perls with nvsize != 8.
