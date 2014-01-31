@@ -2,6 +2,8 @@ Revision history for Math::Cephes
 
 0.5304  Jan 31, 2014
     - Add scripts/bump-version-number.pl to bump the version number.
+    - Add license to META.yml and a LICENSE file (CPANTS).
+    - Add "use warnings;" to all modules (CPANTS).
 
 0.5303  Oct 11, 2013
   - Add Repository CPAN Metadata.

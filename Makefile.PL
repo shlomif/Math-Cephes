@@ -58,6 +58,10 @@ if ($eu_version >= 5.43) {
    $opts{CAPI} = 'TRUE' if $arch =~ /-object\b/i;
 }
 
+if ($eu_version >= 6.31) {
+    $opts{LICENSE} = 'perl';
+}
+
 if ($eu_version >= 6.48) {
     $opts{MIN_PERL_VERSION} = '5.008';
 }
