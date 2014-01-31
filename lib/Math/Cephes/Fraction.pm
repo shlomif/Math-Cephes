@@ -1,6 +1,7 @@
 ############# Class : fract ##############
 package Math::Cephes::Fraction;
 use strict;
+use warnings;
 use vars qw(%OWNER @ISA %ITERATORS 
 	    @EXPORT_OK %EXPORT_TAGS $VERSION);
 

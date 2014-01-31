@@ -1,5 +1,6 @@
 package Math::Cephes::Polynomial;
 use strict;
+use warnings;
 use vars qw(@EXPORT_OK $VERSION $MAXPOL $FMAXPOL $flag $fflag);
 eval {require Math::Complex; import Math::Complex qw(Re Im)};
 eval {local $^W=0; require Math::Fraction;};

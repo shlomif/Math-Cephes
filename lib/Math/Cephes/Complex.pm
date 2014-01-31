@@ -1,6 +1,7 @@
 ############# Class : cmplx ##############
 package Math::Cephes::Complex;
 use strict;
+use warnings;
 use vars qw(%OWNER %ITERATORS @ISA 
 	    @EXPORT_OK %EXPORT_TAGS $VERSION);
 require Math::Cephes;

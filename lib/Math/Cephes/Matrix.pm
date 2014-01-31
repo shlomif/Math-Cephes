@@ -1,5 +1,6 @@
 package Math::Cephes::Matrix;
 use strict;
+use warnings;
 use vars qw(@EXPORT_OK $VERSION);
 
 require Exporter;

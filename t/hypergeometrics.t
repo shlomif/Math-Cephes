@@ -1,8 +1,9 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 ######################### We start with some black magic to print on failure.
 use lib '../blib/lib','../blib/arch';
 use strict;
+use warnings;
 use vars qw($loaded);
 
 BEGIN {$| = 1; print "1..3\n"; }
@@ -21,6 +22,7 @@ sub ok {
   $count++;
   my ($package, $file, $line) = caller;
   my ($value, $true, $skip) = @_;
+  $skip ||= '';
   $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
   print($error < $eps ? "ok $count $skip\n" : 
