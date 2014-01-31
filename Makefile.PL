@@ -58,6 +58,10 @@ if ($eu_version >= 5.43) {
    $opts{CAPI} = 'TRUE' if $arch =~ /-object\b/i;
 }
 
+if ($eu_version >= 6.48) {
+    $opts{MIN_PERL_VERSION} = '5.008';
+}
+
 my $mconf = catfile $libmd, 'mconf.h';
 my %defs = (HAVE_LONG_DOUBLE => 'd_longdbl',
             SIZEOF_INT => 'intsize',
@@ -123,8 +127,8 @@ if ($is_sol or $is_dar or $is_win32 or $is_387) {
   $message = <<"END";
 
 A file libmd/mconf.h, which contains machine-dependent
-definitions, has been used which is known to work with some 
-versions of $arch. If there are problems with 
+definitions, has been used which is known to work with some
+versions of $arch. If there are problems with
 the tests, some manual editing of this file may be needed.
 
 END
@@ -176,7 +180,7 @@ sub MY::postamble {
 	cd ..
 ]
 EOT
-	    } 
+	    }
         elsif ($Config{'make'} =~ /nmake/i) {
 	        #
             $postamble .= <<"EOT";
