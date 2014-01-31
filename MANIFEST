@@ -2,6 +2,7 @@ Cephes.i
 Cephes_wrap.c
 Changes
 INSTALL
+LICENSE
 MANIFEST
 MANIFEST.SKIP
 META.yml                                 Module meta-data (added by MakeMaker)
