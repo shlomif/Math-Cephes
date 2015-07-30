@@ -51,7 +51,7 @@ typedef struct {
 
 typedef struct {
 	double n;
-	double d;	
+	double d;
         %extend {
 	  fract(double n=0, double d=1) {
    	    fract *f;
@@ -78,7 +78,7 @@ extern double SQRT2;
 extern double SQRTH;
 extern double LOG2E;
 extern double SQ2OPI;
-extern double LOGE2; 
+extern double LOGE2;
 extern double LOGSQ2;
 extern double THPIO4;
 extern double TWOOPI;

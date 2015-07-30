@@ -22,7 +22,7 @@ sub new {
     my ($caller, $arr) = @_;
     my $refer = ref($caller);
     my $class = $refer || $caller;
-    die "Must supply data for the polynomial" 
+    die "Must supply data for the polynomial"
       unless ($refer or $arr);
     my ($type, $ref, $data, $n);
     if ($refer) {
@@ -35,7 +35,7 @@ sub new {
       else {
 	my ($f, $s) = ($type eq 'fract') ? ('n', 'd') : ('r', 'i');
 	$data = {$f => [ @{$cdata->{$f}} ],
-		 $s => [ @{$cdata->{$s}} ], 
+		 $s => [ @{$cdata->{$s}} ],
 		};
       }
     }
@@ -133,7 +133,7 @@ sub get_data {
   }
     return ($type, $ref, $data, $n);
 }
-    
+
 sub as_string {
   my $self = shift;
   my ($type, $data, $n) =
@@ -148,7 +148,7 @@ sub as_string {
 	      my $n = $data->{n}->[$j];
 	      my $d = $data->{d}->[$j];
 	      my $sgn = $n < 0 ? ' -' : ' +';
-	      $coef = $sgn . ($j == 0? '(' : ' (') . 
+	      $coef = $sgn . ($j == 0? '(' : ' (') .
 		abs($n) . '/' . abs($d) . ')';
 	      last SWITCH;
 	  };
@@ -156,8 +156,8 @@ sub as_string {
 	      my $re = $data->{r}->[$j];
 	      my $im = $data->{i}->[$j];
 	      my $sgn = $j == 0 ? ' ' :  ' + ';
-	      $coef = $sgn . '(' . $re . 
-		( (int( $im / abs($im) ) == -1) ? '-' : '+' ) . 
+	      $coef = $sgn . '(' . $re .
+		( (int( $im / abs($im) ) == -1) ? '-' : '+' ) .
 		  ( ($im < 0) ? abs($im) : $im) . 'I)';
 	      last SWITCH;
 	    };
@@ -170,7 +170,7 @@ sub as_string {
     }
   return $string . "\n";
 }
- 
+
 sub add {
     my ($self, $b) = @_;
     my ($atype, $aref, $adata, $na) =
@@ -186,12 +186,12 @@ sub add {
 	  $nc = $na > $nb ? $na: $nb;
 	  my $cn = [split //, 0 x ($nc+1)];
 	  my $cd = [split //, 0 x ($nc+1)];
-	Math::Cephes::fpoladd_wrap($adata->{n}, $adata->{d}, $na, 
-				   $bdata->{n}, $bdata->{d}, $nb, 
+	Math::Cephes::fpoladd_wrap($adata->{n}, $adata->{d}, $na,
+				   $bdata->{n}, $bdata->{d}, $nb,
 				   $cn, $cd, $nc);
 	  for (my $i=0; $i<=$nc; $i++) {
 	      my ($gcd, $n, $d) = Math::Cephes::euclid($cn->[$i], $cd->[$i]);
-	      push @$c, ($aref eq 'Math::Fraction' ? 
+	      push @$c, ($aref eq 'Math::Fraction' ?
 			 Math::Fraction->new($n, $d) :
 		       Math::Cephes::Fraction->new($n, $d) );
 	  }
@@ -201,9 +201,9 @@ sub add {
 	  $nc = $na > $nb ? $na: $nb;
 	  my $cr = [split //, 0 x ($nc+1)];
 	  my $ci = [split //, 0 x ($nc+1)];
-	Math::Cephes::poladd($adata->{r}, $na, 
+	Math::Cephes::poladd($adata->{r}, $na,
 			     $bdata->{r}, $nb, $cr);
-	Math::Cephes::poladd($adata->{i}, $na, 
+	Math::Cephes::poladd($adata->{i}, $na,
 			     $bdata->{i}, $nb, $ci);
 	  for (my $i=0; $i<=$nc; $i++) {
 	      push @$c, ($aref eq 'Math::Complex' ?
@@ -216,9 +216,9 @@ sub add {
       $c = [split //, 0 x $nc];
     Math::Cephes::poladd($adata, $na, $bdata, $nb, $c);
   }
-    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) : 
+    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) :
       Math::Cephes::Polynomial->new($c);
-    
+
 }
 
 sub sub {
@@ -236,12 +236,12 @@ sub sub {
 	  $nc = $na > $nb ? $na: $nb;
 	  my $cn = [split //, 0 x ($nc+1)];
 	  my $cd = [split //, 0 x ($nc+1)];
-	Math::Cephes::fpolsub_wrap($bdata->{n}, $bdata->{d}, $nb, 
-				   $adata->{n}, $adata->{d}, $na, 
+	Math::Cephes::fpolsub_wrap($bdata->{n}, $bdata->{d}, $nb,
+				   $adata->{n}, $adata->{d}, $na,
 				   $cn, $cd, $nc);
 	  for (my $i=0; $i<=$nc; $i++) {
 	      my ($gcd, $n, $d) = Math::Cephes::euclid($cn->[$i], $cd->[$i]);
-	      push @$c, ($aref eq 'Math::Fraction' ? 
+	      push @$c, ($aref eq 'Math::Fraction' ?
 			 Math::Fraction->new($n, $d) :
 		       Math::Cephes::Fraction->new($n, $d) );
 	  }
@@ -251,9 +251,9 @@ sub sub {
 	  $nc = $na > $nb ? $na: $nb;
 	  my $cr = [split //, 0 x ($nc+1)];
 	  my $ci = [split //, 0 x ($nc+1)];
-	Math::Cephes::polsub($bdata->{r}, $nb, 
+	Math::Cephes::polsub($bdata->{r}, $nb,
 			     $adata->{r}, $na, $cr);
-	Math::Cephes::polsub($bdata->{i}, $nb, 
+	Math::Cephes::polsub($bdata->{i}, $nb,
 			     $adata->{i}, $na, $ci);
 	  for (my $i=0; $i<=$nc; $i++) {
 	      push @$c, ($aref eq 'Math::Complex' ?
@@ -266,9 +266,9 @@ sub sub {
       $c = [split //, 0 x $nc];
     Math::Cephes::polsub($bdata, $nb, $adata, $na, $c);
   }
-    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) : 
+    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) :
       Math::Cephes::Polynomial->new($c);
-    
+
 }
 
 sub mul {
@@ -286,12 +286,12 @@ sub mul {
 	  $nc = $na + $nb;
 	  my $cn = [split //, 0 x ($nc+1)];
 	  my $cd = [split //, 1 x ($nc+1)];
-	Math::Cephes::fpolmul_wrap($adata->{n}, $adata->{d}, $na, 
-				   $bdata->{n}, $bdata->{d}, $nb, 
+	Math::Cephes::fpolmul_wrap($adata->{n}, $adata->{d}, $na,
+				   $bdata->{n}, $bdata->{d}, $nb,
 				   $cn, $cd, $nc);
 	  for (my $i=0; $i<=$nc; $i++) {
 	      my ($gcd, $n, $d) = Math::Cephes::euclid($cn->[$i], $cd->[$i]);
-	      push @$c, ($aref eq 'Math::Fraction' ? 
+	      push @$c, ($aref eq 'Math::Fraction' ?
 			 Math::Fraction->new($n, $d) :
 		       Math::Cephes::Fraction->new($n, $d) );
 	  }
@@ -301,8 +301,8 @@ sub mul {
 	  my $dc = $na + $nb + 3;
 	  my $cr = [split //, 0 x $dc];
 	  my $ci = [split //, 0 x $dc];
-	  $nc = Math::Cephes::cpmul_wrap($adata->{r}, $adata->{i}, $na+1, 
-					 $bdata->{r}, $bdata->{i}, $nb+1, 
+	  $nc = Math::Cephes::cpmul_wrap($adata->{r}, $adata->{i}, $na+1,
+					 $bdata->{r}, $bdata->{i}, $nb+1,
 					 $cr, $ci, $dc);
 	  $cr = [ @{$cr}[0..$nc] ];
 	  $ci = [ @{$ci}[0..$nc] ];
@@ -317,7 +317,7 @@ sub mul {
       $c = [split //, 0 x $nc];
     Math::Cephes::polmul($adata, $na, $bdata, $nb, $c);
   }
-    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) : 
+    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) :
       Math::Cephes::Polynomial->new($c);
 }
 
@@ -336,12 +336,12 @@ sub div {
 	  $nc = $MAXPOL;
 	  my $cn = [split //, 0 x ($nc+1)];
 	  my $cd = [split //, 0 x ($nc+1)];
-	Math::Cephes::fpoldiv_wrap($adata->{n}, $adata->{d}, $na, 
-				   $bdata->{n}, $bdata->{d}, $nb, 
+	Math::Cephes::fpoldiv_wrap($adata->{n}, $adata->{d}, $na,
+				   $bdata->{n}, $bdata->{d}, $nb,
 				   $cn, $cd, $nc);
 	  for (my $i=0; $i<=$nc; $i++) {
 	      my ($gcd, $n, $d) = Math::Cephes::euclid($cn->[$i], $cd->[$i]);
-	      push @$c, ($aref eq 'Math::Fraction' ? 
+	      push @$c, ($aref eq 'Math::Fraction' ?
 			 Math::Fraction->new($n, $d) :
 		       Math::Cephes::Fraction->new($n, $d) );
 	  }
@@ -355,7 +355,7 @@ sub div {
       $c = [split //, 0 x ($nc+1)];
     Math::Cephes::poldiv($adata, $na, $bdata, $nb, $c);
   }
-    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) : 
+    return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) :
       Math::Cephes::Polynomial->new($c);
 }
 
@@ -409,7 +409,7 @@ sub sbt {
       $nc = $na * $nb;
       for (my $i=0; $i<=$nc; $i++) {
 	my ($gcd, $n, $d) = Math::Cephes::euclid($cn->[$i], $cd->[$i]);
-	push @$c, ($aref eq 'Math::Fraction' ? 
+	push @$c, ($aref eq 'Math::Fraction' ?
 		   Math::Fraction->new($n, $d) :
 		   Math::Cephes::Fraction->new($n, $d) );
       }
@@ -425,7 +425,7 @@ sub sbt {
     $nc = $na*$nb;
     $c = [@$c[0..$nc]];
   }
-  return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) : 
+  return wantarray ? (Math::Cephes::Polynomial->new($c), $nc) :
     Math::Cephes::Polynomial->new($c);
 }
 
@@ -506,7 +506,7 @@ sub atn {
 	ref($bin) eq 'Math::Cephes::Polynomial' ?
 	    ($bin->{type}, $bin->{ref}, $bin->{data}, $bin->{n}) :
 		get_data($bin);
-    
+
     die "Cannot take the atan of a complex polynomial"
 	if $btype eq 'cmplx';
     $b = $btype eq 'fract' ? fract_to_real($bdata) : $bdata;
@@ -635,7 +635,7 @@ Math::Cephes::Polynomial - Perl interface to the cephes math polynomial routines
   $r = $f3->eval($x);
   print "At x=$x, f3(x) has num=", $r->n, " and den=", $r->d, "\n";
   $r = $f3->eval($a1);
-  print "At x=", $a1->n, "/", $a1->d, 
+  print "At x=", $a1->n, "/", $a1->d,
       ", f3(x) has num=", $r->n, " and den=", $r->d, "\n";
 
 =head1 DESCRIPTION
@@ -687,8 +687,8 @@ The following methods are available.
 
  DESCRIPTION:
 
-This returns an array reference containing the coefficients of 
-the polynomial. 
+This returns an array reference containing the coefficients of
+the polynomial.
 
 =item I<clr>: set a polynomial identically equal to zero
 
@@ -698,8 +698,8 @@ the polynomial.
 
  DESCRIPTION:
 
-This sets the coefficients of the polynomial identically to 0, 
-up to $p->[$n]. If $n is omitted, all elements are set to 0. 
+This sets the coefficients of the polynomial identically to 0,
+up to $p->[$n]. If $n is omitted, all elements are set to 0.
 
 =item I<add>: add two polynomials
 
@@ -778,8 +778,8 @@ the polynomial.
 
  DESCRIPTION:
 
-This finds the square root of a polynomial, evaluated by a 
-Taylor expansion. Accuracy is approximately equal to the 
+This finds the square root of a polynomial, evaluated by a
+Taylor expansion. Accuracy is approximately equal to the
 degree of the polynomial, with an internal limit of about 16.
 This method is not available for polynomials with complex coefficients.
 
@@ -791,8 +791,8 @@ This method is not available for polynomials with complex coefficients.
 
  DESCRIPTION:
 
-This finds the sine of a polynomial, evaluated by a 
-Taylor expansion. Accuracy is approximately equal to the 
+This finds the sine of a polynomial, evaluated by a
+Taylor expansion. Accuracy is approximately equal to the
 degree of the polynomial, with an internal limit of about 16.
 This method is not available for polynomials with complex coefficients.
 
@@ -804,8 +804,8 @@ This method is not available for polynomials with complex coefficients.
 
  DESCRIPTION:
 
-This finds the cosine of a polynomial, evaluated by a 
-Taylor expansion. Accuracy is approximately equal to the 
+This finds the cosine of a polynomial, evaluated by a
+Taylor expansion. Accuracy is approximately equal to the
 degree of the polynomial, with an internal limit of about 16.
 This method is not available for polynomials with complex coefficients.
 
@@ -817,8 +817,8 @@ This method is not available for polynomials with complex coefficients.
 
  DESCRIPTION:
 
-This finds the arctangent of the ratio $a / $b of two polynomial, 
-evaluated by a Taylor expansion. Accuracy is approximately equal to the 
+This finds the arctangent of the ratio $a / $b of two polynomial,
+evaluated by a Taylor expansion. Accuracy is approximately equal to the
 degree of the polynomial, with an internal limit of about 16.
 This method is not available for polynomials with complex coefficients.
 
@@ -857,7 +857,7 @@ Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
 =head1 COPYRIGHT
 
 The C code for the Cephes Math Library is
-Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
+Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier,
 and is available at http://www.netlib.org/cephes/.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 

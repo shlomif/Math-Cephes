@@ -15,7 +15,7 @@ sub new {
   my ($caller, $arr) = @_;
   my $refer = ref($caller);
   my $class = $refer || $caller;
-  die "Must supply data for the matrix" 
+  die "Must supply data for the matrix"
     unless ($refer or $arr);
   unless ($refer) {
     die "Please supply an array of arrays for the matrix data"
@@ -98,7 +98,7 @@ sub check {
     }
   }
   else {
-    die "Unknown reference '$ref' for data";    
+    die "Unknown reference '$ref' for data";
   }
 }
 
@@ -260,12 +260,12 @@ Math::Cephes::Matrix - Perl interface to the cephes matrix routines
 =head1 DESCRIPTION
 
 This module is a layer on top of the basic routines in the
-cephes math library for operations on square matrices. In 
+cephes math library for operations on square matrices. In
 the following, a Math::Cephes::Matrix object is created as
 
   my $M = Math::Cephes::Matrix->new($arr_ref);
 
-where C<$arr_ref> is a reference to an array of arrays, as 
+where C<$arr_ref> is a reference to an array of arrays, as
 in the following example:
 
   $arr_ref = [ [1, 2, -1], [2, -3, 1], [1, 0, 3] ]
@@ -293,7 +293,7 @@ A copy of a I<Math::Cephes::Matrix> object may be done as
  DESCRIPTION:
 
 This returns an reference to an array of arrays
-containing the coefficients of the matrix. 
+containing the coefficients of the matrix.
 
 =item I<clr>: set all coefficients equal to a value.
 
@@ -392,7 +392,7 @@ in matrix form as
   M X = B
 
 where M is an N x N square matrix and X and B are column
-vectors of length N. 
+vectors of length N.
 
 =item I<eigens>: eigenvalues and eigenvectors of a real symmetric matrix
 
@@ -412,7 +412,7 @@ vectors of length N.
 
 where $M is a I<Math::Cephes::Matrix> object representing
 a real symmetric matrix. $E is an array reference containing
-the eigenvalues of $M, and $EV is a I<Math::Cephes::Matrix> object 
+the eigenvalues of $M, and $EV is a I<Math::Cephes::Matrix> object
 representing the eigenvalues, the I<ith> row corresponding
 to the I<ith> eigenvalue.
 
@@ -435,7 +435,7 @@ Please report any to Randy Kobes <randy@theoryx5.uwinnipeg.ca>
 =head1 COPYRIGHT
 
 The C code for the Cephes Math Library is
-Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
+Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier,
 and is available at http://www.netlib.org/cephes/.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 

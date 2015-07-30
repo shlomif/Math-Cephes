@@ -25,7 +25,7 @@ sub ok {
   $skip ||= '';
   $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < $eps ? "ok $count $skip\n" : 
+  print($error < $eps ? "ok $count $skip\n" :
 	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
 my $x = 5.57;
@@ -36,4 +36,4 @@ ok( $z, gamma($x)*gamma($y)/gamma(7.77));
 ok( lbeta($x, $y), log($z));
 $z = incbet($x, $y, $u);
 ok( $z, 0.00761009624);
-ok( incbi($x, $y, $z), $u); 
+ok( incbi($x, $y, $z), $u);

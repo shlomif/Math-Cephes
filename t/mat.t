@@ -24,7 +24,7 @@ sub ok {
   $skip ||= '';
   $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < $eps ? "ok $count $skip\n" : 
+  print($error < $eps ? "ok $count $skip\n" :
 	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
 

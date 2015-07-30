@@ -48,7 +48,7 @@ my %opts = (
 	   );
 
 
-$opts{CCFLAGS} = $Config{ccflags} . ' -Wall -fno-builtin ' 
+$opts{CCFLAGS} = $Config{ccflags} . ' -Wall -fno-builtin '
     if $Config{gccversion};
 
 WriteMakefile(%opts);
@@ -81,7 +81,7 @@ END
    }
    return $c_o;
 }
-  
+
 sub post_constants {
     my $postconstant = <<'END';
 INST_STATIC = libmd$(LIB_EXT)
@@ -100,7 +100,7 @@ static ::    libmd$(LIB_EXT)
 
 config ::
 
-test :	
+test :
 
 END
    return $top_targets;

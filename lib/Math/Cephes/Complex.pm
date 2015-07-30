@@ -2,7 +2,7 @@
 package Math::Cephes::Complex;
 use strict;
 use warnings;
-use vars qw(%OWNER %ITERATORS @ISA 
+use vars qw(%OWNER %ITERATORS @ISA
 	    @EXPORT_OK %EXPORT_TAGS $VERSION);
 require Math::Cephes;
 
@@ -27,7 +27,7 @@ $VERSION = '0.5304';
 sub new {
     my $pkg = shift;
     my $self = Math::Cephesc::new_cmplx(@_);
-    bless $self, $pkg if defined($self); 
+    bless $self, $pkg if defined($self);
 }
 
 sub DESTROY {
@@ -81,8 +81,8 @@ sub as_string {
     $string = "$re";
   }
   else {
-    $string = sprintf "%f %s %f %s", $re, 
-      (int( $im / abs($im) ) == -1) ? '-' : '+' , 
+    $string = sprintf "%f %s %f %s", $re,
+      (int( $im / abs($im) ) == -1) ? '-' : '+' ,
 	($im < 0) ? abs($im) : $im, 'i';
   }
   return $string;
@@ -256,7 +256,7 @@ __END__
 =head1 DESCRIPTION
 
 This module is a layer on top of the basic routines in the
-cephes math library to handle complex numbers. A complex 
+cephes math library to handle complex numbers. A complex
 number is created via any of the following syntaxes:
 
   my $f = Math::Cephes::Complex->new(3, 2);   # $f = 3 + 2 i
@@ -268,7 +268,7 @@ are specified, as in
 
  my $h = cmplx();
 
-then the defaults $z = 0 + 0 i are assumed. The real and imaginary 
+then the defaults $z = 0 + 0 i are assumed. The real and imaginary
 part of a complex number are represented respectively by
 
    $f->{r}; $f->{i};
@@ -284,7 +284,7 @@ and can be set according to
 or, again, as methods,
 
   $f->r(4);   $f->i(9);
- 
+
 The complex number can be printed out as
 
   print $f->as_string;
@@ -458,68 +458,68 @@ A summary of the usage is as follows.
 =item I<csinh>: Complex hyperbolic sine
 
   SYNOPSIS:
- 
+
   # void csinh();
   # cmplx z, w;
- 
+
  $z = cmplx(2, 3);    # $z = 2 + 3 i
  $w = $z->csinh;
  print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
  print $w->as_string;           # prints $w as Re($w) + i Im($w)
 
- 
+
   DESCRIPTION:
- 
+
   csinh z = (cexp(z) - cexp(-z))/2
           = sinh x * cos y  +  i cosh x * sin y .
 
 =item I<casinh>: Complex inverse hyperbolic sine
 
   SYNOPSIS:
- 
+
   # void casinh();
   # cmplx z, w;
- 
+
  $z = cmplx(2, 3);    # $z = 2 + 3 i
  $w = $z->casinh;
  print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
  print $w->as_string;           # prints $w as Re($w) + i Im($w)
- 
+
   DESCRIPTION:
- 
+
   casinh z = -i casin iz .
 
 =item I<ccosh>: Complex hyperbolic cosine
 
   SYNOPSIS:
- 
+
   # void ccosh();
   # cmplx z, w;
-  
+
  $z = cmplx(2, 3);    # $z = 2 + 3 i
  $w = $z->ccosh;
  print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
  print $w->as_string;           # prints $w as Re($w) + i Im($w)
- 
+
   DESCRIPTION:
- 
+
   ccosh(z) = cosh x  cos y + i sinh x sin y .
 
 =item I<cacosh>: Complex inverse hyperbolic cosine
 
- 
+
   SYNOPSIS:
- 
+
   # void cacosh();
   # cmplx z, w;
- 
+
  $z = cmplx(2, 3);    # $z = 2 + 3 i
  $w = $z->cacosh;
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w 
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
  print $w->as_string;           # prints $w as Re($w) + i Im($w)
- 
+
   DESCRIPTION:
- 
+
   acosh z = i acos z .
 
 =item I<ctanh>: Complex hyperbolic tangent
@@ -531,7 +531,7 @@ A summary of the usage is as follows.
 
  $z = cmplx(2, 3);    # $z = 2 + 3 i
  $w = $z->ctanh;
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w  
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
  print $w->as_string;           # prints $w as Re($w) + i Im($w)
 
  DESCRIPTION:
@@ -541,37 +541,37 @@ A summary of the usage is as follows.
 =item I<catanh>: Complex inverse hyperbolic tangent
 
   SYNOPSIS:
- 
+
   # void catanh();
   # cmplx z, w;
- 
+
  $z = cmplx(2, 3);    # $z = 2 + 3 i
  $w = $z->catanh;
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w  
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
  print $w->as_string;           # prints $w as Re($w) + i Im($w)
- 
+
   DESCRIPTION:
- 
+
   Inverse tanh, equal to  -i catan (iz);
 
-=item I<cpow>: Complex power function 
+=item I<cpow>: Complex power function
 
   SYNOPSIS:
- 
+
   # void cpow();
   # cmplx a, z, w;
- 
+
  $a = cmplx(5, 6);    # $z = 5 + 6 i
  $z = cmplx(2, 3);    # $z = 2 + 3 i
  $w = $a->cpow($z);
- print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w  
+ print $w->{r}, '  ', $w->{i};  # prints real and imaginary parts of $w
  print $w->as_string;           # prints $w as Re($w) + i Im($w)
- 
+
   DESCRIPTION:
- 
+
   Raises complex A to the complex Zth power.
   Definition is per AMS55 # 4.2.8,
-  analytically equivalent to cpow(a,z) = cexp(z clog(a)). 
+  analytically equivalent to cpow(a,z) = cexp(z clog(a)).
 
 =item I<cmplx>: Complex number arithmetic
 
@@ -634,7 +634,7 @@ A summary of the usage is as follows.
  then
 
        a = sqrt( x**2 + y**2 ).
- 
+
  Overflow and underflow are avoided by testing the magnitudes
  of x and y before squaring.  If either is outside half of
  the floating point full scale range, both are rescaled.
@@ -676,13 +676,13 @@ A summary of the usage is as follows.
 =head1 SEE ALSO
 
 For the basic interface to the cephes complex number routines, see
-L<Math::Cephes>. See also L<Math::Complex> 
+L<Math::Cephes>. See also L<Math::Complex>
 for a more extensive interface to complex number routines.
 
 =head1 COPYRIGHT
 
 The C code for the Cephes Math Library is
-Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier, 
+Copyright 1984, 1987, 1989, 2002 by Stephen L. Moshier,
 and is available at http://www.netlib.org/cephes/.
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140.
 

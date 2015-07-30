@@ -25,7 +25,7 @@ sub ok {
   $skip ||= '';
   $skip = "# skip ($skip)" if $skip;
   my $error = sprintf( "%12.8f", abs($value - $true));
-  print($error < $eps ? "ok $count $skip ($value)\n" : 
+  print($error < $eps ? "ok $count $skip ($value)\n" :
 	"not ok $count (expected $true: got $value) at $file line $line\n");
 }
 
@@ -46,7 +46,7 @@ my $z = incbi( $n/2, $k/2, $p);
 ok( fdtri($k, $n, $p), $n*(1-$z)/($k*$z));
 ok( gdtr($k, $n, $y), igam($n, $k*$y));
 ok( gdtrc($k, $n, $y), igamc($n, $k*$y));
-my $w = nbdtr($k, $n, $p); 
+my $w = nbdtr($k, $n, $p);
 ok( $w, incbet($n, $k+1, $p));
 ok( nbdtrc($k, $n, $p), incbet($k+1, $n, 1-$p));
 ok( nbdtri($k, $n, $w), $p);
