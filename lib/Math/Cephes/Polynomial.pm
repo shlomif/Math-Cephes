@@ -12,7 +12,7 @@ $fflag = 0;
 require Exporter;
 *import = \&Exporter::import;
 @EXPORT_OK = qw(poly);
-$VERSION = '0.5304';
+$VERSION = '0.5305';
 
 require Math::Cephes;
 require Math::Cephes::Fraction;
