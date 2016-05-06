@@ -1,5 +1,16 @@
 Revision history for Math::Cephes
 
+0.5305  May 06, 2016
+    - Remove trailing whitespace - with a test.
+    - Add LICENSE file (CPANTS).
+    - Add "use warnings" (CPANTS).
+    - Set minimal Perl version (CPANTS).
+    - Hopefully fix failing tests on FreeBSD/etc. with the new
+    ExtUtils::MakeMaker .
+        - https://rt.cpan.org/Ticket/Display.html?id=114158
+        - Thanks to Slaven Rezic for the report and to BINGOS for a proposed
+        fix.
+
 0.5304  Jan 31, 2014
     - Add scripts/bump-version-number.pl to bump the version number.
     - Add license to META.yml and a LICENSE file (CPANTS).

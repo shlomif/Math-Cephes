@@ -102,6 +102,10 @@ config ::
 
 test :
 
+test_static :
+
+test_dynamic :
+
 END
    return $top_targets;
 }
