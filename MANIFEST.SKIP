@@ -1,3 +1,8 @@
+(^|/)MYMETA\.(?:json|yml)$
+(^|/)Makefile$
+\.o$
 ^MANIFEST\.
-\bCVS\b
+^Math-Cephes-[0-9]
+^\.git/
 ^blib/
+~$
