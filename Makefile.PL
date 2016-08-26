@@ -109,15 +109,15 @@ open(my $mconf_fh, '>', $mconf) or die "Cannot open $mconf: $!";
 while (my $line = <DATA>) {
     if ($line =~ /\#define\s+($match)/) {
         my $def = $1;
-        print $mconf_fh fix_mconf($def, $defs{$def});
+        print {$mconf_fh} fix_mconf($def, $defs{$def});
     }
     elsif ($line =~ /^\#define XPD/) {
         my $lds = $Config{longdblsize};
         my $xpd = ($is_387 and $lds and $lds == 12) ? '0,' : '';
-        print $mconf_fh qq{\#define XPD $xpd\n};
+        print {$mconf_fh} qq{\#define XPD $xpd\n};
     }
     else {
-        print $mconf_fh $line;
+        print {$mconf_fh} $line;
     }
 }
 close $mconf_fh;
