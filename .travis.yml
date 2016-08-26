@@ -6,4 +6,4 @@ perl:
   - "5.10"
   - "5.8"
 script:
-  perl Makefile.PL && make build && make test
+  perl Makefile.PL && make && make build && make test
