@@ -24,8 +24,8 @@ my $dmake  = ($Config{make} eq 'dmake');
 if ($dmake) {
     my $lib = 'libmd' . $Config{lib_ext};
     my $dummy = catfile $libmd, $lib;
-    open(DUMMY, ">$dummy") or die "Cannot create $dummy: $!";
-    close DUMMY;
+    open(my $dummy_fh, '>',$dummy) or die "Cannot create $dummy: $!";
+    close $dummy_fh;
 }
 ######################################
 
@@ -105,22 +105,22 @@ else {
     $defs{UNK} = 1;
 }
 my $match = join '|', keys %defs;
-open(MCONF, ">$mconf") or die "Cannot open $mconf: $!";
+open(my $mconf_fh, '>', $mconf) or die "Cannot open $mconf: $!";
 while (my $line = <DATA>) {
     if ($line =~ /\#define\s+($match)/) {
         my $def = $1;
-        print MCONF fix_mconf($def, $defs{$def});
+        print $mconf_fh fix_mconf($def, $defs{$def});
     }
     elsif ($line =~ /^\#define XPD/) {
         my $lds = $Config{longdblsize};
         my $xpd = ($is_387 and $lds and $lds == 12) ? '0,' : '';
-        print MCONF qq{\#define XPD $xpd\n};
+        print $mconf_fh qq{\#define XPD $xpd\n};
     }
     else {
-        print MCONF $line;
+        print $mconf_fh $line;
     }
 }
-close MCONF;
+close $mconf_fh;
 
 
 WriteMakefile(%opts);
