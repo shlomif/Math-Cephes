@@ -5,7 +5,7 @@ use warnings;
 
 use Test::More;
 
-eval { use Test::TrailingSpace };
+eval "use Test::TrailingSpace";
 if ($@)
 {
     plan skip_all => "Test::TrailingSpace required for trailing space test.";
