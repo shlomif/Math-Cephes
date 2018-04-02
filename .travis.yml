@@ -1,10 +1,13 @@
 language: perl
 perl:
-  - "5.20"
-  - "5.18"
-  - "5.16"
-  - "5.10"
-  - "5.8"
+    - "5.26"
+    - "5.24"
+    - "5.22"
+    - "5.20"
+    - "5.18"
+    - "5.16"
+    - "5.10"
+    - "5.8"
 install: cpanm -nq Test::CPAN::Changes Test::TrailingSpace
 script:
-  perl Makefile.PL && make test
+    - perl Makefile.PL && make test
