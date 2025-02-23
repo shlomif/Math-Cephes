@@ -356,7 +356,7 @@ typedef struct
 #ifdef __STDC__
 #define ANSIPROT
 /* #include "protos.h" */
-int mtherr();
+int mtherr(char *, int);
 #else
 int mtherr();
 #endif
