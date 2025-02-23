@@ -13,6 +13,10 @@ my $libmd = catdir $cwd, 'libmd';
 my $arch = $Config{archname};
 my $is_win32 = ($arch =~ /MSWin32/i && $Config{cc} eq 'cl');
 my $is_387 = ($arch =~ /^i\d+-linux/i);
+my $is_s390 = ($arch =~ /^s390x?-/i);
+my $is_m68k = ($arch =~ /^m68k-/i);
+my $is_ppc = ($arch =~ /^powerpc(64)?-/i);
+my $is_parisc = ($arch =~ /^hppa-/i);
 my $is_sol = ($arch =~ /sun4-solaris|sparc/i);
 my $is_dar = ($arch =~ /darwin/i);
 my $is_cyg = ($arch =~ /cygwin/i || ($arch =~ /MSWin32/i && !$is_win32));
@@ -81,7 +85,7 @@ my $vals = {RETSIGTYPE => {define => 'void', undef => 'int'},
 if ($is_win32 or $is_387 or $is_cyg) {
     $defs{IBMPC} = 1;
 }
-elsif ($is_sol) {
+elsif ($is_sol or $is_s390 or $is_m68k or $is_ppc or $is_parisc) {
     $defs{WORDS_BIGENDIAN} = 1;
     $defs{FLOAT_WORDS_BIGENDIAN} = 1;
     $defs{UNK} = 1;
