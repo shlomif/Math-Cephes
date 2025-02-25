@@ -1,5 +1,11 @@
 Revision history for Math::Cephes
 
+0.5306  2025-02-25
+    - Convert Changes to CPAN::Changes format.
+    - Some patches from debian.org for better portability.
+        - Thanks!
+    - Modernization / refactoring.
+
 0.5305  2016-05-06
     - Remove trailing whitespace - with a test.
     - Add LICENSE file (CPANTS).
