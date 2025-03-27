@@ -100,11 +100,11 @@ static ::    libmd$(LIB_EXT)
 
 config ::
 
-test :
+test ::
 
-test_static :
+test_static ::
 
-test_dynamic :
+test_dynamic ::
 
 END
    return $top_targets;
