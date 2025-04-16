@@ -1,8 +1,11 @@
 (^|/)MYMETA\.(?:json|yml)$
 (^|/)Makefile$
+\.a$
+\.bs$
 \.o$
 ^MANIFEST\.
 ^Math-Cephes-[0-9]
 ^\.git/
 ^blib/
+pm_to_blib
 ~$
